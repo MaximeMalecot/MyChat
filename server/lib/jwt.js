@@ -1,25 +1,24 @@
 const jwt = require("jsonwebtoken");
 
-exports.createToken = async (user) => {
+exports.createToken = (user) => {
   const payload = {
     id: user.id,
-    firstname: user.firstname,
-    isAdmin: user.isAdmin,
+    name: user.name,
   };
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: "1y",
+    algorithm: "HS512",
   });
 };
 
-exports.checkToken = async (token) => {
+exports.verifyToken = (token) => {
   try {
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return {
       id: decoded.id,
-      firstname: decoded.firstname,
-      isAdmin: decoded.isAdmin,
+      name: decoded.name,
     };
   } catch (error) {
-    return false;
+    return null;
   }
 };
