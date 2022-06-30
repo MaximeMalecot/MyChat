@@ -1,18 +1,6 @@
-version: "3"
+version: '3'
 
 services:
-  app:
-    image: node:17.0.0-alpine
-    user: node
-    working_dir: /home/node
-    entrypoint: node
-    tty: true
-    stdin_open: true
-    ports:
-      - 8000:8000
-    volumes:
-      - ./app:/home/node
-
   mongo:
     image: mongo
     ports:
@@ -22,7 +10,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - mongo-data:/data/db
-    working_dir: /usr/local/sampleCollections
+    working_dir: /usr/local/
 
   server:
     image: node:alpine
@@ -40,10 +28,25 @@ services:
 
   db:
     image: postgres:alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=app
 
+  app:
+    image: node:17.0.0-alpine
+    user: node
+    working_dir: /home/node
+    entrypoint: node
+    tty: true
+    ports:
+      - 8000:8000
+    stdin_open: true
+    volumes:
+      - ./app:/home/node
+      
 volumes:
   mongo-data: {}
+  db-data: {}
