@@ -1,19 +1,9 @@
-import React, {StrictMode} from "react";
-import {createRoot} from "react-dom/client";
-import {BrowserRouter} from "react-router-dom";
-import App from "./src/components/app";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./src/App";
 
-const rootElement = document.getElementById("root");
-const root = createRoot(rootElement);
+const rootElement = document.getElementById('root');
+const virtualElement = React.createElement('h1', null, "Hello, world! ");
+const root = ReactDOM.createRoot(rootElement);
 
-const Main = () => {
-  return (
-    <StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </StrictMode>
-  );
-};
-
-root.render(<Main/>);
+root.render(<App/>);
