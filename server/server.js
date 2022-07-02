@@ -5,6 +5,7 @@ const UserRouter = require("./routes/user");
 const SecurityRouter = require("./routes/security");
 const PostRouter = require("./routes/post");
 const LogRouter = require('./routes/log');
+const AnalyticsRouter = require('./routes/analytics');
 const verifyToken = require("./middlewares/verifyToken");
 const { GlobalLogger } = require("./lib/logger");
 const app = express();
@@ -22,13 +23,13 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.use("/", SecurityRouter, LogRouter);
+app.use("/", SecurityRouter, LogRouter, AnalyticsRouter);
 
 app.use("/api", verifyToken, ProductRouter, UserRouter, PostRouter);
 
 app.use((req, res, next) => {
-    res.sendStatus(500);
-    GlobalLogger(req)
+    GlobalLogger(req);
+    return res.sendStatus(500);
 })
 
 module.exports = app;
