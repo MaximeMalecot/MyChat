@@ -2,7 +2,7 @@ const { Log, mongoose } = require("../models/mongo");
 
 /**
  * ERROR : {
- *  Type: string 'SERVER' <> 'FRONT',
+ *  Type: string 'SERVER' <> 'APP',
  *  Message: string ,
  *  Date: Timestamp,
  *  Level: integer,
@@ -15,6 +15,16 @@ const { Log, mongoose } = require("../models/mongo");
  *  2: basic,
  * }
 */
+
+const logInfo = {
+    types: [
+        'SERVER',
+        'APP'
+    ],
+    levels: [
+        0,1,2
+    ]
+}
 
 const Logger = (errorObject) => {
     const log = new Log(errorObject);
@@ -46,4 +56,4 @@ const GlobalLogger = (req) => {
     Logger(errorObject);
 }
 
-module.exports = { Logger, GlobalLogger, SpecificLogger }
+module.exports = { Logger, GlobalLogger, SpecificLogger, logInfo }
