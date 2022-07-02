@@ -24,12 +24,14 @@ services:
       - JWT_SECRET=secret
     ports:
       - 127.0.0.1:3000:3000
-    command: npm start
+    command: npm run dev
 
   db:
     image: postgres:alpine
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password

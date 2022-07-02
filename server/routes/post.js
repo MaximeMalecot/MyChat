@@ -10,10 +10,16 @@ router.get("/posts", async (req, res) => {
       where: req.query,
       include: [{ model: User, as: "user", attributes: ["id", "name"] }],
     });
+    if(!req.body.message){
+      next({
+        status: 400,
+        message: "give message batard",
+      })
+    }
     res.json(posts);
   } catch (error) {
     res.sendStatus(500);
-    console.error(error);
+    next();
   }
 });
 
