@@ -1,9 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./src/App";
+import React, {StrictMode} from "react";
+import {createRoot} from "react-dom/client";
+import App from "./src/app";
 
-const rootElement = document.getElementById('root');
-const virtualElement = React.createElement('h1', null, "Hello, world! ");
-const root = ReactDOM.createRoot(rootElement);
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement);
 
-root.render(<App/>);
+const Main = () => {
+  return (
+    <StrictMode>
+    <App/>
+    </StrictMode>
+  );
+};
+
+root.render(<Main/>);
