@@ -17,6 +17,7 @@ $gray: #F0F2F5;
         display: flex;
         align-items: center;
         padding: 0 20px;
+        position: relative;
 
         input{
             background-color: transparent;
@@ -24,6 +25,51 @@ $gray: #F0F2F5;
             padding: 10px 10px;
             font-size: 12px;
             outline: none;
+        }
+
+        .searchResults{
+            position: absolute;
+            margin: 0 !important;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: $gray;
+            display: flex;
+            flex-direction: column;
+            border-radius:  0 0 5px 5px;
+            overflow: hidden;
+            box-shadow: 0px 11px 15px -10px rgba(0, 0, 0, 0.25);
+
+            .searchResult{
+                overflow: hidden;
+                padding: 5px 10px;
+                height: 35px;
+                display: flex;
+                align-content: center;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 10px;
+                margin: 0;
+                transition: 0.5s;
+                cursor: pointer;
+
+                &:hover{
+                    background-color: #acb1b8;
+                }
+
+                .picture{
+                    height: 20px;
+                    width: 20px;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img{
+                        height: 100%;
+                    }
+                }
+            }
         }
     }
 
