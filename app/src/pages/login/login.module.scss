@@ -1,0 +1,136 @@
+@import '../../styles/colors.scss';
+@import '../../styles/responsive.scss';
+
+.login{
+    width: 100%;
+    display: flex;
+    padding: 3% 5%;
+    background-color: $gray;
+    min-height: 80vh;
+    justify-content: space-between;
+
+    @include md{
+        padding: 10% 5%;
+    }
+
+    @include sm{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .leftPart{
+        display: flex;
+        justify-content: flex-end;
+        width: 50%;
+        padding: 3% 10%;
+
+        @include md{
+            padding: 10% 0%;
+            justify-content: flex-start;
+        }
+    
+        @include sm{
+            justify-content: center;
+            padding: 0;
+            width: 100%;
+        }
+
+        .content{
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+
+            h2{
+                color: $blue;
+                font-size: 50px;
+                user-select: none;
+            }
+    
+            p{
+                font-size: 24px;
+            }
+        }
+
+        
+    }
+
+    .rightPart{
+        width: 50%;
+        display: flex;
+
+        @include md{
+
+        }
+
+        @include sm{
+            width: 100%;
+            justify-content: center;
+        }
+
+        .loginForm{
+            width: 50%;
+            height: fit-content;
+            box-shadow: 0px 11px 15px -10px rgba(0, 0, 0, 0.25);
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            @include md{
+                width: 100%;
+            }
+
+            @include sm{
+                width: 80%;
+            }
+
+            form{
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                border-bottom: 1px solid rgb(181, 181, 181);
+
+                p{
+                    text-align: center;
+                    margin: 0;
+                    padding: 0;
+                    color: $blue;
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
+
+                button{
+                    width: 100% !important;
+                    font-size: 20px;
+                }
+
+                input{
+                    width: 100%;
+                    font-size: 16px;
+                    padding: 10px;
+                    outline: none;
+                    border: 1px solid rgb(210, 210, 210);
+                    border-radius: 8px;
+
+                    &:focus{
+                        border-color: $blue;
+                        &::placeholder {
+                            color: rgb(201, 199, 199);
+                        }
+                    }
+                }
+
+            }
+
+            button{
+                font-size: 20px;
+            }
+            
+        }
+    }
+}

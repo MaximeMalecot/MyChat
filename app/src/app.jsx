@@ -4,6 +4,7 @@ import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
 
 const Home = lazy(()=> import('./pages/home/home'));
+const Login = lazy(()=> import('./pages/login/login'));
 
 function App(){
     return (
@@ -11,6 +12,7 @@ function App(){
             <Navbar/>
             <Suspense fallback={() => <p>Loading</p>}>
                 <Routes>
+                    <Route path="/login" element={<Login/>}/>
                     <Route path="*" element={<Home/>}/>
                 </Routes>
             </Suspense>

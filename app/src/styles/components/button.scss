@@ -7,7 +7,7 @@
     outline: none;
     border: 1px solid transparent;
     //background-color: white;
-    //color: black;
+    color: white;
     cursor: pointer;
     user-select: none;
 
@@ -19,13 +19,22 @@
     &.tall{
         padding: 15px 10px;
     }
-    
+
     &.blue{
         background-color: $blue !important;
         &:hover{
             background-color: white !important;
             color: $blue !important;
             border: 1px solid $blue !important;
+        }
+    }
+
+    &.green{
+        background-color: $green !important;
+        &:hover{
+            background-color: white !important;
+            color: $green !important;
+            border: 1px solid $green !important;
         }
     }
 
