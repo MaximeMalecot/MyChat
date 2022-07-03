@@ -9,7 +9,16 @@ $gray: #F0F2F5;
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
-    padding: 0 5%;
+    padding: 0 2%;
+
+    .logo{
+        height: 40px;
+        transition: 0.5s;
+
+        &:hover{
+            transform: scale(0.95);
+        }
+    }
 
     .searchDiv{
         background-color: $gray;
@@ -74,12 +83,10 @@ $gray: #F0F2F5;
     }
 
     .tabs{
-        padding: 0 30px;
         display: flex;
         align-items: center;
         //justify-self: flex-end;
         margin-left: auto;
-        width: 200px;
         gap: 20px;
 
         .tabItem{

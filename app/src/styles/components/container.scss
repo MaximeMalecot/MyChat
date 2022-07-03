@@ -1,0 +1,12 @@
+.container{
+    padding: 20px 15%;
+}
+
+.inline-items{
+    display: flex;
+    align-items: center;
+
+    &.space-between{
+        justify-content: space-between;
+    }
+}

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classes from './navbar.module.scss';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+import Logo from '../../assets/svg/logo.svg';
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const ResultItem = ({data}) => {
     const navigate = useNavigate();
@@ -47,7 +49,10 @@ export default function Navbar(){
     return(
         <div className={classes.navbar}>
             <Link to="/">
-                <img src={""} alt="Logo"/>
+                <img 
+                    className={classes.logo} 
+                    src={Logo} 
+                    alt="Logo"/>
             </Link>
             <div
                 className={classes.searchDiv}
@@ -73,12 +78,12 @@ export default function Navbar(){
                 </div>}
             </div>
             <div className={classes.tabs}>
-                <div className={`${classes.tabItem} ${classes.messengerIcon}`}>
+                <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
-                </div>
-                <div className={`${classes.tabItem} ${classes.profileIcon}`}>
+                </Link>
+                <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
-                </div>
+                </Link>
             </div>
         </div>
     )
