@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/svg/logo.svg';
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
+import { useAppContext } from '../../contexts/app-context';
 
 const ResultItem = ({data}) => {
     const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function Navbar(){
     const location = useLocation();
     const [searchEntry, setSearchEntry] = useState("");
     const [results, setResults] = useState([]);
+    const { appState } = useAppContext();
 
     useEffect(()=>{
         if(searchEntry.length > 0){
@@ -46,6 +48,8 @@ export default function Navbar(){
         setSearchEntry("");
     }, [location]);
 
+    if(appState.hideNavbar) return null;
+    
     return(
         <div className={classes.navbar}>
             <Link to="/">
