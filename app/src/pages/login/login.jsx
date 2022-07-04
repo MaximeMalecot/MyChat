@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../../contexts/app-context';
 import classes from './login.module.scss';
 
 export default function Login(){
     const [ authFields, setAuthFields ] = useState({email: '', password: ''});
+    const  {appState, dispatch } = useAppContext();
+
+    useEffect(()=>{
+        dispatch({action: 'HIDE_NAVBAR'})
+    }, []);
 
     return(
         <div className={classes.login}>
