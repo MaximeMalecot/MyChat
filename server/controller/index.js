@@ -1,2 +1,4 @@
-exports.analyticsController = require('./analytics.js');
-exports.logController = require('./log');
+exports.AnalyticsController = require('./analytics.js');
+exports.LogController = require('./log');
+exports.UserController = require('./user');
+exports.SecurityController = require('./security');

@@ -49,9 +49,9 @@ const SpecificLogger = ( req, { message='undefined', level=2, type='SERVER', rou
 
 const GlobalLogger = (req) => {
     let errorObject = {
-        message: `${Object.keys(req.route.methods)[0].toUpperCase()} on '${req.route.path}' - Unknown error `,
+        message: `${Object.keys(req.method)} on '${req.originalUrl}' - Unknown error `,
         level: 0,
-        route: req.route.path,
+        route: req.originalUrl,
     };
     Logger(errorObject);
 }

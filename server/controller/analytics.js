@@ -30,7 +30,8 @@ exports.connect = async (req, res, next) => {
     res.writeHead(200, headers);
 
     broadcast({ type: 'connect', client_id}, client_id);
-}
+    
+};
 
 exports.getLiveConnections = async (req, res, next) => {
     try{

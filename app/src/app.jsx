@@ -9,7 +9,7 @@ const Login = lazy(()=> import('./pages/login/login'));
 
 function App(){
     useEffect(()=>{
-        let url = "http://localhost:3000/connect"
+        let url = "http://localhost:3000/analytics/connect"
         if(localStorage.getItem('client_id')){
             url += "?client_id=" + localStorage.getItem('client_id');
         }

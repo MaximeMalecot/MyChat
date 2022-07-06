@@ -1,11 +1,9 @@
 const { Router } = require("express");
-const { logController } = require('../controller');
-
+const { LogController } = require('../controller');
 
 const router = new Router();
-
-router.post('/logs', logController.postLog);
-
-router.get('/logs', logController.getLogs);
+router.route('/')
+    .post(LogController.postLog)
+    .get(LogController.getLogs)
 
 module.exports = router;

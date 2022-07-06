@@ -1,7 +1,7 @@
 const { SpecificLogger, logInfo } = require("../lib/logger");
 const { Log, mongoose } = require("../models/mongo");
 
-exports.postLog(async(req, res) => {
+exports.postLog = ( async(req, res) => {
     try{
         SpecificLogger(req, { ...req.body, type:"APP"});
         res.sendStatus(201);
@@ -11,7 +11,7 @@ exports.postLog(async(req, res) => {
     }
 })
 
-exports.getLogs( async(req, res) => {
+exports.getLogs = ( async(req, res) => {
     let {
         type,
         message,
