@@ -8,8 +8,15 @@ const LogRouter = require('./routes/log');
 const AnalyticsRouter = require('./routes/analytics');
 const verifyToken = require("./middlewares/verifyToken");
 const { GlobalLogger } = require("./lib/logger");
+const cors = require("cors");
 const app = express();
 
+app.use(
+  cors({
+    origin: "http://localhost:8000",
+    credentials: true
+  })
+)
 app.use(express.json());
 app.use(
   express.urlencoded({

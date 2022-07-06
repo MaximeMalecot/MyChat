@@ -9,10 +9,21 @@ const Login = lazy(()=> import('./pages/login/login'));
 
 function App(){
     useEffect(()=>{
-        const polling =  (async() => {
-            await fetch("http://localhost:3000/connect");
+        let url = "http://localhost:3000/connect"
+        if(localStorage.getItem('client_id')){
+            url += "?client_id=" + localStorage.getItem('client_id');
+        }
+        const eventSource = new EventSource(
+            url,
+            {
+                withCredentials: true,
+            }
+        );
+
+        eventSource.addEventListener('connect', (e) => {
+            const client_id = JSON.parse(e.data).client_id;
+            localStorage.setItem('client_id', client_id);
         })
-        polling();
     }, [])
 
     return (
