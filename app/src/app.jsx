@@ -6,8 +6,10 @@ import { AppContextProvider } from "./contexts/app-context";
 
 const Home = lazy(()=> import('./pages/home/home'));
 const Login = lazy(()=> import('./pages/login/login'));
+const Search = lazy(()=> import('./pages/search/search'));
 
 function App(){
+
     useEffect(()=>{
         let url = "http://localhost:3000/analytics/connect"
         if(localStorage.getItem('client_id')){
@@ -27,18 +29,25 @@ function App(){
     }, [])
 
     return (
-        <Router>
-            <AppContextProvider>
+        <AppContextProvider>
+            <Router>
                 <Navbar/>
                 <Suspense fallback={() => <p>Loading</p>}>
                     <Routes>
-                        <Route path="/login" element={<Login/>}/>
-                        <Route path="*" element={<Home/>}/>
+                        <Route 
+                            path="/login" 
+                            element={<Login/>}/>
+                        <Route 
+                            path="/search/:query" 
+                            element={<Search/>}/>
+                        <Route 
+                            path="*" 
+                            element={<Home/>}/>
                     </Routes>
                 </Suspense>
                 <Footer/>
-            </AppContextProvider>
-        </Router>
+            </Router>
+        </AppContextProvider>
     )
 }
 
