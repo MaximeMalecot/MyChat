@@ -9,7 +9,7 @@ const root = createRoot(rootElement);
 const Main = () => {
   return (
     <StrictMode>
-    <App/>
+      <App/>
     </StrictMode>
   );
 };
