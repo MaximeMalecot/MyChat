@@ -2,7 +2,7 @@ const { connection } = require("./models/postgres");
 
 connection
   .sync({
-    alter: true,
+    force: true,
   })
   .then(() => {
     console.log("Database synced");

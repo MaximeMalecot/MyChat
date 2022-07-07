@@ -22,9 +22,8 @@ app.use(
 app.use("/", mainRouter);
 
 app.use((req, res, next) => {
-    console.log(req);
-    /*GlobalLogger(req);
-    return res.sendStatus(500);*/
+    GlobalLogger(req);
+    return res.sendStatus(500);
 })
 
 module.exports = app;
