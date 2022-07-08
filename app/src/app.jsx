@@ -36,7 +36,7 @@ function App(){
                 <Navbar/>
                 <Suspense fallback={() => <p>Loading</p>}>
                     <Routes>
-                        <Route path="/mon-profil" element={<MonProfil/>}/>
+                        <Route path="/profile" element={<MonProfil/>}/>
                         <Route path="/page-introuvable" element={<PageIntrouvable/>}/>
                         <Route 
                             path="/login" 
