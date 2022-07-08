@@ -2,6 +2,7 @@ const { User: UserMongo } = require("../mongo");
 
 exports.connection = require("./db");
 exports.User = require("./User");
+exports.Filiere = require("./Filiere");
 exports.Message = require("./Message");
 exports.FriendShip = require("./FriendShip");
 
