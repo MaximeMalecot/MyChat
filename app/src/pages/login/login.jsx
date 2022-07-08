@@ -7,10 +7,6 @@ export default function Login(){
     const [ authFields, setAuthFields ] = useState({email: '', password: ''});
     const  {appState, dispatch } = useAppContext();
 
-    useEffect(()=>{
-        dispatch({action: 'HIDE_NAVBAR'})
-    }, []);
-
     return(
         <div className={classes.login}>
             <div className={classes.content}>
