@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { connection } = require("./models/postgres");
 
 connection
