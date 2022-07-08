@@ -1,43 +1,35 @@
 const { Log, mongoose } = require("../models/mongo");
 
-/**
- * ERROR : {
- *  Type: string 'SERVER' <> 'APP',
- *  Message: string ,
- *  Date: Timestamp,
- *  Level: integer,
- *  Route: string
- * }
- * 
- * LogLevels:{
- *  0: critical,
- *  1: security,
- *  2: basic,
- * }
-*/
-
-const logInfo = {
+const log = {
     types: [
         'SERVER',
         'APP'
     ],
-    levels: [
-        0,1,2
-    ]
+    levels: {
+        error: 0,
+        warn: 1,
+        info: 2,
+        http: 3,
+        verbose: 4,
+        debug: 5,
+        silly: 6
+    }
 }
 
 const Logger = (errorObject) => {
     const log = new Log(errorObject);
     log.save()
-        .then((data)=>{
-            console.log("saved")
-        })
+        .then(console.log)
         .catch(console.error)
-    console.log(errorObject);
-    //SAVE INMONGODB
 }
 
-const SpecificLogger = ( req, { message='undefined', level=2, type='SERVER', route=req.route.path }) => {
+const SpecificLogger = ( req, { message='undefined', level=log.levels.info, type='SERVER', route=req.originalUrl }) => {
+    if(!Object.values(log.levels).includes(level)){
+        throw new Error('Not RFC friendly log');
+    }
+    if(!log.types.includes(type)){
+        throw new Error('Unkonw log type');
+    }
     let errorObject = {
         message,
         level,
@@ -49,11 +41,11 @@ const SpecificLogger = ( req, { message='undefined', level=2, type='SERVER', rou
 
 const GlobalLogger = (req) => {
     let errorObject = {
-        message: `${Object.keys(req.method)} on '${req.originalUrl}' - Unknown error `,
-        level: 0,
+        message: `${req.method} on '${req.originalUrl}' - Unknown error `,
+        level: log.levels.error,
         route: req.originalUrl,
     };
     Logger(errorObject);
 }
 
-module.exports = { Logger, GlobalLogger, SpecificLogger, logInfo }
+module.exports = { Logger, GlobalLogger, SpecificLogger, log }

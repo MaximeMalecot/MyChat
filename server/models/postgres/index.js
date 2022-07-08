@@ -2,9 +2,12 @@ const { User: UserMongo } = require("../mongo");
 
 exports.connection = require("./db");
 exports.User = require("./User");
+exports.Field = require("./Field");
 exports.Message = require("./Message");
 exports.FriendShip = require("./FriendShip");
 
+exports.User.belongsTo(exports.Field);
+exports.Field.hasMany(exports.User);
 
 exports.Message.belongsTo(exports.User, { foreignKey: 'sender'});
 exports.User.hasMany(exports.Message, { foreignKey: 'sender'});

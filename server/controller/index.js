@@ -1,4 +1,6 @@
-exports.AnalyticsController = require('./analytics.js');
+exports.AnalyticsController = require('./analytics');
+exports.FieldController = require('./field.js');
 exports.LogController = require('./log');
-exports.UserController = require('./user');
 exports.SecurityController = require('./security');
+exports.TechnoController = require('./techno');
+exports.UserController = require('./user');

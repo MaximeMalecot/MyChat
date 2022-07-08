@@ -4,9 +4,8 @@ const { Log, mongoose } = require("../models/mongo");
 exports.postLog = ( async(req, res) => {
     try{
         SpecificLogger(req, { ...req.body, type:"APP"});
-        res.sendStatus(201);
+        return res.sendStatus(201);
     } catch(err){
-        res.sendStatus(500);
         next();
     }
 })
@@ -23,7 +22,7 @@ exports.getLogs = ( async(req, res) => {
     if(type){
         if(typeof type !== "string" || !logInfo.types.includes(type)){
             SpecificLogger(req, { 
-                message:`${Object.keys(req.route.methods)[0].toUpperCase()} on '${req.route.path}' - Type malformated`,
+                message:`${req.method} on '${req.originalUrl}' - Type malformated`,
                 level: 1
             });
             return res.status(400).json({
@@ -43,7 +42,7 @@ exports.getLogs = ( async(req, res) => {
         date = new Date(date);
         if(isNaN(date)){
             SpecificLogger(req, { 
-                message:`${Object.keys(req.route.methods)[0].toUpperCase()} on '${req.route.path}' - Date malformated`,
+                message:`${req.method} on '${req.originalUrl}' - Date malformated`,
                 level: 1
             });
             return res.status(400).json({
@@ -75,5 +74,5 @@ exports.getLogs = ( async(req, res) => {
         });
     }
     const logs = await Log.aggregate(pipelines);
-    res.status(200).json(logs);
+    return res.status(200).json(logs);
 })
