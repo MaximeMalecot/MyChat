@@ -1,7 +1,7 @@
 const router = require( "express" ).Router();
 
 router.use('/analytics', require('./analytics'));
-router.use('/filiere', require('./filiere'));
+router.use('/field', require('./field'));
 router.use('/logs', require('./log'));
 router.use('/security', require('./security'));
 router.use('/techno', require('./techno'));

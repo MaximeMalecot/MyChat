@@ -45,7 +45,7 @@ exports.getLiveConnections = async (req, res, next) => {
 
 exports.postAnalytic = async (req, res) => {
     try{
-        res.sendStatus(201);
+        return res.sendStatus(201);
     }catch(err){
         next();
     }
@@ -53,7 +53,7 @@ exports.postAnalytic = async (req, res) => {
 
 exports.getAnalytics = async (req, res, next) => {
     try{
-        res.sendStatus(200);
+        return res.sendStatus(200);
     }catch(err){
         next();
     }

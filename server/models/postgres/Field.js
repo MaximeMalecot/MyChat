@@ -1,11 +1,10 @@
 // Create Filiere model
 const { Model, DataTypes } = require("sequelize");
 const connection = require("./db");
-const bcryptjs = require("bcryptjs");
 
-class Filiere extends Model {}
+class Field extends Model {}
 
-Filiere.init(
+Field.init(
   {
     name: {
       type: DataTypes.STRING,
@@ -15,8 +14,8 @@ Filiere.init(
   },
   {
     sequelize: connection,
-    modelName: "filiere",
+    modelName: "field",
   }
 );
 
-module.exports = Filiere;
+module.exports = Field;
