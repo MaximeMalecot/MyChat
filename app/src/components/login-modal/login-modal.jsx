@@ -40,7 +40,7 @@ export default function LoginModal({visible, setVisible}){
             className={`${classes.loginModal}`}
             disableAutoFocus={true}
             ariaHideApp={false}
-            style={{ overlay: { zIndex: 1000, background: 'rgba(0, 0, 0, 0.7)' } }}>
+            style={{ overlay: { zIndex: 1000, background: 'rgba(255, 255, 255, 0.7)' } }}>
                 <div className={classes.formHeader}>
                     <div className={classes.content}>
                         <h2>Sign Up</h2>

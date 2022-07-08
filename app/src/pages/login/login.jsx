@@ -16,7 +16,7 @@ export default function Login(){
         if(res === false){
             console.error(res);
         }else{
-            dispatch({action: 'SET_TOKEN', payload: res });
+            dispatch({action: 'SET_TOKEN', payload: res.token });
         }
     };
 
