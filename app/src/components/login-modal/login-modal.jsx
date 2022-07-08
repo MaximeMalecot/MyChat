@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import classes from './login-modal.module.scss';
+import AuthService from '../../services/auth.service';
 
 const baseUserFields = {
     lastname: '',
@@ -22,9 +23,14 @@ export default function LoginModal({visible, setVisible}){
         setUserFields({...userFields, [type]: value});
     }, [userFields]);
 
-    const onSubmit = e => {
+    const onSubmit = async e => {
         e.preventDefault();
-        alert('yes')
+        let res = await AuthService.register(userFields);
+        if(res === true){
+            setVisible(false);
+        }else{
+            console.error(res);
+        }
     };
 
     return(
@@ -49,8 +55,8 @@ export default function LoginModal({visible, setVisible}){
                     <form onSubmit={onSubmit}>
                         <div className={classes.inlineInput}>
                             <input
-                                onChange={e => updateField(e.target.value, 'firstname')}
-                                value={userFields.firstname}
+                                onChange={e => updateField(e.target.value, 'name')}
+                                value={userFields.name}
                                 className={''}
                                 type="text"
                                 placeholder="First name"
