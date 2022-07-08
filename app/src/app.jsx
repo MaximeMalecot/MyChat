@@ -5,7 +5,7 @@ import Footer from "./components/footer/footer";
 import { AppContextProvider } from "./contexts/app-context";
 
 const Home = lazy(()=> import('./pages/home/home'));
-const MonProfil = lazy(()=> import('./pages/monprofil'));
+const MonProfil = lazy(()=> import('./pages/profile'));
 const PageIntrouvable = lazy(()=> import('./pages/404'));
 const Login = lazy(()=> import('./pages/login/login'));
 const Search = lazy(()=> import('./pages/search/search'));
