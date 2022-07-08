@@ -3,7 +3,7 @@ import { API } from '../constants/base';
 class AuthService{
     async register(user){
         try{
-            let res = await fetch(`${API}/users`, 
+            let res = await fetch(`${API}/security/register`, 
                     {
                         method: "POST",
                         headers:{
@@ -25,7 +25,7 @@ class AuthService{
 
     async login(user){
         try{
-            let res = await fetch(`${API}/users`, 
+            let res = await fetch(`${API}/security/login`, 
                 {
                     method: "POST",
                     headers:{
@@ -36,7 +36,7 @@ class AuthService{
                 }
             );
 
-            if(res.status !== 201){
+            if(res.status !== 200){
                 throw new Error((await res.json()).message??'An error occurred');
             }
 

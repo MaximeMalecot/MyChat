@@ -4,21 +4,30 @@ import { useAppContext } from '../../contexts/app-context';
 import classes from './login.module.scss';
 import LoginModal from '../../components/login-modal/login-modal';
 import AuthService from '../../services/auth.service';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login(){
+    const navigate = useNavigate();
     const [ authFields, setAuthFields ] = useState({email: '', password: ''});
     const  {appState, dispatch } = useAppContext();
     const [ openLoginModal, setOpenLoginModal ] = useState(false);
 
     const onSubmit = async e => {
+        e.stopPropagation();
         e.preventDefault();
         let res = await AuthService.login(authFields);
         if(res === false){
             console.error(res);
         }else{
-            dispatch({action: 'SET_TOKEN', payload: res.token });
+            dispatch({action: 'SET_TOKEN', payload: {token: res.token} });
         }
     };
+
+    useEffect(()=>{
+        if(appState.auth.token){
+            navigate('/');
+        }
+    }, [ appState]);
 
     return(
         <div className={classes.login}>

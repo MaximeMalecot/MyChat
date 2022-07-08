@@ -46,7 +46,6 @@ export default function Navbar(){
 
     useEffect(()=>{
         setSearchEntry("");
-        console.log(location)
     }, [location]);
 
     if((location.pathname).startsWith('/login')) return null;

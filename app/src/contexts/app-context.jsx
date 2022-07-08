@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer } from "react";
 
 const authInitData = {
-    token: null,
+    token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
     avatar: null,
     email: null,
     username: null
@@ -32,6 +32,7 @@ export const appStateReducer = (previousState, { action, payload }) => {
             
         case "SET_TOKEN":
             const { token } = payload;
+            localStorage.setItem('token', token);
             return { ...previousState, token };
 
         case 'SET_AUTH_DATA':

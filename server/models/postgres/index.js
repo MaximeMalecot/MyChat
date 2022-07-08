@@ -29,7 +29,7 @@ function denormalizeUser(user){
     }).then((result) => {
         const mongoUser = new UserMongo(result);
         mongoUser.save()
-            .then(console.log(data))
+            .then(console.log)
             .catch(console.error);
     })
 }

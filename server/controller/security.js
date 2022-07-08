@@ -3,8 +3,9 @@ const { createToken } = require("../lib/jwt");
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const formatError = require("../lib/formatError");
+const bcrypt =  require('bcryptjs');
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
     try {
 		const user = await User.findOne({ where: { email: req.body.email } });
 		if (!user) {
@@ -29,6 +30,7 @@ exports.login = async (req, res) => {
 			token: createToken(user),
 		});
     } catch (error) {
+		console.error(error);
       next();
     }
 };
