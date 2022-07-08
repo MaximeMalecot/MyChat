@@ -6,6 +6,7 @@ import { AppContextProvider } from "./contexts/app-context";
 
 const Home = lazy(()=> import('./pages/home/home'));
 const MonProfil = lazy(()=> import('./pages/monprofil'));
+const CreateFiliere = lazy(()=> import('./pages/admin/createFiliere'));
 const PageIntrouvable = lazy(()=> import('./pages/404'));
 const Login = lazy(()=> import('./pages/login/login'));
 const Search = lazy(()=> import('./pages/search/search'));
@@ -37,6 +38,7 @@ function App(){
                 <Suspense fallback={() => <p>Loading</p>}>
                     <Routes>
                         <Route path="/profile" element={<MonProfil/>}/>
+                        <Route path="/create-filiere" element={<CreateFiliere/>}/>
                         <Route path="/page-introuvable" element={<PageIntrouvable/>}/>
                         <Route 
                             path="/login" 
