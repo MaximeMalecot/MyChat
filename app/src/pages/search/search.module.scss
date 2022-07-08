@@ -1,0 +1,48 @@
+.search{
+    & > h2{
+        margin-bottom: 30px;
+    }
+
+    .searchResults{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .profileItem{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+
+            .profilePictureContainer{
+                width: 50px;
+                height: 50px;
+                overflow: hidden;
+                border-radius: 30px;
+                border: 1px solid gray;
+
+                img{
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .profileData{
+                p{
+                    font-size: 12px;
+                    color: gray;
+                }
+            }
+
+            .connectBtn{
+                margin-left: auto;
+            }
+        }
+    }
+
+   
+}

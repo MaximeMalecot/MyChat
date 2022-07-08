@@ -1,8 +1,34 @@
+const { User: UserMongo } = require("../mongo");
+
 exports.connection = require("./db");
 exports.User = require("./User");
-exports.Post = require("./Post");
+exports.Message = require("./Message");
+exports.FriendShip = require("./FriendShip");
 
-exports.User.hasMany(exports.Post);
-exports.Post.belongsTo(exports.User);
 
-exports.Post.addHook("afterCreate", (post) => {});
+exports.Message.belongsTo(exports.User, { foreignKey: 'sender'});
+exports.User.hasMany(exports.Message, { foreignKey: 'sender'});
+
+exports.Message.belongsTo(exports.User, { foreignKey: 'receiver'});
+exports.User.hasMany(exports.Message, { foreignKey: 'receiver'});
+
+exports.FriendShip.belongsTo(exports.User, { foreignKey: 'sender'});
+exports.User.hasMany(exports.FriendShip, { foreignKey: 'sender'});
+
+exports.FriendShip.belongsTo(exports.User, { foreignKey: 'receiver'});
+exports.User.hasMany(exports.FriendShip, { foreignKey: 'receiver'});
+
+function denormalizeUser(user){
+    exports.User.findByPk(user.id, {
+        attributes: [
+            "id", "name"
+        ],
+    }).then((result) => {
+        const mongoUser = new UserMongo(result);
+        mongoUser.save()
+            .then(console.log(data))
+            .catch(console.error);
+    })
+}
+
+exports.User.addHook("afterCreate", denormalizeUser);
