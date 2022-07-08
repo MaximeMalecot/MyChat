@@ -33,10 +33,10 @@ export const appStateReducer = (previousState, { action, payload }) => {
         case "SET_TOKEN":
             const { token } = payload;
             localStorage.setItem('token', token);
-            return { ...previousState, token };
+            return { ...previousState, auth: {...previousState.auth, token } };
 
         case 'SET_AUTH_DATA':
-            return { ...previousState, profile: {...previousState.profile, ...payload} };
+            return { ...previousState, auth: {...previousState.auth, ...payload} };
 
         case "LOGOUT":
             localStorage.removeItem(process.env.REACT_APP_STORAGE_KEY);
