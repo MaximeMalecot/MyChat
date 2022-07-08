@@ -1,0 +1,100 @@
+.loginModal{
+    z-index: 20000 !important;
+    background-color: white;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    height: fit-content;
+    border-radius: 6px;
+    border: 1px solid rgb(226, 226, 226) ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: white;
+    padding: 10px 0;
+
+    &:focus-visible{
+        outline: none;
+    }
+
+    .formHeader{
+        width: 100%;
+        border-bottom: 1px solid rgb(207, 207, 207);
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        position: relative;
+        .content{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            gap: 5px;
+            p{
+                color: gray;
+            }
+
+            svg{
+                cursor: pointer;
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
+        }
+        
+    }
+
+    .formContent{
+        width: 100%;
+
+        form{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            width: 100%;
+            padding: 10px 20px;
+            gap: 10px;
+            
+            input{
+                padding: 10px 10px;
+                background-color: #f5f6f7;
+                border: 1px solid rgb(180, 180, 180);
+                outline: none;
+                border-radius: 5px;
+                width: 100%;
+
+            }
+
+            .inlineInput{
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                input{
+                    flex: 1;
+                }
+            }
+
+            .tos{
+                color: gray;
+                font-size: 10px;
+            }
+
+            button{
+                padding: 10px 60px;
+                font-size: 16px;
+            }
+        }
+
+    }
+
+}

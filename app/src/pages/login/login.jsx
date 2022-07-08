@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../../contexts/app-context';
 import classes from './login.module.scss';
+import LoginModal from '../../components/login-modal/login-modal';
 
 export default function Login(){
     const [ authFields, setAuthFields ] = useState({email: '', password: ''});
     const  {appState, dispatch } = useAppContext();
+    const [ openLoginModal, setOpenLoginModal ] = useState(false);
 
     return(
         <div className={classes.login}>
@@ -32,12 +34,15 @@ export default function Login(){
                             <button className='btn blue'>Log In</button>
                             <Link to="/login/recover"><p>Forgot password?</p></Link>
                         </form>
-                        <button className='btn green'>Create new account</button>
+                        <button onClick={() => setOpenLoginModal(true)}
+                            className='btn green'>Create new account</button>
                     </div>
                 </div>
                 
             </div>
-            
+            <LoginModal
+                setVisible={setOpenLoginModal}
+                visible={openLoginModal}/>
         </div>
     )
 }
