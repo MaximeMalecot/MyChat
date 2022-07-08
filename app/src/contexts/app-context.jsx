@@ -23,13 +23,7 @@ export const useAppContext = () => {
 }
 
 export const appStateReducer = (previousState, { action, payload }) => {
-    switch(action){
-        case "HIDE_NAVBAR":
-            return { ...previousState, hideNavbar: true }
-            
-        case "SHOW_NAVBAR":
-            return { ...previousState, hideNavbar: false }
-            
+    switch(action){            
         case "SET_TOKEN":
             const { token } = payload;
             localStorage.setItem('token', token);
