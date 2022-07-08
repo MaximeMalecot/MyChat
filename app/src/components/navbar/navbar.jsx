@@ -49,7 +49,7 @@ export default function Navbar(){
         console.log(location)
     }, [location]);
 
-    if(location.pathname === '/login') return null;
+    if((location.pathname).startsWith('/login')) return null;
     
     return(
         <div className={classes.navbar}>
