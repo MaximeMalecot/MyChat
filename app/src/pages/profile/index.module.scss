@@ -1,5 +1,6 @@
 %reset { margin: 0; padding: 0; }
 %flex { display: flex; justify-content: center;	align-items: center; }
+%cardDisplay {position: absolute; top: 10px; right: 10px;}
  
 @mixin animated($timein: null, $delay: null) { 
  transition: all $timein ease-in-out;
@@ -38,6 +39,9 @@ $maincolor: #009688;
   box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
   position: relative;
   overflow: hidden;
+  .edit{
+    @extend %cardDisplay;
+  }
   &:after {
     content: '';
     display: block;
@@ -49,6 +53,18 @@ $maincolor: #009688;
     animation: rotatemagic 0.75s cubic-bezier(0.425, 1.040, 0.470, 1.105) 1s both;
   }
 }
+  .cardForm{
+    @include dimensions( 500px,  500px);
+    padding: 20px;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+    .close{
+      @extend %cardDisplay;
+    }
+  }
 
   .badgescard{
     padding: 13px 20px;
