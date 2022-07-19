@@ -47,7 +47,7 @@ $maincolor: #009688;
     
     position: absolute;
     animation: rotatemagic 0.75s cubic-bezier(0.425, 1.040, 0.470, 1.105) 1s both;
-}
+  }
 }
 
   .badgescard{
@@ -75,7 +75,6 @@ $maincolor: #009688;
   z-index:2;
   position: relative;
   img{ 
-    border-radius: 50%;
     width: 120px;
     height: 120px;
   }
@@ -95,7 +94,25 @@ $maincolor: #009688;
   }
 }
 
-
+@media screen and (max-width: 500px ) {
+  .card{
+    @include dimensions( 100%,  0px);
+    &:after {
+      animation: rotatemagicmobile 0.75s cubic-bezier(0.425, 1.040, 0.470, 1.105) 1s both;
+      height: 400px;
+    }
+  }
+  .badgescard{
+    width: 100%;
+    left: 0;
+  }
+  .firstinfo{
+    flex-direction: column;
+    .profileinfo{
+      margin-top: 10px;
+    }
+  }
+}
 @keyframes animatop{
   0%{ 
     opacity: 0;
@@ -124,5 +141,20 @@ $maincolor: #009688;
     transform: rotate(-30deg);
     top: -24px;
     left: -78px;
+  }
+}
+
+@keyframes rotatemagicmobile{
+  0%{
+    opacity: 0;
+    transform: rotate(-0deg);
+    top: -24px;
+    left: -253px;
+  }
+  100%{
+    
+    transform: rotate(-30deg);
+    top: 10px;
+    left: -100px;
   }
 }
