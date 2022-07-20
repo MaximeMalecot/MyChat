@@ -36,8 +36,30 @@ class TechnoService{
                         "Accept": "*/*",
                         "Content-Type":"application/json",
                         "Authorization":`Bearer ${token}`
-
                     },
+                }
+            );
+            res = await res.json();
+            return res;
+        //}catch(e){
+        //    return e.message;
+        //}
+    }
+    async create(name){
+        //try{
+            const token = localStorage.getItem("token");
+            if (!token){
+                throw new Error("T'AS PAS L'ACCES FRERO")
+            }
+            let res = await fetch(`${API}/techno/`, 
+                {
+                    method: "POST",
+                    headers:{
+                        "Accept": "*/*",
+                        "Content-Type":"application/json",
+                        "Authorization":`Bearer ${token}`
+                    },
+                    body:JSON.stringify({name})
                 }
             );
             res = await res.json();

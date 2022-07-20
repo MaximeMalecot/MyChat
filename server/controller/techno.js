@@ -12,6 +12,7 @@ exports.getTechnos = async (req, res) => {
 
 exports.postTechno = async (req, res) => {
     try {
+        console.log("ntm");
 		const techno = await Techno.create(req.body);
 		res.status(201).json(techno);
     } catch (error) {
