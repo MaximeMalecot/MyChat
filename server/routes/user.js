@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { UserController } = require('../controller');
+const { verifyToken } = require('../middlewares/auth');
 
 const router = new Router();
 router.route('/')
@@ -7,7 +8,7 @@ router.route('/')
 	.post(UserController.postUser)
 
 router.route('/:id')
-	.get(UserController.getUser)
+	.get(verifyToken, UserController.getUser)
 	.put(UserController.modifyUser)
 	.delete(UserController.deleteUser);
 
