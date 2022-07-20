@@ -1,4 +1,5 @@
 const { User: UserMongo } = require("../mongo");
+const mongoose = require("mongoose");
 
 exports.connection = require("./db");
 exports.User = require("./User");
@@ -26,12 +27,35 @@ function denormalizeUser(user){
         attributes: [
             "id", "name"
         ],
-    }).then((result) => {
-        const mongoUser = new UserMongo(result);
+    }).then(({id, name}) => {
+        console.log(id, name);
+        const mongoUser = new UserMongo({
+            _id: mongoose.Types.ObjectId(id),
+            name: name
+        });
         mongoUser.save()
             .then(console.log)
             .catch(console.error);
     })
 }
 
+function denormalizeMessage(message){
+    exports.Message.findByPk(message.id, {
+        attributes: [
+            "id", "content", "sender", "receiver"
+        ],
+    }).then(async (result) => {
+        console.log(result);
+        const mongoMessage = new MessageMongo({
+            _id: mongoose.Types.ObjectId(result.id),
+            content: result.content,
+            sender: mongoose.Types.ObjectId(result.sender.id),
+            receiver: mongoose.Types.ObjectId(result.receiver.id),
+        });
+        mongoMessage.save()
+            .then(console.log)
+            .catch(console.error);
+    })
+}
 exports.User.addHook("afterCreate", denormalizeUser);
+exports.Message.addHook("afterCreate", denormalizeMessage);

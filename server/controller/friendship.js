@@ -1,23 +1,29 @@
-const { User } = require("../models/postgres");
-const { FriendShip } = require("../models/postgres/FriendShip");
+const { User: UserPG } = require("../models/postgres");
+const { User: UserMongo } = require("../models/mongo");
+const { FriendShip } = require("../models/postgres");
 
 exports.sendInvitation = async (req, res, next) => {
     try{
+        console.log(FriendShip);
         await FriendShip.create({
             sender: req.user.id,
-            receiver: req.body.user
+            receiver: req.params.id
         });
-        res.status(201);
+        res.sendStatus(201);
     }catch(e){
+        console.error(e);
         next();
     }
 };
 
 exports.getList = async (req, res, next) => {
     try{
-
+        console.log(req.params.id);
+        console.log('#################');
+		const friendList = await UserMongo.find({ _id: req.query.id });
+        res.status(200).json(friendList);
     }catch(e){
-        
+        next();
     }
 };
 
