@@ -1,5 +1,8 @@
 import React, {lazy, Suspense, useEffect} from "react";
 import {BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
 import { useAppContext } from "./contexts/app-context";
@@ -48,6 +51,7 @@ export default function AppRouter(){
                         element={<Home/>}/>
                 </Routes>
             </Suspense>
+            <ToastContainer/>
             <Footer/>
         </>
     )

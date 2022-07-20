@@ -24,7 +24,7 @@ class AuthService{
     }
 
     async login(user){
-        try{
+        //try{
             let res = await fetch(`${API}/security/login`, 
                 {
                     method: "POST",
@@ -37,13 +37,18 @@ class AuthService{
             );
 
             if(res.status !== 200){
-                throw new Error((await res.json()).message??'An error occurred');
+                if(res.status == 500){
+                    throw new Error("An error occurred, please try again later");
+                }else{
+                    //throw new Error((await res.json()).message??'An error occurred');
+                    throw new Error("Invalid account");
+                }
             }
 
             return await res.json();
-        }catch(e){
-            return false;
-        }
+        //}catch(e){
+        //    return e.message;
+        //}
     }
 }
 
