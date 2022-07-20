@@ -35,7 +35,7 @@ exports.login = async (req, res, next) => {
     }
 };
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
     try {
 		const user = await User.create(req.body);
 		return res.status(201).json(user);
