@@ -3,26 +3,58 @@ const { ValidationError } = require("sequelize");
 
 exports.getTechnos = async (req, res) => {
     try {
-		const technos = await Techno.findAll();
+		const technos = await Techno.findAll({
+			order: [
+				['createdAt', 'ASC'],
+			],
+		});
 		res.status(200).json(technos);
     } catch (error) {
       	next();
     }
 };
 
-exports.postTechno = async (req, res) => {
+exports.postTechno = async (req, res, next) => {
     try {
-        console.log("ntm");
 		const techno = await Techno.create(req.body);
 		res.status(201).json(techno);
     } catch (error) {
       	if (error instanceof ValidationError) {
 			res.status(422).json({
-				quantity: "must be greather than 0",
-				title: "must not be empty",
+				name: "Invalid name",
 			});
       	} else {
         	next();
       	}
     }
 };
+
+exports.putTechno = async (req, res, next) => {
+	try {
+		await Techno.update({ name: req.body.name },{ where: { id: req.params.id }});
+		res.sendStatus(204);
+    } catch (error) {
+      	if (error instanceof ValidationError) {
+			res.status(422).json({
+				id: "Invalid ressource",
+			});
+      	} else {
+        	next();
+      	}
+    }
+}
+
+exports.deleteTechno = async (req, res, next) => {
+	try {
+		await Techno.destroy({ where: { id: req.params.id }});
+		res.sendStatus(202);
+    } catch (error) {
+      	if (error instanceof ValidationError) {
+			res.status(422).json({
+				id: "Invalid ressource",
+			});
+      	} else {
+        	next();
+      	}
+    }
+}

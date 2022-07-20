@@ -5,6 +5,10 @@ const router = new Router();
 
 router.route('/')
     .post(verifyToken, checkAdmin, TechnoController.postTechno)
-    .get( verifyToken, checkAdmin, TechnoController.getTechnos)
+    .get(TechnoController.getTechnos)
+
+router.route('/:id')
+    .put(verifyToken, checkAdmin, TechnoController.putTechno)
+    .delete(verifyToken, checkAdmin, TechnoController.deleteTechno)
 
 module.exports = router;

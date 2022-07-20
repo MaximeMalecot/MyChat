@@ -1,3 +1,5 @@
+@import '../../../styles/colors.scss';
+
 .container {
     width: 100%;
     display: flex;
@@ -11,5 +13,24 @@
     margin-top: 20px;
     input{
         margin: 10px 0;
+    }
+}
+
+.listContainer{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    .list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 60%;
+        margin-top: 20px;
+        background-color: rgb(195, 195, 195);
+        div:nth-child(odd){
+            background-color: rgb(215, 215, 215);
+        }
     }
 }
