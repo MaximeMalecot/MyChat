@@ -11,7 +11,7 @@ router.route('/invitations')
 
 router.route('/invitations/:id')
     .post(verifyToken, FriendshipController.sendInvitation)
-	//.patch(FriendshipController.acceptInvitation)
+	.patch(FriendshipController.acceptInvitation)
 	//.delete(FriendshipController.denyInvitation);
 
 module.exports = router;

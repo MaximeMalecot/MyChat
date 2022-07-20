@@ -29,12 +29,14 @@ const denormalizeUser = async (user) => {
         ],
     })
     const mongoUser = new UserMongo({
-        _id: mongoose.Types.ObjectId(pgUser.id),
+        //_id: mongoose.Types.ObjectId(pgUser.id),
+        userId: pgUser.id,
         email: pgUser.email, 
         firstName: pgUser.firstName,
         lastName: pgUser.lastName
     });
-    await mongoUser.save();
+    mongoUser.save()
+    .catch(console.error)
 }
 
 exports.User.addHook("afterCreate", denormalizeUser);
@@ -43,11 +45,11 @@ exports.User.addHook("beforeDestroy", async(user) => {
     //cherche toutes les friendlist ayant le user dans la friendList
     //
     UserMongo.updateMany({
-        "user.friendlist.userId": mongoose.Types.ObjectId(user.id)
+        "user.friendlist.userId": user.id
     },
     {
         $unset: {
-            "user.friendlist.userId" : mongoose.Types.ObjectId(user.id)
+            "user.friendlist.userId" : user.id
         }
     })
     .then(() => user.destroy())
