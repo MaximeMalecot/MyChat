@@ -4,8 +4,8 @@ import classes from './login-modal.module.scss';
 import AuthService from '../../services/auth.service';
 
 const baseUserFields = {
-    lastname: '',
-    firstname: '',
+    lastName: '',
+    firstName: '',
     password: '',
     email: ''
 };
@@ -55,15 +55,15 @@ export default function LoginModal({visible, setVisible}){
                     <form onSubmit={onSubmit}>
                         <div className={classes.inlineInput}>
                             <input
-                                onChange={e => updateField(e.target.value, 'name')}
-                                value={userFields.name}
+                                onChange={e => updateField(e.target.value, 'firstName')}
+                                value={userFields.firstName}
                                 className={''}
                                 type="text"
                                 placeholder="First name"
                                 />
                             <input
-                                onChange={e => updateField(e.target.value, 'lastname')}
-                                value={userFields.lastname}
+                                onChange={e => updateField(e.target.value, 'lastName')}
+                                value={userFields.lastName}
                                 className={''}
                                 type="text"
                                 placeholder="Last name"

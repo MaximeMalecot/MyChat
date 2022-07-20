@@ -3,7 +3,8 @@ const {FRIEND_STATUS} = require('../../constants/enums');
 
 const FriendListUser = new mongoose.Schema({
     userId: {type: String, required: true},
-    userName: {type: String, required: true},
+    userFirstName: {type: String, required: true},
+    userLastName: {type: String, required: true},
     status: {
         type: String,
         enum: FRIEND_STATUS,
@@ -12,10 +13,30 @@ const FriendListUser = new mongoose.Schema({
 })
 
 const UserSchema = new mongoose.Schema({
-    name: {type: String, required: true},
-    friendlist: FriendListUser,
+    email: {type: String, unique: true, required: true},
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
+    friendList: FriendListUser,
 });
 
 const User = mongoose.model("users", UserSchema);
 
 module.exports = User;
+
+/*
+{
+    _id:,
+    firstName:,
+    lastName:,
+    friendList: {
+        {
+            userId: id,
+            ...
+        },
+        ...,
+        {
+            userId: id
+        }
+    }
+}
+ */
