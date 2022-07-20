@@ -40,7 +40,8 @@ class TechnoService{
                     },
                 }
             );
-            return await res.json();
+            res = await res.json();
+            return res;
         //}catch(e){
         //    return e.message;
         //}

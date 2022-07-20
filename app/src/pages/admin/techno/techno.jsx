@@ -6,11 +6,13 @@ export default function Techno() {
     const  {appState} = useAppContext();
 
     useEffect(() => {
-        console.log(technoServices.getAll());
+        technoServices.getAll()
+          .then((res) => setTechnos(res))
+          .catch(console.error);
     }, []) 
   return (
     <div>
-        
+        {JSON.stringify(technos)}
     </div>
   );
 }
