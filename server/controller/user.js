@@ -77,3 +77,18 @@ exports.getUser = async (req, res) => {
      	next();
     }
 };
+
+exports.getSelf = async (req, res, next) => {
+    try {
+		console.log('aqui');
+		const user = await User.findByPk(req.user.id);
+		console.log('aquiqui');
+		if (!user) {
+			return res.sendStatus(404);
+		} else {
+			return res.json(user);
+		}
+    } catch (error) {
+     	next();
+    }
+};
