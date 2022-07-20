@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
+import MyProfileForm from '../../components/my-profile-form/my-profile-form';
 
 export default function Profile(){
     const [email, setEmail] = useState('cegenredemail.com');
@@ -11,34 +12,14 @@ export default function Profile(){
         e.preventDefault();
         console.log(email, name, password);
     }
+
+    const handleFormDisplay = () => {
+        setShowForm(!showForm);
+    }
     return(
         <div className={styles.container}>
             {showForm ?
-                <form className={styles.cardForm}>
-                    <p className={styles.close} onClick={()=>setShowForm(false)}>x</p>
-                    <label htmlFor="email">Email :</label>
-                    <input id='email' type="email" value={email}/>
-                    <label htmlFor="password">Mot de passe :</label>
-                    <input type="password" value={password} />
-                    <p>Classes : IW</p>
-                    <div>
-                        <input type="checkbox" name="css" id="css" />
-                        <label htmlFor="css" style={{marginLeft: '10px'}}>Css</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="React" id="React" />
-                        <label htmlFor="React" style={{marginLeft: '10px'}}>React</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="Breakdance.js" id="Breakdance.js" />
-                        <label htmlFor="Breakdance.js" style={{marginLeft: '10px'}}>Breakdance.js</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="Html" id="Html" />
-                        <label htmlFor="Html" style={{marginLeft: '10px'}}>Html</label>
-                    </div>
-                    <button type='submit' onSubmit={handleSubmit}>Edit</button>
-                </form>
+                <MyProfileForm formHandler={handleFormDisplay} />
                 :
                 <div className={styles.content}>
                 <div className={styles.card}>
