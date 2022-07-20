@@ -47,7 +47,7 @@ export default function LoginModal({visible, setVisible}){
                         <p>It's quick and easy.</p>
                         <svg onClick={() => setVisible(false)}
                             width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17 17L1 1M17 1L1 17" stroke="#858585" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M17 17L1 1M17 1L1 17" stroke="#858585" strokeWidth="2" strokeLinecap="round"/>
                         </svg>
                     </div>
                 </div>
