@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer } from "react";
 
 const authInitData = {
-    token: null,
+    token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
     avatar: null,
     email: null,
     username: null
@@ -26,10 +26,11 @@ export const appStateReducer = (previousState, { action, payload }) => {
     switch(action){            
         case "SET_TOKEN":
             const { token } = payload;
-            return { ...previousState, token };
+            localStorage.setItem('token', token);
+            return { ...previousState, auth: {...previousState.auth, token } };
 
         case 'SET_AUTH_DATA':
-            return { ...previousState, profile: {...previousState.profile, ...payload} };
+            return { ...previousState, auth: {...previousState.auth, ...payload} };
 
         case "LOGOUT":
             localStorage.removeItem(process.env.REACT_APP_STORAGE_KEY);
