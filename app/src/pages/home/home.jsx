@@ -1,25 +1,17 @@
+import classes from './home.module.scss';
 import React, { useState, useEffect } from 'react';
 import InvitationService from '../../services/invitation.service';
 import {useAppContext} from '../../contexts/app-context';
+import { toast } from 'react-toastify';
+import HomeInvitations from '../../components/home-invitations/home-invitations';
 
 export default function Home(){
     const { appState } = useAppContext();
-    const [ pendingInvitations, setPendingInvitations ] = useState([]);
-
-    const getPendingInvitations = async () => {
-        let res = await InvitationService.getInvitations();
-        if(res !== false){
-            //setPendingInvitations(res);
-        }
-    };
-
-    useEffect(()=>{
-        getPendingInvitations();
-    }, []);
+    
 
     return(
-        <div className='container'>
-            Home
+        <div className={`${classes.main} container`}>
+            <HomeInvitations/>
         </div>
     )
 }

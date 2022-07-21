@@ -24,7 +24,7 @@ class InvitationService{
         }
     }
 
-    async create(userId){
+    async send(userId){
         try{
             const token = localStorage.getItem("token");
             if (!token){
@@ -49,6 +49,24 @@ class InvitationService{
             return false;
         }
         
+    }
+
+    async acceptInvitation(id){
+        try{
+            return true;
+        }catch(e){
+            console.error(e);
+            return false;
+        }
+    }
+
+    async refuseInvitation(id){
+        try{
+            return true;
+        }catch(e){
+            console.error(e);
+            return false;
+        }
     }
 
 }
