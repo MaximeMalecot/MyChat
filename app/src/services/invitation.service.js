@@ -53,6 +53,25 @@ class InvitationService{
 
     async acceptInvitation(id){
         try{
+            const token = localStorage.getItem("token");
+            if (!token){
+                throw new Error("Missing token")
+            }
+
+            let res = await fetch(`${API}/friendship/invitations/${id}`, 
+                    {
+                        method: "PATCH",
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        }
+                    }
+            );
+
+            if(res.status != 200){
+                return false
+            }
             return true;
         }catch(e){
             console.error(e);

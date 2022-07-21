@@ -83,7 +83,7 @@ export default function HomeInvitations(){
                         </div>
                         <div className={classes.infos}>
                             <h4>{user.firstName} {user.lastName}</h4>
-                            <button className='btn green' onClick={acceptInvitation}>ACCEPT</button>
+                            <button className='btn green' onClick={() => acceptInvitation(user.userId)}>ACCEPT</button>
                             <button className='btn red' onClick={refuseInvitation}>REFUSE</button>
                         </div>
                     </div>
