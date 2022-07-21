@@ -38,6 +38,15 @@
         }
     }
 
+    &.red{
+        background-color: $red !important;
+        &:hover{
+            background-color: white !important;
+            color: $red !important;
+            border: 1px solid $red !important;
+        }
+    }
+
     :disabled{
         background-color: gray !important;
         cursor: not-allowed !important;

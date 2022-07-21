@@ -17,12 +17,13 @@ exports.verifyToken = (token) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 		return {
-		id: decoded.id,
-		firstName: decoded.firstName,
-		lastName: decoded.lastName,
-		isAdmin: decoded.isAdmin,
+			id: decoded.id,
+			firstName: decoded.firstName,
+			lastName: decoded.lastName,
+			isAdmin: decoded.isAdmin,
 		};
 	} catch (error) {
+		console.error(error);
 		return null;
 	}
 };

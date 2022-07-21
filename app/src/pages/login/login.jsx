@@ -35,7 +35,6 @@ export default function Login(){
     };
 
     useEffect(()=>{
-        console.log(appState)
         if(appState.auth.token){
             navigate('/');
         }
