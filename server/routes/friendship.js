@@ -6,7 +6,7 @@ const router = new Router();
 
 router.route('/invitations/:id')
     .post(verifyToken, FriendshipController.sendInvitation)
-	.patch(FriendshipController.acceptInvitation)
+	.patch(verifyToken, FriendshipController.acceptInvitation)
 	//.delete(FriendshipController.denyInvitation);
 
     
