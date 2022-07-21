@@ -31,7 +31,7 @@ export default function ProfileTechnoForm({userTechnos}) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(selectedTechno);
+        TechnoService.modifySelfTechno(selectedTechno)
     }
 
     return (
