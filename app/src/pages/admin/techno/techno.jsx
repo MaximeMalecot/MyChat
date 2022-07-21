@@ -19,7 +19,7 @@ export default function Techno() {
 	const handleChange = async (id, name) => {
 		let res = await TechnoService.modify(id, name);
 		if(!res){
-			toast.error("Couldn't modify techno, try again later fdp", {
+			toast.error("Couldn't modify techno, try again later", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -34,7 +34,7 @@ export default function Techno() {
 	const handleDelete = async (id) => {
 		let res = await TechnoService.delete(id);
 		if(!res){
-			toast.error("Couldn't modify techno, try again later fdp", {
+			toast.error("Couldn't modify techno, try again later", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
