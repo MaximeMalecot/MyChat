@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const { User: UserPG } = require("../models/postgres");
 const { User: UserMongo } = require("../models/mongo");
-const { FriendListUser } = require("../models/mongo");
 const {FRIEND_STATUS} = require('../constants/enums');
 
 const friendListObject = ({userId, lastName, firstName, status=FRIEND_STATUS["CREATED"]}) => {
@@ -70,17 +69,32 @@ exports.getList = async (req, res, next) => {
 
 exports.getInvitations = async (req, res, next) => {
     try{
-        const invitations = await FriendShip.findAll({
-            where: {
-                receiver: req.user.id,
-                status: FRIEND_STATUS[0]
-            },
-            attributes: [
-                "id", "createAt", "sender"
-            ]
-        });
+        const invitations = (
+            await UserMongo.aggregate([
+                {
+                    $match: { userId: req.user.id }
+                },
+                {
+                    $project: {
+                        friendList: "$friendList"
+                    }
+                },
+                {
+                    $unwind : "$friendList"
+                },
+                {
+                    $match: { "friendList.status": FRIEND_STATUS["AWAITING"] }
+                },
+                {
+                    $project: {
+                        "friendList._id": 0
+                    }
+                }
+            ])
+        ).map(obj => obj.friendList);
         res.status(200).json(invitations);
     }catch(e){
+        console.error(e);
         next();
     }
 };
