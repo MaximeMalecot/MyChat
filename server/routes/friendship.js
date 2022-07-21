@@ -11,7 +11,7 @@ router.route('/invitations/:id')
 
     
 router.route('/invitations')
-.get(verifyToken, FriendshipController.getInvitations)
+    .get(verifyToken, FriendshipController.getInvitations)
 
 router.route('/:id')
     //.get(FriendshipController.getList)
