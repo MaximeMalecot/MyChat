@@ -78,10 +78,10 @@ $maincolor: #009688;
     bottom: 10px;
     @extend %flex; 
     animation: animainfos 0.5s cubic-bezier(0.425, 1.040, 0.470, 1.105) 0.75s forwards;
-    span {
-        font-size: 2.6em;
-        margin: 0px 6px;
-        opacity: 1;
+    flex-wrap: wrap;
+    img{
+      margin: 0 6px;
+      object-fit: cover;
     }
   }   
 
@@ -96,8 +96,10 @@ $maincolor: #009688;
   }
   .profileinfo{
     padding: 0px 20px;
-    h1{ font-size: 1.8em;}
-    h3{ font-size: 1.2em;
+    .name{ font-size: 1.8em;
+      font-weight: bold;
+    }
+    .email{ font-size: 1.2em;
         color: $maincolor;
         font-style: italic;
     }

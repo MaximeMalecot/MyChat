@@ -16,16 +16,17 @@ export default function Profile(){
             })
             .catch(console.error);
         }
-    }, [showForm])
+    }, [showForm]);
 
     const handleFormDisplay = () => {
         setShowForm(!showForm);
     }
+
     return(
         <div className={styles.container}>
             {showForm ?
                 <div className={styles.cardForm}>
-                    <p className={styles.close} onClick={() => setShowForm(!showForm)}>x</p> 
+                    <button className={`${styles.close} btn red`} onClick={() => setShowForm(!showForm)}>x</button> 
                     <MyProfileForm userData={user}/>
                     <ProfileTechnoForm userTechnos={user.technos} />
                     <ProfileFieldForm userField ={user.field} />
@@ -33,22 +34,24 @@ export default function Profile(){
                 :
                 <div className={styles.content}>
                 <div className={styles.card}>
-                    <p className={styles.edit} onClick={()=>setShowForm(true)}>edit</p>
+                    <div onClick={()=>setShowForm(true)} className={`${styles.edit} btn green`}>Edit</div>
                     <div className={styles.firstinfo}>
                         <img width='120px' height="120px" src="https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortFlat&accessoriesType=Wayfarers&hairColor=Blonde&facialHairType=BeardMajestic&facialHairColor=Black&clotheType=ShirtCrewNeck&clotheColor=Blue03&eyeType=Squint&eyebrowType=DefaultNatural&mouthType=Disbelief&skinColor=Pale" alt="Photo de profil"  />
                         <div className={styles.profileinfo}>
-                            <p>{user.firstName}</p>
-                            <p>{user.lastName}</p>
+                            <p className={styles.name}>{user.firstName} {user.lastName}</p>
+                            <p className={styles.email}>{user.email}</p>
                             <p className={styles.bio}>Je suis en classe de techo IW1</p>
                         </div>
                     </div>
 
                 </div>
                 <div className={styles.badgescard}>
-                    <span className="devicon-docker-plain-wordmark colored"></span>
-                    <span className="devicon-javascript-plain colored"></span>
-                    <span className="devicon-mongodb-plain-wordmark colored"></span>
-                    <span className="devicon-react-original-wordmark colored"></span>
+                    {user.technos?.length ? 
+                        user.technos.map(techno => (
+                            <img src={`https://icongr.am/devicon/${techno.name}-original.svg?size=41`} alt={`logo ${techno.name}`} />
+                        ))
+                    : <p>Ah t'aime pas le dev... Ok c'est pas grave, ça arrive de faire des erreurs.</p>
+                    }
                 </div>
             </div>    
             }

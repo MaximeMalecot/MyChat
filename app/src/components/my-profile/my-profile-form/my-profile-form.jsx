@@ -1,6 +1,7 @@
 import React,{ useEffect, useRef, useState } from "react";
 import UserService from "../../../services/user.service";
 import styles from "./my-profile-form.module.scss";
+import { toast } from 'react-toastify';
 
 export default function MyProfileForm({userData}) {
     const [user, setUser] = useState(userData);
@@ -9,9 +10,9 @@ export default function MyProfileForm({userData}) {
         setUser({...user, [e.target.name]: e.target.value});
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        let res = await UserService.modifySelf(user);
+        let res = UserService.modifySelf(user);
         if(!res){
             toast.error("Couldn't modify user, try again later", {
                 position: "top-right",
@@ -23,10 +24,19 @@ export default function MyProfileForm({userData}) {
                 progress: undefined,
             });
         }
+        toast.success("Account updated", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
     
     return(
-        <div>
+        <div className={styles.myProfileForm}>
             <label htmlFor="firstname">Firstname</label>
             <input type="text" name="firstName" id="firstname" defaultValue={user?.firstName} onChange={handleInput}/>
             <label htmlFor="lastname">Lastname</label>

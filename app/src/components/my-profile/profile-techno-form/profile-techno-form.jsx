@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TechnoService from "../../../services/techno.service";
+import styles from './profile-techno-form.module.scss';
+import { toast } from 'react-toastify';
 
 export default function ProfileTechnoForm({userTechnos}) {
     const [techno, setTechno] = useState([]);
@@ -31,7 +33,27 @@ export default function ProfileTechnoForm({userTechnos}) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        TechnoService.modifySelfTechno(selectedTechno)
+        let res = TechnoService.modifySelfTechno(selectedTechno);
+        if(!res){
+            toast.error("Couldn't modify user, try again later", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+        toast.success("Account updated", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
 
     return (
@@ -42,6 +64,12 @@ export default function ProfileTechnoForm({userTechnos}) {
                     <option key={tech.id} value={tech.id}>{tech.name}</option>
                 ))}
             </select>
+            <p>Selection : </p>
+            <p>
+                {selectedTechno&&selectedTechno.map(tech => (
+                    (techno.find(t => t.id === parseInt(tech))?.name ?? null) + ' / '
+                ))}
+            </p>
             <button onClick={handleSubmit} className="btn green">Edit</button>
         </div>
 
