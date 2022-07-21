@@ -67,13 +67,16 @@ export default function HomeInvitations(){
         getPendingInvitations();
     }, []);
 
-    if( pendingInvitations.length < 1) return null;
+    if( pendingInvitations.length == 0) return null;
     
     return(
         <div className={classes.main}>
-            <h3>Pending invitations</h3>
+            <div className={classes.header}>
+                <h3>Pending invitations</h3>
+                {pendingInvitations.length > 6 && <p>See all</p>}
+            </div>
             <div className={classes.list}>
-                {pendingInvitations.map((user, idx) =>
+                {pendingInvitations.slice(0, 6).map((user, idx) =>
                     <div key={idx} className={classes.invitationItem}>
                         <div className={classes.imgContainer}>
                             <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="user's profile picture" />

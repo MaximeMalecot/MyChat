@@ -1,12 +1,18 @@
 .main{
-    h3{
+
+    .header{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: 10px;
     }
     
     .list{
         display: flex;
         align-items: center;
-        gap: 10px;
+        flex-wrap: wrap;
+        gap: 20px;
         
         .invitationItem{
             width: 180px;
