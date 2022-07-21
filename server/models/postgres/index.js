@@ -1,9 +1,8 @@
 const { User: UserMongo } = require("../mongo");
-const mongoose = require("mongoose");
-const { restore } = require("./User");
 
 exports.connection = require("./db");
 exports.User = require("./User");
+exports.Techno = require("./Techno");
 exports.Field = require("./Field");
 exports.Message = require("./Message");
 
