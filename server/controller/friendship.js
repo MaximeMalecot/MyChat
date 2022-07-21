@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-const { User: UserPG } = require("../models/postgres");
 const { User: UserMongo } = require("../models/mongo");
 const {FRIEND_STATUS} = require('../constants/enums');
 
@@ -116,12 +115,6 @@ exports.acceptInvitation = async (req, res, next) => {
         if( !req.params.id ){
             throw new Error('Missing user id');
         }
-
-        await FriendShip.update({status: FRIEND_STATUS[1]},{
-            where: {
-                id: req.params.id
-            }
-        });
 
         return res.sendStatus(200);
     }catch(e){
