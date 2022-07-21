@@ -63,6 +63,7 @@ export default function Techno() {
             });
 		} else {
 			setTechnos([...technos, techno]);
+			setName('');
 		}
 	};
 
@@ -77,6 +78,7 @@ export default function Techno() {
 				onChange={(e) => {
 				setName(e.target.value);
 				}}
+				value={name}
 				type="text"
 			/>
 			<button type="submit">Créer</button>

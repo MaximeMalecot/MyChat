@@ -1,7 +1,9 @@
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
+const Techno = require("../models/postgres/Techno");
+const { SpecificLogger, log } = require("../lib/logger");
 
-exports.getUsers = async (req, res) => {
+exports.getUsers = async (req, res, next) => {
     try {
 		const users = await User.findAll({ where: req.query });
 		return res.json(users);
@@ -10,7 +12,7 @@ exports.getUsers = async (req, res) => {
     }
 };
 
-exports.postUser = async (req, res) => {
+exports.postUser = async (req, res, next) => {
     try {
 		const user = await User.create(req.body);
 		return res.status(201).json(user);
@@ -26,7 +28,7 @@ exports.postUser = async (req, res) => {
     }
 };
 
-exports.modifyUser = async (req, res) => {
+exports.modifyUser = async (req, res, next) => {
     try {
 		const result = await User.update(req.body, {
 			where: { id: req.params.id },
@@ -52,7 +54,7 @@ exports.modifyUser = async (req, res) => {
     }
 }
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
     try {
 		const nbLine = await User.destroy({ where: { id: req.params.id } });
 		if (!nbLine) {
@@ -65,9 +67,13 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-exports.getUser = async (req, res) => {
+exports.getUser = async (req, res, next) => {
     try {
-		const user = await User.findByPk(req.params.id);
+		const user = await User.findByPk(req.params.id,
+			{
+				exclude: ["password"]
+			}
+		);
 		if (!user) {
 			return res.sendStatus(404);
 		} else {
@@ -80,13 +86,75 @@ exports.getUser = async (req, res) => {
 
 exports.getSelf = async (req, res, next) => {
     try {
-		const user = await User.findByPk(req.user.id);
+		const user = await User.findByPk(req.user.id, {
+			attributes: {
+				exclude: ["password", "isAdmin", "createdAt", "updatedAt"]
+			},
+			include: ["technos"],
+		});
 		if (!user) {
 			return res.sendStatus(404);
 		} else {
 			return res.json(user);
 		}
     } catch (error) {
+		console.error(error);
      	next();
     }
 };
+
+exports.modifySelf = async (req, res, next) => {
+	try {
+		if(req.body.id !== req.user.id){
+			SpecificLogger(req, {
+				message: "Trying to modify someone else's profile",
+				level: log.levels.warn,
+				type: log.types[0],
+			})
+			return res.sendStatus(403);
+		}
+		if(req.body.password === ''){
+			delete req.body.password;
+		}
+		if(req.body.technos){
+			delete req.body.technos;
+		}
+		if(req.body.field){
+			delete req.body.field;
+		}
+		console.log(req.body)
+		await User.update(req.body, { where: { id: req.user.id}, individualHooks: true });
+		return res.sendStatus(204);
+	}catch(error){
+		console.error(error);
+		next();
+	}
+	
+}
+
+exports.modifySelfTechno = async (req, res, next) => {
+	try{
+		let user = await User.findByPk(req.user.id, {
+			include: ["technos"]
+		});
+		let technos = await user.getTechnos();
+		if(technos && technos.length > 0){
+			technos.map(techno => {
+				if(!req.body.technos || !req.body.technos.includes(techno.id)){
+					user.removeTechno(techno);
+				} 
+			})
+		}
+		if(req.body.technos && req.body.technos.length > 0){
+			req.body.technos.map(techno => {
+				if(!technos.includes(techno.id)){
+					user.addTechno(techno);
+				}
+			})
+		}
+		return res.sendStatus(204);
+	} catch (error) {
+		console.error(error);
+		next();
+	}
+}

@@ -8,8 +8,8 @@ exports.Message = require("./Message");
 exports.FriendShip = require("./FriendShip");
 exports.Techno = require ("./Techno");
 
-exports.User.belongsTo(exports.Field);
 exports.Field.hasMany(exports.User);
+exports.User.belongsTo(exports.Field);
 
 exports.User.belongsToMany(exports.Techno,{ through: 'user_technos' });
 exports.Techno.belongsToMany(exports.User,{ through: 'user_technos' });

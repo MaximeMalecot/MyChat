@@ -102,6 +102,29 @@ class TechnoService{
         }
         return true;
     }
+
+    async modifySelfTechno(technos){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("T'AS PAS L'ACCES FRERO")
+        }
+        let res = await fetch(`${API}/user/self/techno`, 
+            {
+                method: "PUT",
+                headers:{
+                    "Accept": "*/*",
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                },
+                body: JSON.stringify({technos})
+            }
+        );
+        res = await res.json();
+        if(res.status !== 202){
+            return false;
+        }
+        return true;
+    }
 }
 
 export default new TechnoService();

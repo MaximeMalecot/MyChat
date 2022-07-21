@@ -6,7 +6,7 @@ export default function admin() {
     <div>
       <Routes>
         <Route path="/profile" element={<div> PROFIL ADMIN </div>} />
-        <Route path="/technos" element={<Techno/>} />
+        <Route path="/techno" element={<Techno/>} />
         <Route path="*" element={<div> HOME ADMIN</div>} />
       </Routes>
     </div>
