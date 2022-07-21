@@ -15,7 +15,7 @@ import { useAppContext } from "./contexts/app-context";
 import AdminRooter from "./pages/admin/admin";
 
 const Home = lazy(() => import("./pages/home/home"));
-const MonProfil = lazy(() => import("./pages/profile/profile"));
+const Profile = lazy(() => import("./pages/profile/profile"));
 const PageIntrouvable = lazy(() => import("./pages/404"));
 const Login = lazy(() => import("./pages/login/login"));
 const Search = lazy(() => import("./pages/search/search"));
@@ -37,7 +37,7 @@ export default function AppRouter() {
       <Navbar />
       <Suspense fallback={() => <p>Loading</p>}>
         <Routes>
-          <Route path="/profile" element={<MonProfil />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/page-introuvable" element={<PageIntrouvable />} />
           <Route path="/login" element={<Login />} />
           <Route path="/search/:query" element={<Search />} />
