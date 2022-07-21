@@ -7,7 +7,10 @@ router.route('/')
     .get(verifyToken, UserController.getUsers)
 	.post(UserController.postUser)
 
-router.get('/self', verifyToken, UserController.getSelf)
+router.route('/self')
+	.get(verifyToken, UserController.getSelf)
+	.put(verifyToken, UserController.modifySelf)
+router.put('/self/techno', verifyToken, UserController.modifySelfTechno)
 
 router.route('/:id')
 	.get(verifyToken, UserController.getUser)

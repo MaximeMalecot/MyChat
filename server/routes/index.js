@@ -5,6 +5,6 @@ router.use('/field', require('./field'));
 router.use('/logs', require('./log'));
 router.use('/security', require('./security'));
 router.use('/techno', require('./techno'));
-router.use('/users', require('./user'));
+router.use('/user', require('./user'));
 
 module.exports = router;

@@ -7,7 +7,7 @@ class UserService {
             throw new Error("T'AS PAS L'ACCES FRERO")
         }
         try{
-            let res = await fetch(`${API}/users/self`, 
+            let res = await fetch(`${API}/user/self`, 
                 {
                     method: "GET",
                     headers:{
@@ -58,7 +58,7 @@ class UserService {
         if (!token){
             throw new Error("T'AS PAS L'ACCES FRERO")
         }
-        let res = await fetch(`${API}/techno`, 
+        let res = await fetch(`${API}/user`, 
             {
                 method: "GET",
                 headers:{
@@ -76,7 +76,7 @@ class UserService {
         if (!token){
             throw new Error("T'AS PAS L'ACCES FRERO")
         }
-        let res = await fetch(`${API}/techno`, 
+        let res = await fetch(`${API}/user`, 
             {
                 method: "POST",
                 headers:{
@@ -99,7 +99,7 @@ class UserService {
         if (!token){
             throw new Error("T'AS PAS L'ACCES FRERO")
         }
-        let res = await fetch(`${API}/techno/${id}`, 
+        let res = await fetch(`${API}/user/${id}`, 
             {
                 method: "PUT",
                 headers:{
@@ -117,12 +117,36 @@ class UserService {
         return true;
     }
 
+    async modifySelf(user){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("T'AS PAS L'ACCES FRERO")
+        }
+        let res = await fetch(`${API}/user/self`, 
+            {
+                method: "PUT",
+                headers:{
+                    "Accept": "*/*",
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                },
+                body: JSON.stringify(user)
+            }
+        );
+        res = await res.json();
+        if(res.status !== 204){
+            return false;
+        }
+        return true;
+    }
+    
+
     async delete(id){
         const token = localStorage.getItem("token");
         if (!token){
             throw new Error("T'AS PAS L'ACCES FRERO")
         }
-        let res = await fetch(`${API}/techno/${id}`, 
+        let res = await fetch(`${API}/user/${id}`, 
             {
                 method: "DELETE",
                 headers:{
