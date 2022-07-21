@@ -3,15 +3,16 @@ const { FriendshipController } = require('../controller');
 const { verifyToken } = require('../middlewares/auth');
 
 const router = new Router();
-router.route('/:id')
-    .get(FriendshipController.getList)
-
-router.route('/invitations')
-    //.get(FriendshipController.getInvitations)
 
 router.route('/invitations/:id')
     .post(verifyToken, FriendshipController.sendInvitation)
 	.patch(FriendshipController.acceptInvitation)
 	//.delete(FriendshipController.denyInvitation);
 
+    
+router.route('/invitations')
+.get(verifyToken, FriendshipController.getInvitations)
+
+router.route('/:id')
+    //.get(FriendshipController.getList)
 module.exports = router;
