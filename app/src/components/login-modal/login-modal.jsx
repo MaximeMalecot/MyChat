@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import classes from './login-modal.module.scss';
 import AuthService from '../../services/auth.service';
+import { toast } from 'react-toastify';
 
 const baseUserFields = {
     lastName: '',
@@ -28,9 +29,28 @@ export default function LoginModal({visible, setVisible}){
         let res = await AuthService.register(userFields);
         if(res === true){
             setVisible(false);
-        }else{
-            console.error(res);
+            toast.success("Account created", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return;
         }
+        Object.values(res).map((error) => {
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }, "")
     };
 
     return(

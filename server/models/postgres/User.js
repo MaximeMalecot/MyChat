@@ -18,14 +18,23 @@ User.init(
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				notEmpty: true,
+			},
 		},
 		firstName:{
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				notEmpty: true,
+			},
 		},
 		lastName: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				notEmpty: true,
+			},
 		},
 		isAdmin: {
 			type: DataTypes.BOOLEAN,

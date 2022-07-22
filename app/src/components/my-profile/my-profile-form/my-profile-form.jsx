@@ -10,11 +10,11 @@ export default function MyProfileForm({userData}) {
         setUser({...user, [e.target.name]: e.target.value});
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        let res = UserService.modifySelf(user);
-        if(!res){
-            toast.error("Couldn't modify user, try again later", {
+        let res = await UserService.modifySelf(user);
+        if(res === true ){
+            toast.success("Account updated", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -23,16 +23,19 @@ export default function MyProfileForm({userData}) {
                 draggable: true,
                 progress: undefined,
             });
+            return;
         }
-        toast.success("Account updated", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
+        Object.values(res).map((error) => {
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }, "")
     }
     
     return(

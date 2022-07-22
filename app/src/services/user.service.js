@@ -87,11 +87,10 @@ class UserService {
                 body:JSON.stringify({name})
             }
         );
-        if(res.status !== 201){
-            return false
+        if(res.status === 201){
+            return true;
         }
-        res = await res.json();
-        return res;
+        return res.json();
     }
 
     async modify(id, name){
@@ -133,11 +132,10 @@ class UserService {
                 body: JSON.stringify(user)
             }
         );
-        res = await res.json();
-        if(res.status !== 204){
-            return false;
+        if(res.status === 204){
+            return true;
         }
-        return true;
+        return res.json();
     }
     
 

@@ -44,6 +44,7 @@ export default function ProfileTechnoForm({userTechnos}) {
                 draggable: true,
                 progress: undefined,
             });
+            return;
         }
         toast.success("Account updated", {
             position: "top-right",

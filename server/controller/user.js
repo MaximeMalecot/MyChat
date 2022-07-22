@@ -1,7 +1,7 @@
 const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
-const Techno = require("../models/postgres/Techno");
 const { SpecificLogger, log } = require("../lib/logger");
+const formatError = require("../lib/formatError");
 
 exports.getUsers = async (req, res, next) => {
     try {
@@ -122,12 +122,18 @@ exports.modifySelf = async (req, res, next) => {
 		if(req.body.field){
 			delete req.body.field;
 		}
-		console.log(req.body)
-		await User.update(req.body, { where: { id: req.user.id}, individualHooks: true });
+		await User.update(req.body, { where: { id: req.user.id}, individualHooks: true, limit: 1 });
 		return res.sendStatus(204);
 	}catch(error){
-		console.error(error);
-		next();
+		if (error instanceof ValidationError) {
+			SpecificLogger(req, { 
+				message:`${req.method} on '${req.originalUrl}' - ${JSON.stringify(formatError(error.errors))}`,
+				level: log.levels.info
+			});
+			return res.status(422).json(formatError(error.errors));
+      	} else {
+			next();
+      	}
 	}
 	
 }

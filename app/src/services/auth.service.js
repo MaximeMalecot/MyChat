@@ -13,11 +13,10 @@ class AuthService{
                         body: JSON.stringify(user)
                     }
             );
-            if(res.status !== 201){
-                return await res.json();
+            if(res.status === 201){
+                return true;
             }
-            return true;
-
+            return res.json();
         }catch(e){
             return e.message;
         }
