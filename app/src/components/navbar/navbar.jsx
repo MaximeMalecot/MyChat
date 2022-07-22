@@ -6,16 +6,16 @@ import Logo from '../../assets/svg/logo.svg';
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
 import { useAppContext } from '../../contexts/app-context';
+import UserService from '../../services/user.service';
 
 const ResultItem = ({data}) => {
     const navigate = useNavigate();
-
     return(
         <Link to={data.url} className={`${classes.searchResult}`}>
             <div className={classes.picture}>
                 <img src={data.picture}/>
             </div>
-            <p>{data.name}</p>
+            <p>{data.firstName} {data.lastName}</p>
         </Link>
     )
 
@@ -35,14 +35,18 @@ export default function Navbar(){
     const { appState } = useAppContext();
 
     useEffect(()=>{
-        if(searchEntry.length > 0){
-            setResults([ MOCK_RESULT, MOCK_RESULT, MOCK_RESULT])
-        }else{
-            if(results.length > 0){
-                setResults([]);
+        const search = async() => {
+            if(searchEntry.length > 0){
+                let res = await UserService.search(searchEntry)
+                setResults(res);
+            }else{
+                if(results.length > 0){
+                    setResults([]);
+                }
             }
         }
-    }, [ searchEntry]);
+        search();
+    }, [ searchEntry ]);
 
     useEffect(()=>{
         setSearchEntry("");
@@ -71,12 +75,12 @@ export default function Navbar(){
                 {searchEntry.length > 0 && <div className={classes.searchResults}>
                     {results.length > 0 && results.map( (res, idx) => 
                         <ResultItem 
-                            data={{...res, url: `/profile/${res?.id}` }}
+                            data={{...res, url: `/profile/${res?.userId}` }}
                             key={idx} />
                     )}
                     <ResultItem data={{
                         picture: SearchIcon, 
-                        name: `Search ${searchEntry}`,
+                        firstName: `Search ${searchEntry}`,
                         url: `/search/${searchEntry}`
                         }}/>
                 </div>}
