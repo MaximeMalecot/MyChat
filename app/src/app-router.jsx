@@ -38,12 +38,12 @@ export default function AppRouter() {
       <Suspense fallback={() => <p>Loading</p>}>
         <Routes>
           <Route path="/profile" element={<Profile />} />
-          <Route path="/page-introuvable" element={<PageIntrouvable />} />
           <Route path="/login" element={<Login />} />
           <Route path="/search/:query" element={<Search />} />
           <Route path="/create-field" element={<CreateField />} />
           <Route path="/admin/*" element={<AdminRooter />} />
-          <Route path="*" element={<Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<PageIntrouvable />} />
         </Routes>
       </Suspense>
       <ToastContainer />
