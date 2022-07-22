@@ -4,7 +4,8 @@ const authInitData = {
     token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
     avatar: null,
     email: null,
-    username: null
+    username: null,
+    id: null
 };
 
 export const appInitData = {
