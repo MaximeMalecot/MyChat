@@ -1,0 +1,1 @@
+export const PROFILE_PICTURE = "https://i.stack.imgur.com/l60Hf.png";
