@@ -132,6 +132,34 @@ class InvitationService{
         }
     }
 
+    async removeFriend(id){
+        try{
+            const token = localStorage.getItem("token");
+            if (!token){
+                throw new Error("Missing token")
+            }
+
+            let res = await fetch(`${API}/friendship/${id}`, 
+                    {
+                        method: "DELETE",
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        }
+                    }
+            );
+
+            if(res.status != 204){
+                return false
+            }
+            return true;
+        }catch(e){
+            console.error(e);
+            return false;
+        }
+    }
+
 }
 
 export default new InvitationService();

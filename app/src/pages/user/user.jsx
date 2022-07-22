@@ -8,6 +8,27 @@ import { useAppContext } from "../../contexts/app-context";
 import InvitationService from '../../services/invitation.service';
 import { toast } from "react-toastify";
 
+const displayMsg = (msg, type="success") => {
+    const settings = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    };
+
+    switch(type){
+        case "success":
+            toast.success(msg, settings);
+            break;
+        case "error":
+            toast.error(msg, settings);
+            break;
+    }
+}
+
 const InviteButton = ({loading}) => {
     const { appState } = useAppContext();
     const {id} = useParams();
@@ -31,30 +52,20 @@ const InviteButton = ({loading}) => {
             if(res !== true) throw new Error();
 
             setFriendshipStatus(FRIEND_STATUS.CREATED);
-            toast.success("Invitation sent", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            displayMsg("Invitation sent");
         }catch(e){
-            toast.error("An error occurred, could not accept this invitation.", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            displayMsg("An error occurred, could not accept this invitation.", "error");
         }
     };
 
     const removeFriend = async () => {
-        
+        let res = await InvitationService.removeFriend(id);
+        if(res !== true){
+            displayMsg("An error occurred, could not remove this user from friends.", "error");
+        }else{
+            displayMsg("User removed from friends");
+            setFriendshipStatus(null);
+        }
     }
     
     useEffect(()=>{
