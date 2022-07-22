@@ -39,7 +39,7 @@ class TechnoService{
     async create(name){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/techno`, 
             {
@@ -62,7 +62,7 @@ class TechnoService{
     async modify(id, name){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/techno/${id}`, 
             {
@@ -85,7 +85,7 @@ class TechnoService{
     async delete(id){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/techno/${id}`, 
             {
@@ -106,7 +106,7 @@ class TechnoService{
     async modifySelfTechno(technos){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/user/self/techno`, 
             {

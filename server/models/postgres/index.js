@@ -19,17 +19,10 @@ exports.Message.belongsTo(exports.User, { foreignKey: 'receiver'});
 exports.User.hasMany(exports.Message, { foreignKey: 'receiver'});
 
 const denormalizeUser = async (user) => {
-    const pgUser = await exports.User.findByPk(user.id, {
-        attributes: [
-            "id", "email", "firstName", "lastName"
-        ]
-    });
-
     const mongoUser = new UserMongo({
-        userId: pgUser.id,
-        email: pgUser.email,
-        firstName: pgUser.firstName,
-        lastName: pgUser.lastName,
+        userId: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         friendList: []
     });
 
@@ -38,22 +31,59 @@ const denormalizeUser = async (user) => {
 
 };
 
+const denormalizeForFriends = async (user) => {
+    try{
+        UserMongo.updateOne(
+                {userId: user.id},
+                {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                }
+            ).then(console.log)
+            .catch(console.error);
+        UserMongo.updateMany(
+                {
+                    "friendList.userId": user.id
+                },
+                {
+                    $set: {
+                        "friendList.$[item].firstName": user.firstName,
+                        "friendList.$[item].lastName": user.lastName, 
+                    } 
+                },
+                {
+                    arrayFilters: [
+                        {
+                            "item.userId": user.id
+                        }
+                    ]
+                }                
+            ).then(console.log)
+            .catch(console.error);
+    }catch(e){
+        console.error(e);
+    }
+}
+
 const deleteFromFriends = async (user) => {
     //cherche toutes les friendlist ayant le user dans la friendList
     //
-    UserMongo.updateMany({
-        "user.friendlist.userId": user.id
-    },
-    {
-        $unset: {
-            "user.friendlist.userId" : user.id
-        }
-    })
-    .then(() => user.destroy())
-    .catch(console.error);
+    try {
+        await UserMongo.updateMany(
+            { friendList: { $elemMatch: { userId: user.id } } },
+            { $pull: { friendList: { userId: user.id } } },              
+        ).catch(console.error);
+        await UserMongo.remove({userId: user.id})
+            .then(console.log)
+            .catch(console.error);
+    }catch(err){
+        console.error(err);
+    }
+    
 };
 
 
 
 exports.User.addHook("afterCreate", denormalizeUser);
+exports.User.addHook("afterUpdate", denormalizeForFriends);
 exports.User.addHook("beforeDestroy", deleteFromFriends)

@@ -1,7 +1,9 @@
 const { User } = require("../models/postgres");
+const { User: UserMongo } = require("../models/mongo");
 const { ValidationError } = require("sequelize");
 const { SpecificLogger, log } = require("../lib/logger");
 const formatError = require("../lib/formatError");
+const { FRIEND_STATUS } = require("../constants/enums");
 
 exports.getUsers = async (req, res, next) => {
     try {
@@ -162,5 +164,64 @@ exports.modifySelfTechno = async (req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		next();
+	}
+}
+
+exports.searchUsers = async (req, res, next) => {
+	try {
+		const users = (await UserMongo.aggregate([
+			{
+				$match: { 
+					$and: [
+						{
+							$or: [
+								{ firstName: { $regex: req.query.search, $options: 'i' } },
+								{ lastName: { $regex: req.query.search, $options: 'i' } },
+							]
+						},
+						{
+							userId: { $ne: req.user.id }
+						}
+					]
+					
+				},
+			},
+			{
+				$project: {
+					_id: 0,
+					firstName: 1,
+					lastName: 1,
+					userId: 1,
+					friendNb: { 
+						$size: {
+							$filter: {
+								input: "$friendList",
+								as: "friend",
+								cond: { $eq: ["$$friend.status", "ACCEPTED"] }
+							}
+						}
+					}
+				}
+			},
+		]));
+		console.log(users);
+		return res.json(users);
+	} catch (error) {
+		console.error(error);
+	  	next();
+	}
+}
+
+exports.deleteSelf = async (req, res, next) => {
+	try {
+		const nbLine = await User.destroy({ where: { id: req.user.id } , individualHooks: true});
+		if (!nbLine) {
+			return res.sendStatus(404);
+		} else {
+			return res.sendStatus(204);
+		}
+	} catch (error) {
+		console.error(error);
+	  	next();
 	}
 }

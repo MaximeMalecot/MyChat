@@ -4,7 +4,7 @@ class UserService {
     async getSelf(){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         try{
             let res = await fetch(`${API}/user/self`, 
@@ -30,7 +30,7 @@ class UserService {
     async getOne(id){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         try{
             let res = await fetch(`${API}/user/${id}`, 
@@ -56,7 +56,7 @@ class UserService {
     async getAll(){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/user`, 
             {
@@ -74,7 +74,7 @@ class UserService {
     async create(name){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/user`, 
             {
@@ -96,7 +96,7 @@ class UserService {
     async modify(id, name){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/user/${id}`, 
             {
@@ -119,7 +119,7 @@ class UserService {
     async modifySelf(user){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/user/self`, 
             {
@@ -137,12 +137,30 @@ class UserService {
         }
         return res.json();
     }
-    
+
+    async search(search){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("Missing token")
+        }
+        let res = await fetch(`${API}/user/search?search=${search}`, 
+            {
+                method: "GET",
+                headers:{
+                    "Accept": "*/*",
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                }
+            }
+        );
+        res = await res.json();
+        return res;
+    }
 
     async delete(id){
         const token = localStorage.getItem("token");
         if (!token){
-            throw new Error("T'AS PAS L'ACCES FRERO")
+            throw new Error("Missing token")
         }
         let res = await fetch(`${API}/user/${id}`, 
             {

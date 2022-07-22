@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import UserService from '../../services/user.service';
 import classes from './search.module.scss';
 
 const ProfileItem = ({data}) => {
@@ -9,8 +10,8 @@ const ProfileItem = ({data}) => {
                 <img src="" alt=""/>
             </a>
             <div className={classes.profileData}>
-                <h3>{`${data.surname} ${data.name}`}</h3>
-                <p>XXX friends</p>
+                <h3>{`${data.firstName} ${data.lastName}`}</h3>
+                <p>{data.friendNb} friends</p>
             </div>
             <button className={`btn green ${classes.connectBtn}`}>Connect</button>
         </div>
@@ -23,8 +24,17 @@ export default function Search(){
     const [ results, setResults ] = useState([]);
 
     const searchProfiles = useCallback(()=>{
-        let res = [];
-        setResults(res);
+        const search = async() => {
+            if(query.length > 0){
+                let res = await UserService.search(query)
+                setResults(res);
+            }else{
+                if(results.length > 0){
+                    setResults([]);
+                }
+            }
+        }
+        search();
     }, [query]);
 
     useEffect(()=>{
