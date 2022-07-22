@@ -6,6 +6,7 @@ import { useAppContext } from '../../contexts/app-context';
 import classes from './login.module.scss';
 import LoginModal from '../../components/login-modal/login-modal';
 import AuthService from '../../services/auth.service';
+import jwt_decode from "jwt-decode";
 
 export default function Login(){
     const navigate = useNavigate();
@@ -19,7 +20,6 @@ export default function Login(){
             e.preventDefault();
             let res = await AuthService.login(authFields);
             dispatch({action: 'SET_TOKEN', payload: {token: res.token} });
-            
         }catch(e){
             toast.error(e.message, {
                 position: "top-right",

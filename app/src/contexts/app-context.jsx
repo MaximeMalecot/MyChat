@@ -1,15 +1,32 @@
 import React, { createContext, useContext, useReducer } from "react";
+import jwt_decode from "jwt-decode";
 
-const authInitData = {
-    token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
-    avatar: null,
-    email: null,
-    username: null,
-    id: null
+const getFromtoken = token => {
+    let decoded = jwt_decode(token);
+    return decoded;
+}
+
+const authInitData = () => {
+    if(localStorage.getItem('token')){
+        console.log("empty")
+        return {
+            token: localStorage.getItem('token'),
+            ...getFromtoken(localStorage.getItem('token'))
+        };
+    }else{
+        return {
+            token: null,
+            avatar: null,
+            email: null,
+            username: null,
+            id: null,
+            isAdmin: false
+        }
+    }
 };
 
 export const appInitData = {
-    auth: authInitData,
+    auth: authInitData(),
     hideNavbar: false,
 };
 
