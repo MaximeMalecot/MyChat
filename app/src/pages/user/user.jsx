@@ -58,7 +58,7 @@ export default function User(){
         try{
             let res = await UserService.getOne(id);
             if(!res){
-                navigate("/");
+                navigate("/?error=not_found");
             }else{
                 setUser(res);
             }

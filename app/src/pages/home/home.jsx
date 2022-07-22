@@ -8,6 +8,9 @@ import HomeInvitations from '../../components/home-invitations/home-invitations'
 export default function Home(){
     const { appState } = useAppContext();
     
+    useEffect(()=>{
+        document.title = "GESbook - Home";
+    }, []);
 
     return(
         <div className={`${classes.main} container`}>
