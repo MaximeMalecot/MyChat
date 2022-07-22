@@ -169,14 +169,21 @@ exports.modifySelfTechno = async (req, res, next) => {
 
 exports.searchUsers = async (req, res, next) => {
 	try {
-		console.log(req.query);
 		const users = (await UserMongo.aggregate([
 			{
 				$match: { 
-					$or: [
-						{ firstName: { $regex: req.query.search, $options: 'i' } },
-						{ lastName: { $regex: req.query.search, $options: 'i' } },
+					$and: [
+						{
+							$or: [
+								{ firstName: { $regex: req.query.search, $options: 'i' } },
+								{ lastName: { $regex: req.query.search, $options: 'i' } },
+							]
+						},
+						{
+							userId: { $ne: req.user.id }
+						}
 					]
+					
 				},
 			},
 			{
@@ -185,34 +192,19 @@ exports.searchUsers = async (req, res, next) => {
 					firstName: 1,
 					lastName: 1,
 					userId: 1,
-					friendList: "$friendList"
-				}
-			},
-			{
-				$unwind : "$friendList"
-			},
-			{
-				$match: { "friendList.status": FRIEND_STATUS["ACCEPTED"] }
-			},
-			{
-				$group: {
-					"_id": {
-						"firstName": "$firstName",
-						"lastName": "$lastName",
-						"userId": "$userId",
-					},
-					friendNb: {
-						$count: {}
+					friendNb: { 
+						$size: {
+							$filter: {
+								input: "$friendList",
+								as: "friend",
+								cond: { $eq: ["$$friend.status", "ACCEPTED"] }
+							}
+						}
 					}
 				}
-			}
-		])).map( object => {
-			return {
-				...object._id,
-				friendNb: object.friendNb
-			}
-		});
-		console.log(JSON.stringify(users));
+			},
+		]));
+		console.log(users);
 		return res.json(users);
 	} catch (error) {
 		console.error(error);
