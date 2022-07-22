@@ -255,3 +255,49 @@ exports.removeFriend = async (req, res, next) => {
         next();
     }
 };
+
+exports.getFriendshipStatus = async (req, res, next) => {
+    try{
+        if( !req.params.userId ){
+            throw new Error('Missing friend id');
+        }
+
+        if( req.params.userId == req.user.id ){
+            res.status(200).json({message: "You cannot be friend with yourself"});
+        }
+
+        //let friendship = await UserMongo.findOne({userId: req.user.id, "friendList.userId": req.params.userId});
+        let friendship = ( 
+            await UserMongo.aggregate([
+                {
+                    $match: { userId: req.user.id }
+                },
+                {
+                    $project: {
+                        friendList: "$friendList"
+                    }
+                },
+                {
+                    $unwind : "$friendList"
+                },
+                {
+                    $match: { "friendList.userId": req.params.userId }
+                },
+                {
+                    $project: {
+                        "friendList._id": 0
+                    }
+                }
+            ])
+        ).map( obj => obj.friendList);
+
+        if( friendship.length === 0 ){
+            res.status(200).json({message: "NOT_FRIENDS"});
+            return;
+        }
+        res.status(200).json({message: friendship[0].status});
+    }catch(e){
+        console.error(e);
+        next();
+    }
+};

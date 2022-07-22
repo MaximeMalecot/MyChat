@@ -13,6 +13,9 @@ router.route('/invitations/:id')
 router.route('/invitations')
     .get(verifyToken, FriendshipController.getInvitations)
 
+router.route('/status/:userId')
+    .get(verifyToken, FriendshipController.getFriendshipStatus);
+
 router.route('/:userId')
     .get(FriendshipController.getList)
     .delete(verifyToken, FriendshipController.removeFriend)
