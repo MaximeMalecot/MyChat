@@ -6,13 +6,15 @@ const router = new Router();
 
 router.route('/invitations/:id')
     .post(verifyToken, FriendshipController.sendInvitation)
-	.patch(FriendshipController.acceptInvitation)
-	//.delete(FriendshipController.denyInvitation);
+	.patch(verifyToken, FriendshipController.acceptInvitation)
+	.delete(verifyToken, FriendshipController.denyInvitation);
 
     
 router.route('/invitations')
     .get(verifyToken, FriendshipController.getInvitations)
 
-router.route('/:id')
-    //.get(FriendshipController.getList)
+router.route('/:userId')
+    .get(FriendshipController.getList)
+    .delete(verifyToken, FriendshipController.removeFriend)
+    
 module.exports = router;
