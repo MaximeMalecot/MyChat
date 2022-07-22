@@ -75,7 +75,7 @@ export default function Navbar(){
                 {searchEntry.length > 0 && <div className={classes.searchResults}>
                     {results.length > 0 && results.map( (res, idx) => 
                         <ResultItem 
-                            data={{...res, url: `/profile/${res?.userId}` }}
+                            data={{...res, url: `/user/${res?.userId}` }}
                             key={idx} />
                     )}
                     <ResultItem data={{
