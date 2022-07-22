@@ -211,3 +211,17 @@ exports.searchUsers = async (req, res, next) => {
 	  	next();
 	}
 }
+
+exports.deleteSelf = async (req, res, next) => {
+	try {
+		const nbLine = await User.destroy({ where: { id: req.user.id } , individualHooks: true});
+		if (!nbLine) {
+			return res.sendStatus(404);
+		} else {
+			return res.sendStatus(204);
+		}
+	} catch (error) {
+		console.error(error);
+	  	next();
+	}
+}

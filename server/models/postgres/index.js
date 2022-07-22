@@ -63,23 +63,23 @@ const denormalizeForFriends = async (user) => {
     }catch(e){
         console.error(e);
     }
-    // let usersMongo = await
-    // )
 }
 
 const deleteFromFriends = async (user) => {
     //cherche toutes les friendlist ayant le user dans la friendList
     //
-    UserMongo.updateMany({
-        "user.friendlist.userId": user.id
-    },
-    {
-        $unset: {
-            "user.friendlist.userId" : user.id
-        }
-    })
-    .then(() => user.destroy())
-    .catch(console.error);
+    try {
+        await UserMongo.updateMany(
+            { friendList: { $elemMatch: { userId: user.id } } },
+            { $pull: { friendList: { userId: user.id } } },              
+        ).catch(console.error);
+        await UserMongo.remove({userId: user.id})
+            .then(console.log)
+            .catch(console.error);
+    }catch(err){
+        console.error(err);
+    }
+    
 };
 
 
