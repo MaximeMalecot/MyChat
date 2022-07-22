@@ -40,8 +40,21 @@ export default function LoginModal({visible, setVisible}){
             });
             return;
         }
-        Object.values(res).map((error) => {
-            toast.error(error, {
+        console.log(res);
+        if(!res.includes('NetworkError')){
+            Object.values(res).map((error) => {
+                toast.error(error, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }, "")
+        }else {
+            toast.error("Network Error", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -50,7 +63,7 @@ export default function LoginModal({visible, setVisible}){
                 draggable: true,
                 progress: undefined,
             });
-        }, "")
+        }
     };
 
     return(
