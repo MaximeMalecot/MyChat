@@ -16,6 +16,7 @@ import AdminRooter from "./pages/admin/admin";
 
 const Home = lazy(() => import("./pages/home/home"));
 const Profile = lazy(() => import("./pages/profile/profile"));
+const User = lazy(() => import("./pages/user/user"));
 const PageIntrouvable = lazy(() => import("./pages/404"));
 const Login = lazy(() => import("./pages/login/login"));
 const Search = lazy(() => import("./pages/search/search"));
@@ -37,6 +38,7 @@ export default function AppRouter() {
       <Navbar />
       <Suspense fallback={() => <p>Loading</p>}>
         <Routes>
+          <Route path="/user/:id" element={<User />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/page-introuvable" element={<PageIntrouvable />} />
           <Route path="/login" element={<Login />} />
