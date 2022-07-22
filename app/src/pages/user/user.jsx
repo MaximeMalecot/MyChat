@@ -3,21 +3,34 @@ import { useNavigate, useParams } from "react-router-dom";
 import classes from "./user.module.scss";
 import UserService from "../../services/user.service";
 import { PROFILE_PICTURE } from "../../constants/assets";
+import { FRIEND_STATUS } from "../../constants/base";
 import { useAppContext } from "../../contexts/app-context";
 import InvitationService from '../../services/invitation.service';
 import { toast } from "react-toastify";
 
-const InviteButton = () => {
+const InviteButton = ({loading}) => {
     const { appState } = useAppContext();
     const {id} = useParams();
-    const [ sent, setSent ] = useState(false);
+    const [ friendshipStatus , setFriendshipStatus ] = useState(null);
+
+    const getFriendshipStatus = async () => {
+        try{
+            let res = await InvitationService.getFriendshipStatus(id);
+            if(res !== false){
+                setFriendshipStatus(res.message);
+                console.log(res);
+            }
+        }catch(e){
+            console.error(e);
+        }
+    };
 
     const sendInvitation = async () => {
         try{
             let res = await InvitationService.send(id);
             if(res !== true) throw new Error();
 
-            setSent(true);
+            setFriendshipStatus(FRIEND_STATUS.CREATED);
             toast.success("Invitation sent", {
                 position: "top-right",
                 autoClose: 5000,
@@ -40,11 +53,32 @@ const InviteButton = () => {
         }
     };
 
-    if( appState.auth.id === id || sent ) return null;
+    const removeFriend = async () => {
+        
+    }
+    
+    useEffect(()=>{
+        if(!loading){
+            getFriendshipStatus();
+        }
+    }, [loading]);
 
-    return(
-        <button className="btn green" onClick={sendInvitation}>Add to friend</button>
-    )
+    if( appState.auth.id == id ) return null;
+    
+    switch(friendshipStatus){
+        case FRIEND_STATUS.CREATED:
+            return <button className="btn">Request sent</button>
+
+        case FRIEND_STATUS.AWAITING:
+            return <button className="btn" >Awaiting your answer</button>
+
+        case FRIEND_STATUS.ACCEPTED:
+            return <button className="btn red" onClick={removeFriend}>Remove from friends</button>
+        
+        default:
+            return <button className="btn green" onClick={sendInvitation}>Add to friend</button>
+    }
+
 }
 
 export default function User(){
@@ -61,9 +95,9 @@ export default function User(){
                 navigate("/?error=not_found");
             }else{
                 setUser(res);
+                document.title = `${res.firstName} ${res.lastName} | GESbook`;
             }
             setLoading(false);
-            document.title = `${res.firstName} ${res.lastName} | GESbook`;
         }catch(e){
             console.error(e);
         }
@@ -85,7 +119,7 @@ export default function User(){
                     <h1>{user.firstName} {user.lastName}</h1>
                 </div>
                 <div>
-                    <InviteButton/>
+                    <InviteButton loading={loading}/>
                 </div>
             </div>
         </div>

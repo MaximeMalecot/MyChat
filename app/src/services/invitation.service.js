@@ -1,7 +1,7 @@
 import { API } from '../constants/base';
 
 class InvitationService{
-    async getInvitations(user){
+    async getInvitations(){
         const token = localStorage.getItem("token");
 
         try{
@@ -103,6 +103,31 @@ class InvitationService{
             return true;
         }catch(e){
             console.error(e);
+            return false;
+        }
+    }
+
+    async getFriendshipStatus(friendId){
+        const token = localStorage.getItem("token");
+        if( !token ) {
+            throw new Error('Missing token');
+        }
+
+        try{
+            let res = await fetch(`${API}/friendship/status/${friendId}`, 
+                    {
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        }
+                    }
+            );
+            if(res.status !== 200){
+                throw new Error();
+            }
+            return res.json();
+        }catch(e){
             return false;
         }
     }
