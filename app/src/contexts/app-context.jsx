@@ -52,6 +52,7 @@ export const appStateReducer = (previousState, { action, payload }) => {
 
         case "LOGOUT":
             localStorage.removeItem("token");
+            localStorage.removeItem("client_id");
             return { ...previousState, token: null };
 
         case "SET_EVENT_SOURCE":

@@ -21,6 +21,7 @@ const PageIntrouvable = lazy(() => import("./pages/404"));
 const Login = lazy(() => import("./pages/login/login"));
 const Search = lazy(() => import("./pages/search/search"));
 const CreateField = lazy(() => import("./pages/admin/createField"));
+const Messages = lazy(() => import("./pages/messages/messages"));
 
 export default function AppRouter() {
 	const { appState, dispatch } = useAppContext();
@@ -69,6 +70,7 @@ export default function AppRouter() {
         <Routes>
           <Route path="/user/:id" element={<User />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/messages" element={<Messages />} />
           <Route path="/page-introuvable" element={<PageIntrouvable />} />
           <Route path="/login" element={<Login />} />
           <Route path="/search/:query" element={<Search />} />

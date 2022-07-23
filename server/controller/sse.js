@@ -24,7 +24,7 @@ const broadcastKnown = ({message, userId}) => {
 
 const sseWithAuth = (client_id, userId) => {
     auth_users[userId] = client_id;
-    console.log(auth_users);
+    console.log(auth_users, users);
     users[auth_users[userId]].write(convertMessage({type: 'auth'}));
 }
 
