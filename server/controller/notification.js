@@ -34,18 +34,6 @@ const notifyFriendShip = ({subType, sender, recipient}) => {
     }, msg);
 }
 
-const realTimeMessage = ({message, recipientId}) => {
-    if( !content ) throw new Error('Invalid content');
-    broadcastKnown(
-        {
-        message: {
-            type: 'new_message', 
-            data: message
-        }, 
-        userId: recipientId
-    })
-}
-
 const notifyUser = ({content, type, subType, senderId, recipientId}, customMsg="") => {
     try {
         if(!NOTIFICATION_TYPES[type]){
@@ -110,6 +98,5 @@ module.exports = {
     getNotifications,
     readNotifications,
     notifyUser,
-    realTimeMessage,
     notifyFriendShip
 }
