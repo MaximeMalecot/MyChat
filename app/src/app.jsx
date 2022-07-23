@@ -7,9 +7,12 @@ function App(){
     const { appState } = useAppContext();
 
     useEffect(()=>{
-        let url = "http://localhost:3000/analytics/connect"
+        let url = "http://localhost:3000/sse?"
         if(localStorage.getItem('client_id')){
-            url += "?client_id=" + localStorage.getItem('client_id');
+            url += "client_id=" + localStorage.getItem('client_id') + "&";
+        }
+        if(localStorage.getItem('token')){
+            url += "token=" + localStorage.getItem('token');
         }
         const eventSource = new EventSource(
             url,
@@ -21,6 +24,11 @@ function App(){
         eventSource.addEventListener('connect', (e) => {
             const client_id = JSON.parse(e.data).client_id;
             localStorage.setItem('client_id', client_id);
+            console.log("connected");
+        })
+
+        eventSource.addEventListener('auth', (e) => {
+            console.log('fonctionnel');
         })
     }, []);
 

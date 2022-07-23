@@ -31,27 +31,27 @@ export default function Navbar(){
     const { appState } = useAppContext();
 
     useEffect(() => {
-        let url = `${API}/notification?token=${localStorage.getItem('token')}`;
-        const eventSource = new EventSource(
-            url,
-            {
-                withCredentials: true,
-            }
-        )
+        // let url = `${API}/notification?token=${localStorage.getItem('token')}`;
+        // const eventSource = new EventSource(
+        //     url,
+        //     {
+        //         withCredentials: true,
+        //     }
+        // )
 
-        eventSource.addEventListener('connect', (e) => {
-            let data = JSON.parse(e.data);
-            if(Object.values(data).length > 0){
-                setNotifications(Object.values(data));
-            }
-            console.log(notifications);
-        })
+        // eventSource.addEventListener('connect', (e) => {
+        //     let data = JSON.parse(e.data);
+        //     if(Object.values(data).length > 0){
+        //         setNotifications(Object.values(data));
+        //     }
+        //     console.log(notifications);
+        // })
 
-        eventSource.addEventListener('new', (e) => {
-            const data = JSON.parse(e.data);
-            setNotifications(notifications => [...notifications, data]);
-            console.log(notifications);
-        });
+        // eventSource.addEventListener('new', (e) => {
+        //     const data = JSON.parse(e.data);
+        //     setNotifications(notifications => [...notifications, data]);
+        //     console.log(notifications);
+        // });
     });
 
     useEffect(()=>{
