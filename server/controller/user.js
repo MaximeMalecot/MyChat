@@ -204,7 +204,6 @@ exports.searchUsers = async (req, res, next) => {
 				}
 			},
 		]));
-		console.log(users);
 		return res.json(users);
 	} catch (error) {
 		console.error(error);

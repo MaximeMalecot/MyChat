@@ -7,7 +7,6 @@ router.route('/')
     .get(AnalyticsController.getAnalytics)
     .post(AnalyticsController.postAnalytic)
 
-router.get("/connect", AnalyticsController.connect);
 router.get("/connections", AnalyticsController.getLiveConnections);
 
 module.exports = router;

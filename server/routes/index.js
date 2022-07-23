@@ -8,5 +8,7 @@ router.use('/techno', require('./techno'));
 router.use('/user', require('./user'));
 router.use('/friendship', require('./friendship'));
 router.use('/notification', require('./notification'));
+router.use('/message', require('./message'));
+router.use('/sse', require('./sse'));
 
 module.exports = router;

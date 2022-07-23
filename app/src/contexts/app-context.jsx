@@ -27,7 +27,7 @@ const authInitData = () => {
 
 export const appInitData = {
     auth: authInitData(),
-    hideNavbar: false,
+    eventSource: null,
 };
 
 export const useAppContext = () => {
@@ -51,10 +51,13 @@ export const appStateReducer = (previousState, { action, payload }) => {
             return { ...previousState, auth: {...previousState.auth, ...payload} };
 
         case "LOGOUT":
-            localStorage.removeItem(process.env.REACT_APP_STORAGE_KEY);
+            localStorage.removeItem("token");
+            localStorage.removeItem("client_id");
             return { ...previousState, token: null };
-            
 
+        case "SET_EVENT_SOURCE":
+            console.log(payload);
+            return { ...previousState, eventSource: payload };
         default:
             throw new Error('Undefined action');
     }

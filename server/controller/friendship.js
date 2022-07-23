@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const { User: UserMongo } = require("../models/mongo");
-const {FRIEND_STATUS, NOTIFICATION_TYPES} = require('../constants/enums');
-const { createNotification } = require('../controller/notification');
+const { NOTIFICATION_TYPES, SUB_FRIENDSHIP_TYPES, FRIEND_STATUS} = require('../constants/enums');
+const { notifyFriendShip } = require('../controller/notification');
 
 const getUser = async id => {
     let user = await UserMongo.findOne({userId: id});
@@ -58,10 +58,7 @@ exports.sendInvitation = async (req, res, next) => {
         await saveFriend(sender.userId, senderSchema)
         await saveFriend(receiver.userId, receiverSchema);
 
-        createNotification(NOTIFICATION_TYPES.FRIENDSHIP,{type: 'new', data: { 
-            type: "friendship",
-            emitter: receiver.firstName + " " + receiver.lastName
-        }}, receiver.userId)
+        notifyFriendShip({subType: SUB_FRIENDSHIP_TYPES.RECEIVED, sender: sender, recipient: receiver});
 
         res.sendStatus(201);
     }catch(e){

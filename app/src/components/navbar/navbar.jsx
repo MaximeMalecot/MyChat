@@ -28,32 +28,20 @@ export default function Navbar(){
     const [searchEntry, setSearchEntry] = useState("");
     const [results, setResults] = useState([]);
     const [notifications, setNotifications] = useState([]);
-    const { appState } = useAppContext();
+    const { appState, dispatch } = useAppContext();
     const menuMobile = useRef(null);
 
+    const logout = () => {
+        dispatch({ action: "LOGOUT" });
+        window.location.reload();
+    };
+
     useEffect(() => {
-        let url = `${API}/notification?token=${localStorage.getItem('token')}`;
-        const eventSource = new EventSource(
-            url,
-            {
-                withCredentials: true,
-            }
-        )
-
-        eventSource.addEventListener('connect', (e) => {
-            let data = JSON.parse(e.data);
-            if(Object.values(data).length > 0){
-                setNotifications(Object.values(data));
-            }
-            console.log(notifications);
+        if(!appState.eventSource) return;
+        appState.eventSource.addEventListener('new_notification', (e) => {
+            console.log(JSON.parse(e.data));
         })
-
-        eventSource.addEventListener('new', (e) => {
-            const data = JSON.parse(e.data);
-            setNotifications(notifications => [...notifications, data]);
-            console.log(notifications);
-        });
-    });
+    }, [appState]);
 
     useEffect(()=>{
         const search = async() => {
@@ -122,6 +110,7 @@ export default function Navbar(){
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>
+                <button onClick={logout}>Logout</button>
                 <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
                 </Link>

@@ -4,10 +4,11 @@ const { User } = require("../models/postgres");
 const { ValidationError } = require("sequelize");
 const formatError = require("../lib/formatError");
 const bcrypt =  require('bcryptjs');
+const { sseWithAuth } = require('./sse')
 
 exports.login = async (req, res, next) => {
     try {
-		const user = await User.findOne({ where: { email: req.body.email } });
+		const user = await User.findOne({ where: { email: req.body.user.email } });
 		if (!user) {
 			SpecificLogger(req, { 
 				message:`${req.method} on '${req.originalUrl}' - Email not found`,
@@ -17,7 +18,7 @@ exports.login = async (req, res, next) => {
 				email: "Email not found",
 			});
 		}
-		if ( !await bcrypt.compare( req.body.password, user.password )) {
+		if ( !await bcrypt.compare( req.body.user.password, user.password )) {
 			SpecificLogger(req, { 
 				message:`${req.method} on '${req.originalUrl}' - Wrong password for account ${user.id}`,
 				level: log.levels.info
@@ -26,6 +27,7 @@ exports.login = async (req, res, next) => {
 				password: "Password is incorrect",
 			});
 		}
+		sseWithAuth(req.body.client_id, user.id);
 		return res.status(200).json({
 			token: createToken(user),
 		});

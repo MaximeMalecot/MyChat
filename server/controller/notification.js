@@ -1,71 +1,102 @@
-const {verifyToken} = require('../lib/jwt');
+const { User} = require('../models/mongo');
 const { Notification } = require("../models/postgres");
-const { NOTIFICATION_TYPES} = require("../constants/enums");
+const { NOTIFICATION_TYPES, SUB_FRIENDSHIP_TYPES} = require("../constants/enums");
+const { broadcastKnown, broadcastUnknown } = require("./sse");
+const { Op } = require('sequelize');
 
-const users = [];
+/**
+ * NOTIFICATION
+ * 
+ * ?content string
+ * type string
+ * ?subType string
+ * ?sender integer
+ * ?recipient integer
+ * read bool
+ * 
+ */
 
-const convertMessage = ({ type, ...data }) => {
-    return `event: ${type}\n` + `data: ${JSON.stringify(data)}\n\n`;
-};  
-
-const createNotification = (type, message, id) => {
-    if(!NOTIFICATION_TYPES[type]){
-        console.error(`${type} is not a valid notification type`);
-        return;
+const notifyFriendShip = ({subType, sender, recipient}) => {
+    if( !SUB_FRIENDSHIP_TYPES[subType] ) throw new Error('Invalid sub type');
+    let msg = "";
+    switch(SUB_FRIENDSHIP_TYPES[subType]){
+        case SUB_FRIENDSHIP_TYPES.ACCEPTED:
+            msg = `${sender.firstName} ${sender.lastName} has accepted your invitation`;
+        case SUB_FRIENDSHIP_TYPES.RECEIVED:
+            msg = `You've received a friend invitation from ${sender.firstName} ${sender.lastName}`;
     }
-    Notification.create({
-        userId: id,
+
+    notifyUser({
         type: NOTIFICATION_TYPES.FRIENDSHIP,
-    }).then(() => { 
-        broadcastNotification(message, id);
-    }).catch(console.error);
+        subType,
+        senderId: sender.userId,
+        recipientId: recipient.userId
+    }, msg);
 }
 
-const broadcastNotification = (message, id) => {
-    if(users[id]){
-        users[id].write(convertMessage(message));
-    }
-};
-
-
-const getSSE = (req, res, next) => {
+const notifyUser = ({content, type, subType, senderId, recipientId}, customMsg="") => {
     try {
-        let { token } = req.query;
-        if(!token){
-            throw new Error('Token is required');
+        if(!NOTIFICATION_TYPES[type]){
+            throw new Error(`${type} is not a valid notification type`);
         }
-        const user = verifyToken(req.query.token);
-        if(!user){
-            res.sendStatus(404);
+        const user = User.findOne({userId: recipientId});
+        if(user){
+            Notification.create({
+                content, type, subType, senderId, recipientId
+            }).then(() => 
+                broadcastKnown(
+                    {
+                    message: {
+                        type: 'new_notification', 
+                        data: customMsg
+                    }, 
+                    userId: recipientId
+                })
+            );
         }
-        users[user.id] = res;
+    } catch (err){
+        console.error(err);
+        next();
+    }
+}
 
-        res.on("close", () => {
-            delete users[user.id];
-        });
-        
-        const headers = {
-            "Content-Type": "text/event-stream",
-            "Cache-Control": "no-cache",
-            Connection: "keep-alive",
-        };
-        res.writeHead(200, headers);
-    
-        Notification.findAll({
+const getNotifications = async (req, res, next) => {
+    try {
+        const notifications = await Notification.findAll({
             where: {
                 userId: user.id,
                 status: false,
             }
-        }).then(notifications => {
-            broadcastNotification({ type: 'connect', ...notifications}, user.id);
-        }).catch(console.error);
-
-    } catch(err){
-        console.error(err)
+        });
+        return res.status(200).json({
+            notifications
+        });
+    } catch( err ){
+        console.error(err);
+        next();
     }
 }
 
-module.exports = {
-    getSSE,
-    createNotification
+const readNotifications = async (req, res, next) => {
+    try {
+        await Notification.update({
+            where: {
+                userId: req.user.id,
+                status: false,
+            }
+        }, {
+            status: true,
+        })
+        return res.sendStatus(204);
+    }catch(err){
+        next()
+    }
+}
+
+
+module.exports = { 
+    getNotifications,
+    readNotifications,
+    notifyUser,
+    notifyFriendShip
 }
