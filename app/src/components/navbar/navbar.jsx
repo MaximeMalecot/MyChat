@@ -7,6 +7,7 @@ import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
 import { useAppContext } from '../../contexts/app-context';
 import UserService from '../../services/user.service';
+import { API } from "../../constants/base";
 
 const ResultItem = ({data}) => {
     const navigate = useNavigate();
@@ -21,18 +22,37 @@ const ResultItem = ({data}) => {
 
 };
 
-const MOCK_RESULT = {
-    id: "4454-3444",
-    picture: 'https://www.informatique-mania.com/wp-content/uploads/2021/04/foto-sin-rostro-de-facebook-780x470.jpg?ezimgfmt=rs:0x0/rscb1/ng:webp/ngcb1', 
-    name: 'TEST'
-};
-
 export default function Navbar(){
     const navigate = useNavigate();
     const location = useLocation();
     const [searchEntry, setSearchEntry] = useState("");
     const [results, setResults] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const { appState } = useAppContext();
+
+    useEffect(() => {
+        let url = `${API}/notification?token=${localStorage.getItem('token')}`;
+        const eventSource = new EventSource(
+            url,
+            {
+                withCredentials: true,
+            }
+        )
+
+        eventSource.addEventListener('connect', (e) => {
+            let data = JSON.parse(e.data);
+            if(Object.values(data).length > 0){
+                setNotifications(Object.values(data));
+            }
+            console.log(notifications);
+        })
+
+        eventSource.addEventListener('new', (e) => {
+            const data = JSON.parse(e.data);
+            setNotifications(notifications => [...notifications, data]);
+            console.log(notifications);
+        });
+    });
 
     useEffect(()=>{
         const search = async() => {
@@ -86,6 +106,14 @@ export default function Navbar(){
                 </div>}
             </div>
             <div className={classes.tabs}>
+                <div>
+                    {
+                        notifications.length > 0 ?
+                                <button>{notifications.length}</button>
+                            :   
+                            null
+                    }
+                </div>
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>

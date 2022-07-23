@@ -5,6 +5,7 @@ exports.User = require("./User");
 exports.Techno = require("./Techno");
 exports.Field = require("./Field");
 exports.Message = require("./Message");
+exports.Notification = require('./Notification');
 
 exports.Field.hasMany(exports.User);
 exports.User.belongsTo(exports.Field);
@@ -17,6 +18,9 @@ exports.User.hasMany(exports.Message, { foreignKey: 'sender'});
 
 exports.Message.belongsTo(exports.User, { foreignKey: 'receiver'});
 exports.User.hasMany(exports.Message, { foreignKey: 'receiver'});
+
+exports.Notification.belongsTo(exports.User, { foreignKey: 'userId'});
+exports.User.hasMany(exports.Notification, { foreignKey: 'userId'});
 
 const denormalizeUser = async (user) => {
     const mongoUser = new UserMongo({

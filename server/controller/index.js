@@ -5,3 +5,4 @@ exports.SecurityController = require('./security');
 exports.TechnoController = require('./techno');
 exports.UserController = require('./user');
 exports.FriendshipController = require('./friendship');
+exports.NotificationController = require('./notification');

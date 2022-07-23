@@ -23,7 +23,6 @@ exports.verifyToken = (token) => {
 			isAdmin: decoded.isAdmin,
 		};
 	} catch (error) {
-		console.error(error);
 		return null;
 	}
 };

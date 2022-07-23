@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const { User: UserMongo } = require("../models/mongo");
-const {FRIEND_STATUS} = require('../constants/enums');
+const {FRIEND_STATUS, NOTIFICATION_TYPES} = require('../constants/enums');
+const { createNotification } = require('../controller/notification');
 
 const getUser = async id => {
     let user = await UserMongo.findOne({userId: id});
@@ -56,6 +57,11 @@ exports.sendInvitation = async (req, res, next) => {
 
         await saveFriend(sender.userId, senderSchema)
         await saveFriend(receiver.userId, receiverSchema);
+
+        createNotification(NOTIFICATION_TYPES.FRIENDSHIP,{type: 'new', data: { 
+            type: "friendship",
+            emitter: receiver.firstName + " " + receiver.lastName
+        }}, receiver.userId)
 
         res.sendStatus(201);
     }catch(e){
@@ -263,7 +269,7 @@ exports.getFriendshipStatus = async (req, res, next) => {
         }
 
         if( req.params.userId == req.user.id ){
-            res.status(200).json({message: "You cannot be friend with yourself"});
+            return res.status(200).json({message: "You cannot be friend with yourself"});
         }
 
         //let friendship = await UserMongo.findOne({userId: req.user.id, "friendList.userId": req.params.userId});
@@ -292,10 +298,9 @@ exports.getFriendshipStatus = async (req, res, next) => {
         ).map( obj => obj.friendList);
 
         if( friendship.length === 0 ){
-            res.status(200).json({message: "NOT_FRIENDS"});
-            return;
+            return res.status(200).json({message: "NOT_FRIENDS"});
         }
-        res.status(200).json({message: friendship[0].status});
+        return res.status(200).json({message: friendship[0].status});
     }catch(e){
         console.error(e);
         next();

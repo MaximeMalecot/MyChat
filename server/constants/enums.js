@@ -5,3 +5,8 @@ exports.FRIEND_STATUS = {
     "REFUSED": "REFUSED",
     "DELETED": "DELETED"
 }
+
+exports.NOTIFICATION_TYPES = {
+    "MESSAGE": "MESSAGE",
+    "FRIENDSHIP": "FRIENDSHIP",
+}
