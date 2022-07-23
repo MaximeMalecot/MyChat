@@ -34,7 +34,7 @@ export default function AppRouter() {
   }, [appState]);
 
   return (
-    <>
+    <div style={{minHeight: '100vh', position: 'relative', backgroundColor: '#006496'}}>
       <Navbar />
       <Suspense fallback={() => <p>Loading</p>}>
         <Routes>
@@ -50,6 +50,6 @@ export default function AppRouter() {
       </Suspense>
       <ToastContainer />
       <Footer />
-    </>
+    </div>
   );
 }
