@@ -19,8 +19,11 @@ exports.User.hasMany(exports.Message, { foreignKey: 'sender'});
 exports.Message.belongsTo(exports.User, { foreignKey: 'receiver'});
 exports.User.hasMany(exports.Message, { foreignKey: 'receiver'});
 
-exports.Notification.belongsTo(exports.User, { foreignKey: 'userId'});
-exports.User.hasMany(exports.Notification, { foreignKey: 'userId'});
+exports.Notification.belongsTo(exports.User, { foreignKey: 'senderId'});
+exports.User.hasMany(exports.Notification, { foreignKey: 'senderId'});
+
+exports.Notification.belongsTo(exports.User, { foreignKey: 'recipientId'});
+exports.User.hasMany(exports.Notification, { foreignKey: 'recipientId'});
 
 const denormalizeUser = async (user) => {
     const mongoUser = new UserMongo({

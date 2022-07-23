@@ -23,9 +23,38 @@ const Search = lazy(() => import("./pages/search/search"));
 const CreateField = lazy(() => import("./pages/admin/createField"));
 
 export default function AppRouter() {
-  const { appState } = useAppContext();
-  const navigate = useNavigate();
-  const location = useLocation();
+	const { appState, dispatch } = useAppContext();
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	useEffect(()=>{
+		if(!appState.eventSource){
+			let url = "http://localhost:3000/sse?"
+			if(localStorage.getItem('client_id')){
+				url += "client_id=" + localStorage.getItem('client_id') + "&";
+			}
+			if(appState.auth.token){
+				url += "token=" + appState.auth.token;
+			}
+			const eventSource = new EventSource(
+				url,
+				{
+					withCredentials: true,
+				}
+			);
+			dispatch({action: "SET_EVENT_SOURCE", payload: eventSource});
+		} else {
+			appState.eventSource.addEventListener('connect', (e) => {
+				const client_id = JSON.parse(e.data).client_id;
+				localStorage.setItem('client_id', client_id);
+				console.log("connected");
+			})
+	
+			appState.eventSource.addEventListener('auth', (e) => {
+				console.log('fonctionnel');
+			})
+		}
+	}, [appState]);
 
   useEffect(() => {
     if (!appState.auth.token) {

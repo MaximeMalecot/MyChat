@@ -28,9 +28,21 @@ export default function Navbar(){
     const [searchEntry, setSearchEntry] = useState("");
     const [results, setResults] = useState([]);
     const [notifications, setNotifications] = useState([]);
-    const { appState } = useAppContext();
+    const { appState, dispatch } = useAppContext();
+
+    const logout = () => {
+        dispatch({ action: "LOGOUT" });
+        window.location.reload();
+    };
 
     useEffect(() => {
+        if(!appState.eventSource) return;
+
+        console.log("onéla");
+        appState.eventSource.addEventListener('new_notification', (e) => {
+            console.log("onenkoréla");
+            console.log(JSON.parse(e.data));
+        })
         // let url = `${API}/notification?token=${localStorage.getItem('token')}`;
         // const eventSource = new EventSource(
         //     url,
@@ -52,7 +64,8 @@ export default function Navbar(){
         //     setNotifications(notifications => [...notifications, data]);
         //     console.log(notifications);
         // });
-    });
+
+    }, [appState]);
 
     useEffect(()=>{
         const search = async() => {
@@ -117,6 +130,7 @@ export default function Navbar(){
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>
+                <button onClick={logout}>Logout</button>
                 <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
                 </Link>

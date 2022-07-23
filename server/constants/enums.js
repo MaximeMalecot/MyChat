@@ -6,7 +6,13 @@ exports.FRIEND_STATUS = {
     "DELETED": "DELETED"
 }
 
+exports.SUB_FRIENDSHIP_TYPES = {
+    "ACCEPTED" : "ACCEPTED",
+    "RECEIVED": "RECEIVED",
+}
+
 exports.NOTIFICATION_TYPES = {
     "MESSAGE": "MESSAGE",
     "FRIENDSHIP": "FRIENDSHIP",
 }
+

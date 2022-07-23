@@ -4,34 +4,6 @@ import AppRouter from './app-router';
 import {BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 function App(){
-    const { appState } = useAppContext();
-
-    useEffect(()=>{
-        let url = "http://localhost:3000/sse?"
-        if(localStorage.getItem('client_id')){
-            url += "client_id=" + localStorage.getItem('client_id') + "&";
-        }
-        if(localStorage.getItem('token')){
-            url += "token=" + localStorage.getItem('token');
-        }
-        const eventSource = new EventSource(
-            url,
-            {
-                withCredentials: true,
-            }
-        );
-
-        eventSource.addEventListener('connect', (e) => {
-            const client_id = JSON.parse(e.data).client_id;
-            localStorage.setItem('client_id', client_id);
-            console.log("connected");
-        })
-
-        eventSource.addEventListener('auth', (e) => {
-            console.log('fonctionnel');
-        })
-    }, []);
-
     return (
         <AppContextProvider>
             <Router>
