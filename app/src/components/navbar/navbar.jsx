@@ -108,14 +108,14 @@ export default function Navbar(){
             </div>
             
         </header>
-        <div ref={menuMobile} className={`${classes.mobileMenu} ${classes.displayNone}`}>
+        {/* <div ref={menuMobile} className={`${classes.mobileMenu} ${classes.displayNone}`}>
             <Link to="/messages">
                 Messenger
             </Link>
             <Link to="/profile">
                 Profile
             </Link>
-        </div>
+        </div> */}
     </>
     )
 }
