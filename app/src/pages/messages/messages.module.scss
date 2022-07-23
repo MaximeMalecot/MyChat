@@ -1,0 +1,80 @@
+.main{
+    width: 100%;
+    display: flex;
+
+    .left{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        //border: 1px solid red;
+
+        .conversationList{
+            height: 100%;
+            width: 100%;
+
+            .conversationItem{
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                height: 60px;
+                width: 100%;
+                padding: 10px;
+                border: 1px solid gray;
+                cursor: pointer;
+                transition: 0.5s;
+
+                &:hover{
+                    background-color: rgb(218, 218, 218);
+                }
+
+                .picture_container{
+                    height: 30px;
+                    width: 30px;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    img{
+                        height: 100%;
+                        width: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .data{
+                    width: 60%;
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+
+    }
+
+    .right{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid red;
+
+        .conversation{
+            width: 100%;
+            height: 100%;
+            border-left: 1px solid gray;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid red;
+        
+            .header{
+                display: flex;
+                align-items: center;
+            }
+        
+            .messagesContainer{
+                height: 60%;
+            }
+        
+            .input{
+        
+            }
+        }
+    }
+}

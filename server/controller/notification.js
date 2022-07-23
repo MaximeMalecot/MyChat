@@ -34,15 +34,16 @@ const notifyFriendShip = ({subType, sender, recipient}) => {
     }, msg);
 }
 
-const notifyMessage = ({content, senderId, recipientId}) => {
+const realTimeMessage = ({message, recipientId}) => {
     if( !content ) throw new Error('Invalid content');
-    
-    notifyUser({
-        content,
-        type: NOTIFICATION_TYPES.MESSAGE,
-        senderId,
-        recipientId
-    }, content.slice(0, 10));
+    broadcastKnown(
+        {
+        message: {
+            type: 'new_message', 
+            data: message
+        }, 
+        userId: recipientId
+    })
 }
 
 const notifyUser = ({content, type, subType, senderId, recipientId}, customMsg="") => {
@@ -51,7 +52,6 @@ const notifyUser = ({content, type, subType, senderId, recipientId}, customMsg="
             throw new Error(`${type} is not a valid notification type`);
         }
         const user = User.findOne({userId: recipientId});
-        console.log(recipientId);
         if(user){
             Notification.create({
                 content, type, subType, senderId, recipientId
@@ -110,6 +110,6 @@ module.exports = {
     getNotifications,
     readNotifications,
     notifyUser,
-    notifyMessage,
+    realTimeMessage,
     notifyFriendShip
 }

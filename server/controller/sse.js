@@ -15,16 +15,16 @@ const broadcastUnknown = (message, client_id) => {
 }
 
 const broadcastKnown = ({message, userId}) => {
-    console.log(userId, typeof userId);
+    console.log(message);
+    console.log(userId);
     if(auth_users[userId]){
-        console.log("auth");
+        console.log(userId);
         users[auth_users[userId]].write(convertMessage(message));
     }
 }
 
 const sseWithAuth = (client_id, userId) => {
     auth_users[userId] = client_id;
-    console.log(auth_users, users);
     users[auth_users[userId]].write(convertMessage({type: 'auth'}));
 }
 

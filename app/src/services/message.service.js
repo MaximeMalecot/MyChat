@@ -8,7 +8,7 @@ class MessageService{
             throw new Error("Missing token")
         }
         try{
-            let res = await fetch(`${API}/message`, 
+            let res = await fetch(`${API}/message`,
                     {
                         headers:{
                             "Accept": "*/*",
@@ -27,6 +27,32 @@ class MessageService{
         }
     }
 
+    async send(userId, content){
+        try{
+            const token = localStorage.getItem("token");
+            if (!token){
+                throw new Error("Missing token");
+            }
+            let res = await fetch(`${API}/message/${userId}`, 
+                    {
+                        method: "POST",
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        },
+                        body:JSON.stringify({content})
+                    }
+                );
+
+            if(res.status !== 201){
+                throw new Error();
+            }
+            return true;
+        }catch(e){
+            
+        }
+    }
     // async send(userId){
     //     try{
     //         const token = localStorage.getItem("token");

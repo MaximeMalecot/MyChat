@@ -1,8 +1,12 @@
-const { User, Message} = require("../models/mongo");
+const { User } = require("../models/postgres");
+const { User: UserMongo, Message} = require("../models/mongo");
+const { broadcastKnown } = require('./sse');
+const { SpecificLogger, log } = require("../lib/logger");
 
 exports.getConversations = async (req, res, next) => {
     try{
-        const friendList = (await User.aggregate([
+        const selfId = (req.user.id).toString();
+        const friendList = (await UserMongo.aggregate([
             {
                 $match: { 
                     
@@ -25,14 +29,23 @@ exports.getConversations = async (req, res, next) => {
         if(!friendList.friends){
             return res.status(200).json([]);
         }
-        console.log(friendList.friends);
-        const messages = friendList.friends.map((friend) => {
-            Message.aggregate([
+        let conversations = await Promise.all(friendList.friends.map(async (friend) => {
+            let messages = await Message.aggregate([
                 {
                     $match: {
                         $or: [
-                            { sender: req.user.id },
-                            { receiver: friend.userId }
+                            {
+                                $and: [
+                                    { "senderId": selfId },
+                                    { "receiverId": friend.userId }
+                                ]
+                            },
+                            {
+                                $and: [ 
+                                    { "senderId": friend.userId },
+                                    { "receiverId": selfId }
+                                ]
+                            }
                         ]
                     }
                 },
@@ -41,17 +54,53 @@ exports.getConversations = async (req, res, next) => {
                         createdAt: -1
                     }
                 }
-            ]).then(
-                (messages) => {
-                    return messages[0];
-                }
-            )
-        }).filter( msg => !!msg);
-        console.log(messages);
-        return res.status(200).json(messages);
+            ])
+            return {
+                friend,
+                lastMessage: messages[0],
+            };
+        }));
+        conversations = conversations.sort((a, b) => {
+            return b.lastMessage.createdAt - a.lastMessage.createdAt;
+        });
+        return res.status(200).json(conversations);
     }catch(err){
         console.error(err);
         next();
     }
 
+}
+
+exports.send = async (req, res, next) => {
+    try{
+        const { userId } = req.params;
+        const { content } = req.body;
+        let receiver = await User.findOne({ userId });
+        if(!receiver){
+            SpecificLogger(req, {
+                message:`${req.method} on '${req.originalUrl}' - User not found`,
+				level: log.levels.warn
+            })
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+        const message = await Message.create({
+            senderId: req.user.id,
+            receiverId: userId,
+            content
+        });
+        broadcastKnown(
+            {
+            message: {
+                type: 'new_message', 
+                data: message
+            }, 
+            userId: userId
+        });
+        return res.status(201).json(message);
+    }catch(err){
+        console.error(err);
+        next();
+    }
 }
