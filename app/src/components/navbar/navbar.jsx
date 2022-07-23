@@ -29,6 +29,7 @@ export default function Navbar(){
     const [results, setResults] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const { appState } = useAppContext();
+    const menuMobile = useRef(null);
 
     useEffect(() => {
         let url = `${API}/notification?token=${localStorage.getItem('token')}`;
@@ -74,13 +75,17 @@ export default function Navbar(){
 
     if((location.pathname).startsWith('/login')) return null;
     
+    const handleMenuMobile = () => {
+        menuMobile.current.classList.toggle(classes.displayNone);
+    }
+
     return(
-        <div className={classes.navbar}>
+        <>
+        <header className={classes.navbar}>
             <Link to="/">
-                <img 
-                    className={classes.logo} 
-                    src={Logo} 
-                    alt="Logo"/>
+                <div className={classes.logo}>
+                    <span>G</span>
+                </div>
             </Link>
             <div
                 className={classes.searchDiv}
@@ -120,7 +125,23 @@ export default function Navbar(){
                 <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
                 </Link>
+                <div className={classes.hamburgerLines} onClick={handleMenuMobile}>
+                    <span className={`${classes.line} ${classes.line1}`}></span>
+                    <span className={`${classes.line} ${classes.line2}`}></span>
+                    <span className={`${classes.line} ${classes.line3}`}></span>
+                </div>  
+                
             </div>
-        </div>
+            
+        </header>
+        {/* <div ref={menuMobile} className={`${classes.mobileMenu} ${classes.displayNone}`}>
+            <Link to="/messages">
+                Messenger
+            </Link>
+            <Link to="/profile">
+                Profile
+            </Link>
+        </div> */}
+    </>
     )
 }

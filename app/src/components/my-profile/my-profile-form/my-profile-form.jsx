@@ -1,4 +1,4 @@
-import React,{ useEffect, useRef, useState } from "react";
+import React,{ useState } from "react";
 import UserService from "../../../services/user.service";
 import styles from "./my-profile-form.module.scss";
 import { toast } from 'react-toastify';
