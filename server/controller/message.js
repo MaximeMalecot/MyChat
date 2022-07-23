@@ -71,7 +71,44 @@ exports.getConversations = async (req, res, next) => {
 
 }
 
-exports.send = async (req, res, next) => {
+exports.getMessages = async (req, res, next) => {
+    try{
+        const { userId } = req.params;
+        const selfId = (req.user.id).toString();
+        const user = await UserMongo.findOne({ userId }, { _id: 0, friendList: 0, __v: 0 });
+        const messages = await Message.aggregate([
+            {
+                $match: {
+                    $or: [
+                        {
+                            $and: [
+                                { "senderId": selfId },
+                                { "receiverId": userId }
+                            ]
+                        },
+                        {
+                            $and: [ 
+                                { "senderId": userId },
+                                { "receiverId": selfId }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                $sort: {
+                    createdAt: -1
+                }
+            }
+        ]);
+        return res.status(200).json({user, messages});
+    }catch(err){
+        console.error(err);
+        next();
+    }
+}
+
+exports.sendMessage = async (req, res, next) => {
     try{
         const { userId } = req.params;
         const { content } = req.body;

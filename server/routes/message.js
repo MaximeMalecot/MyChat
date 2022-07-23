@@ -6,6 +6,8 @@ const router = new Router();
 
 router.get('/', verifyToken, MessageController.getConversations);
 
-router.post('/:userId', verifyToken, MessageController.send);
+router.route('/:userId')
+    .post(verifyToken, MessageController.sendMessage)
+    .get(verifyToken, MessageController.getMessages);
 
 module.exports = router;
