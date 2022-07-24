@@ -16,6 +16,8 @@ router.route('/self')
 	
 router.put('/self/techno', verifyToken, UserController.modifySelfTechno)
 
+router.put('/self/field', verifyToken, UserController.modifySelfField)
+
 router.route('/:id')
 	.get(verifyToken, UserController.getUser)
 	.put(UserController.modifyUser)

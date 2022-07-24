@@ -25,3 +25,33 @@ exports.postField = async (req, res) => {
       	}
     }
 };
+
+exports.putField = async (req, res, next) => {
+	try {
+		await Field.update({ name: req.body.name },{ where: { id: req.params.id }});
+		res.sendStatus(204);
+    } catch (error) {
+      	if (error instanceof ValidationError) {
+			res.status(422).json({
+				id: "Invalid ressource",
+			});
+      	} else {
+        	next();
+      	}
+    }
+}
+
+exports.deleteField = async (req, res, next) => {
+	try {
+		await Field.destroy({ where: { id: req.params.id }});
+		res.sendStatus(202);
+    } catch (error) {
+      	if (error instanceof ValidationError) {
+			res.status(422).json({
+				id: "Invalid ressource",
+			});
+      	} else {
+        	next();
+      	}
+    }
+}

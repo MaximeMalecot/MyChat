@@ -1,4 +1,4 @@
-const { User } = require("../models/postgres");
+const { User, Field } = require("../models/postgres");
 const { User: UserMongo } = require("../models/mongo");
 const { ValidationError } = require("sequelize");
 const { SpecificLogger, log } = require("../lib/logger");
@@ -167,6 +167,24 @@ exports.modifySelfTechno = async (req, res, next) => {
 	}
 }
 
+exports.modifySelfField = async (req, res, next) => {
+	try{
+		console.log(req.body);
+		let user = await User.findByPk(req.user.id, {
+			include: ["field"]
+		});
+		let field = await Field.findByPk(req.body.field);
+		if(!field){
+			return res.sendStatus(404);
+		}
+		await User.update({fieldId:field.id},{where:{id:req.user.id}})
+		return res.sendStatus(204);
+	} catch (error) {
+		console.error(error);
+		next();
+	}
+}
+
 exports.searchUsers = async (req, res, next) => {
 	try {
 		const users = (await UserMongo.aggregate([
@@ -224,3 +242,4 @@ exports.deleteSelf = async (req, res, next) => {
 	  	next();
 	}
 }
+

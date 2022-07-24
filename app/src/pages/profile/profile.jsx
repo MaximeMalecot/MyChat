@@ -29,7 +29,7 @@ export default function Profile(){
                     <button className={`${styles.close} btn red`} onClick={() => setShowForm(!showForm)}>x</button> 
                     <MyProfileForm userData={user}/>
                     <ProfileTechnoForm userTechnos={user.technos} />
-                    <ProfileFieldForm userField ={user.field} />
+                    <ProfileFieldForm userField ={user.fieldId} />
                 </div>
                 :
                 <div className={styles.content}>
