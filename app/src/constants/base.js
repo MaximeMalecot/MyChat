@@ -7,3 +7,13 @@ export const FRIEND_STATUS = {
     "REFUSED": "REFUSED",
     "DELETED": "DELETED"
 }
+
+export const SUB_FRIENDSHIP_TYPES = {
+    "ACCEPTED" : "ACCEPTED",
+    "RECEIVED": "RECEIVED",
+}
+
+export const NOTIFICATION_TYPES = {
+    "MESSAGE": "MESSAGE",
+    "FRIENDSHIP": "FRIENDSHIP",
+}

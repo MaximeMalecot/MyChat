@@ -5,6 +5,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/svg/logo.svg';
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
+import BellIcon from '../../assets/svg/bell-icon.svg';
+
+import NotificationCenter from '../notification-center/notification-center';
+
 import { useAppContext } from '../../contexts/app-context';
 import UserService from '../../services/user.service';
 import { API } from "../../constants/base";
@@ -29,6 +33,7 @@ export default function Navbar(){
     const [searchEntry, setSearchEntry] = useState("");
     const [results, setResults] = useState([]);
     const [notifications, setNotifications] = useState([]);
+    const [ showNotificationCenter, setShowNotificationCenter ] = useState(false);
     const { appState, dispatch } = useAppContext();
     const menuMobile = useRef(null);
 
@@ -112,6 +117,9 @@ export default function Navbar(){
                             null
                     }
                 </div>
+                <div onClick={() => setShowNotificationCenter(true)} className={`${classes.tabItem} ${classes.bellIcon}`} >
+                    <img src={BellIcon} alt=""/>
+                </div>
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>
@@ -136,6 +144,7 @@ export default function Navbar(){
                 Profile
             </Link>
         </div> */}
+        <NotificationCenter visible={showNotificationCenter} setVisible={setShowNotificationCenter}/>
     </>
     )
 }

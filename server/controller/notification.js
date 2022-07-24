@@ -64,7 +64,7 @@ const getNotifications = async (req, res, next) => {
     try {
         const notifications = await Notification.findAll({
             where: {
-                userId: user.id,
+                recipientId: req.user.id,
                 status: false,
             }
         });
