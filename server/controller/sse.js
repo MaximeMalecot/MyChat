@@ -61,16 +61,6 @@ const getSSE = (req, res, next) => {
         res.writeHead(200, headers);
 
         broadcastUnknown({type: 'connect', client_id}, client_id);
-    
-        // Notification.findAll({
-        //     where: {
-        //         userId: user.id,
-        //         status: false,
-        //     }
-        // }).then(notifications => {
-        //     broadcastNotification({ type: 'connect', ...notifications}, user.id);
-        // }).catch(console.error);
-
     } catch(err){
         console.error(err);
         next();
@@ -80,7 +70,10 @@ const getSSE = (req, res, next) => {
 const getLiveConnections = () => {
     console.log(Object.values(users).length, Object.values(users));
     console.log(Object.values(auth_users).length, Object.values(auth_users));
-    return Object.values(users).length;
+    return {
+        authentified_users: Object.values(auth_users).length,
+        unknown_users: Object.values(users).length
+    };
 }
 
 module.exports = {

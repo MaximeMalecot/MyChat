@@ -3,7 +3,7 @@ const {getLiveConnections} = require('./sse');
 exports.getLiveConnections = async (req, res, next) => {
     try{
         return res.status(200).json({
-            connected_users: getLiveConnections()
+            users: getLiveConnections()
         });
     }catch(err){
         next();
