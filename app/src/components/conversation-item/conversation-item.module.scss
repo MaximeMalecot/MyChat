@@ -1,0 +1,33 @@
+.conversationItem{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 60px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid gray;
+    cursor: pointer;
+    transition: 0.5s;
+
+    &:hover{
+        background-color: rgb(218, 218, 218);
+    }
+
+    .picture_container{
+        height: 30px;
+        width: 30px;
+        overflow: hidden;
+        border-radius: 50%;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .data{
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+    }
+}
