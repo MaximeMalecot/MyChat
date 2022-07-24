@@ -1,3 +1,5 @@
+@import '../../styles/responsive.scss';
+
 .main{
     z-index: 20000 !important;
     background-color: white;
@@ -8,19 +10,28 @@
     bottom: auto;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    width: 30%;
+    width: 40%;
     height: 60vh;
     border-radius: 6px;
     border: 1px solid rgb(226, 226, 226) ;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    //justify-content: center;
     align-items: center;
     overflow: hidden;
     color: white;
     padding: 10px 0;
     box-shadow: 0px 2px 6px 3px rgba(0, 0, 0, 0.1);
     
+
+    @include sm{
+        width: 80%;
+    }
+
+    @include md{
+        width: 60%;
+    }
+
     &:focus-visible{
         outline: none;
     }
@@ -31,6 +42,7 @@
         padding: 10px 20px;
         margin-bottom: 10px;
         position: relative;
+
         .content{
             position: relative;
             display: flex;
@@ -61,5 +73,12 @@
         width: 100%;
         overflow-y: scroll;
         overflow-x: hidden;
+
+
+        .empty{
+            width: 100%;
+            text-align: center;
+        }
+
     }
 }

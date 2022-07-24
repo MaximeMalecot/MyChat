@@ -58,7 +58,7 @@ export default function NotificationCenter({visible, setVisible}){
 
             <div className={classes.content}>
                 {notifications.length === 0 
-                    ? <p>You have no notification</p>
+                    ? <p className={classes.empty}>You have no notification</p>
                     : notifications.map((notification, idx) => <NotificationItem key={idx} data={notification}/>)
                 }
             </div>

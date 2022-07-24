@@ -178,6 +178,8 @@ exports.acceptInvitation = async (req, res, next) => {
         await updateUserInvitation(receiver.userId, sender.userId, FRIEND_STATUS["ACCEPTED"] );
         await updateUserInvitation(sender.userId, receiver.userId, FRIEND_STATUS["ACCEPTED"] );
         
+        notifyFriendShip({subType: SUB_FRIENDSHIP_TYPES.ACCEPTED, sender: sender, recipient: sender});
+
         return res.sendStatus(200);
     }catch(e){
         console.error(e);

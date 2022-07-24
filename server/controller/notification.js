@@ -22,6 +22,7 @@ const notifyFriendShip = ({subType, sender, recipient}) => {
     switch(SUB_FRIENDSHIP_TYPES[subType]){
         case SUB_FRIENDSHIP_TYPES.ACCEPTED:
             msg = `${sender.firstName} ${sender.lastName} has accepted your invitation`;
+            break;
         case SUB_FRIENDSHIP_TYPES.RECEIVED:
             msg = `You've received a friend invitation from ${sender.firstName} ${sender.lastName}`;
     }
