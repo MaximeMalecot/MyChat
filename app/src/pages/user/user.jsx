@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import classes from "./user.module.scss";
 import UserService from "../../services/user.service";
 import { PROFILE_PICTURE } from "../../constants/assets";
@@ -94,6 +94,7 @@ const InviteButton = ({loading}) => {
 
 export default function User(){
     const { appState } = useAppContext();
+    const location = useLocation();
     const navigate = useNavigate();
     const {id} = useParams();
     const [ user, setUser ] = useState({});
@@ -115,8 +116,9 @@ export default function User(){
     };
 
     useEffect(()=>{
+        setLoading(true);
         getUser();
-    }, []);
+    }, [location]);
 
     if(loading) return <div>Loading...</div>;
 
