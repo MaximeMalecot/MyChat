@@ -27,6 +27,31 @@ class MessageService{
         }
     }
 
+    async getMessages(friendId){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("Missing token")
+        }
+        try{
+            let res = await fetch(`${API}/message/${friendId}`,
+                    {
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        }
+                    }
+            );
+            if(res.status != 200){
+                throw new Error();
+            }
+            return res.json();
+
+        }catch(e){
+            return false;
+        }
+    }
+
     async send(userId, content){
         try{
             const token = localStorage.getItem("token");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MessageService from "../../services/message.service";
 import { useAppContext } from "../../contexts/app-context";
 import classes from "./conversation.module.scss";
@@ -6,10 +6,22 @@ import { PROFILE_PICTURE } from "../../constants/assets.js";
 import { displayMsg } from "../../helpers/toasts.js";
 import { Link } from 'react-router-dom';
 
+const MessageItem = ({message}) => {
+    const { appState } = useAppContext();
+
+    return(
+        <div className={`${classes.messageItem} ${message.senderId == appState.auth.id ? classes.self : ""}`}>
+            {message.content}
+        </div>
+    )
+};
+
 export const Conversation = ({selected}) => {
     const { appState } = useAppContext();
     const [ messages, setMessages ] = useState([]);
     const [ currInput, setCurrInput ] = useState("");
+    const lastMsgRef = useRef(null);
+    const msgContainerRef = useRef(null);
 
     const sendMessage = async () => {
         let res = await MessageService.send(selected.userId, currInput);
@@ -20,7 +32,26 @@ export const Conversation = ({selected}) => {
         }
     };
 
+    const getMessages = async () => {
+        let res = await MessageService.getMessages(selected.userId);
+        scrollToBottom();
+        if( res === false){
+            displayMsg("An error occurred, could not get this message", "error");
+        }else{
+            setMessages(res.messages);
+        }
+    };
+
+    const scrollToBottom = () =>{
+        if(lastMsgRef.current){
+            const { offsetTop } = lastMsgRef.current
+            //msgContainerRef.current.scrollTo(0, offsetTop, { behavior: "smooth" })
+            msgContainerRef.current.scrollTo({ top: offsetTop, behavior: 'smooth' });
+        }
+    };
+
     useEffect(()=>{
+        getMessages();
         // appState.eventSource.addEventListener('new_message', (e) => {
         //      setMessages([...messages, e])
         // })
@@ -47,7 +78,11 @@ export const Conversation = ({selected}) => {
             <div className={classes.messagesContainer}>
                 {
                     messages.length > 0
-                    ? <></>
+                    ? 
+                        <div className={classes.messagesList} ref={msgContainerRef}>
+                            {messages.map((message, index) => <MessageItem message={message} key={index}/>)}
+                            <div ref={lastMsgRef} />
+                        </div>
                     : <p style={{fontStyle: "italic"}}>Looks like you never talked to each other yet</p>
                 }
             </div>

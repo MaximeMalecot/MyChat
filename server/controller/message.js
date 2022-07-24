@@ -97,7 +97,7 @@ exports.getMessages = async (req, res, next) => {
             },
             {
                 $sort: {
-                    createdAt: -1
+                    createdAt: 1
                 }
             }
         ]);
