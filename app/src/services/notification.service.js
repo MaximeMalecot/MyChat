@@ -26,12 +26,15 @@ class NotificationService{
 
     async readAll(){
         const token = localStorage.getItem("token");
+        if( !token){
+            throw new Error('Missing token');
+        }
 
         try{
             let res = await fetch(`${API}/notification`, 
                     {
+                        method: "PATCH",
                         headers:{
-                            "method": "PATCH",
                             "Accept": "*/*",
                             "Content-Type":"application/json",
                             "Authorization":`Bearer ${token}`
@@ -41,7 +44,7 @@ class NotificationService{
             if(res.status !== 204){
                 throw new Error();
             }
-            return res.json();
+            return true;
 
         }catch(e){
             return false;

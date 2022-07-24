@@ -79,16 +79,19 @@ const getNotifications = async (req, res, next) => {
 
 const readNotifications = async (req, res, next) => {
     try {
+        console.log(req.user.id)
         await Notification.update({
-            where: {
-                userId: req.user.id,
-                status: false,
+                status: true,
+            },{
+                where: {
+                    recipientId: req.user.id,
+                    status: false,
+                }
             }
-        }, {
-            status: true,
-        })
+        );
         return res.sendStatus(204);
     }catch(err){
+        console.error(err);
         next()
     }
 }
