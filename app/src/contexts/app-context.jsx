@@ -8,7 +8,6 @@ const getFromtoken = token => {
 
 const authInitData = () => {
     if(localStorage.getItem('token')){
-        console.log("empty")
         return {
             token: localStorage.getItem('token'),
             ...getFromtoken(localStorage.getItem('token'))
@@ -56,7 +55,6 @@ export const appStateReducer = (previousState, { action, payload }) => {
             return { ...previousState, token: null };
 
         case "SET_EVENT_SOURCE":
-            console.log(payload);
             return { ...previousState, eventSource: payload };
         default:
             throw new Error('Undefined action');

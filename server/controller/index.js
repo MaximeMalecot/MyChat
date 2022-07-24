@@ -8,3 +8,4 @@ exports.FriendshipController = require('./friendship');
 exports.NotificationController = require('./notification');
 exports.MessageController = require('./message');
 exports.SSEController = require('./sse');
+exports.ReportController = require('./report');

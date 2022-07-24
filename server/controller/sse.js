@@ -6,6 +6,7 @@ const auth_users = {};
 const users = {};
 
 const convertMessage = ({ type, ...data }) => {
+    console.log(`event: ${type}\n` + `data: ${JSON.stringify(data)}\n\n`);
     return `event: ${type}\n` + `data: ${JSON.stringify(data)}\n\n`;
 };
 
@@ -17,15 +18,15 @@ const broadcastUnknown = (message, client_id) => {
 
 const broadcastAdmins = (message) => {
     if(Object.values(admins).length > 0){
-        Object.values(admins).map((client_id) => users[client_id].write(convertMessage(message)));
+        Object.values(admins).map((client_id) => {
+            console.log(users[client_id]);
+            users[client_id].write(convertMessage(message))
+        });
     }
 }
 
 const broadcastKnown = ({message, userId}) => {
-    console.log(message);
-    console.log(userId);
     if(auth_users[userId]){
-        console.log(userId);
         users[auth_users[userId]].write(convertMessage(message));
     }
 }

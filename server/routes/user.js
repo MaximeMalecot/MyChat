@@ -20,7 +20,8 @@ router.put('/self/field', verifyToken, UserController.modifySelfField)
 
 router.route('/:id')
 	.get(verifyToken, UserController.getUser)
-	.put(UserController.modifyUser)
-	.delete(UserController.deleteUser);
+	.put(verifyToken, UserController.modifyUser)
+	.post(verifyToken, UserController.reportUser)
+	.delete(verifyToken, UserController.deleteUser);
 
 module.exports = router;

@@ -9,6 +9,10 @@
         padding: 30px 0px;
         border-bottom: 1px solid rgb(208, 208, 208);
 
+        :nth-child(2){
+            margin: 5px;
+        }
+        
         .dataPart{
             width: fit-content;
             display: flex;

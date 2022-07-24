@@ -1,9 +1,9 @@
-const { User, Field } = require("../models/postgres");
+const { User, Field, Report } = require("../models/postgres");
 const { User: UserMongo } = require("../models/mongo");
 const { ValidationError } = require("sequelize");
 const { SpecificLogger, log } = require("../lib/logger");
 const formatError = require("../lib/formatError");
-const { FRIEND_STATUS } = require("../constants/enums");
+const { broadcastAdmins } = require('./sse');
 
 exports.getUsers = async (req, res, next) => {
     try {
@@ -21,8 +21,10 @@ exports.postUser = async (req, res, next) => {
     } catch (error) {
       	if (error instanceof ValidationError) {
 			return res.status(422).json({
-				quantity: "must be greather than 0",
-				title: "must not be empty",
+				email: "Must be an email",
+				password: "must not be empty",
+				firstName: "must not be empty",
+				lastName: "must not be empty",
 			});
       	} else {
         	next();
@@ -243,3 +245,29 @@ exports.deleteSelf = async (req, res, next) => {
 	}
 }
 
+exports.reportUser = async (req, res, next) => {
+	try{
+		let reported = req.params.id;
+		let { type, content } = req.body;
+		if(reported === req.user.id){
+			SpecificLogger(req, {
+				message: "Trying to report own profile",
+				level: log.levels.warn,
+				type: log.types[0],
+			})
+			return res.sendStatus(403);
+		}
+		let report = await Report.create({
+			type,
+			content,
+			reported,
+			reporter: req.user.id,
+		});
+
+		broadcastAdmins({ type: 'new_notification', data: "new report"});
+		return res.sendStatus(201);
+	} catch (error) {
+		console.error(error);
+	  	next();
+	}
+}

@@ -50,10 +50,6 @@ export default function AppRouter() {
 				localStorage.setItem('client_id', client_id);
 				console.log("connected");
 			})
-	
-			appState.eventSource.addEventListener('auth', (e) => {
-				console.log('fonctionnel');
-			})
 		}
 	}, [appState]);
 

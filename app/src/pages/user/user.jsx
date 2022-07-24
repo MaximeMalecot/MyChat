@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import classes from "./user.module.scss";
 import UserService from "../../services/user.service";
 import { PROFILE_PICTURE } from "../../constants/assets";
-import { FRIEND_STATUS } from "../../constants/base";
+import { FRIEND_STATUS, REPORT_TYPES } from "../../constants/base";
 import { useAppContext } from "../../contexts/app-context";
 import InvitationService from '../../services/invitation.service';
 import { toast } from "react-toastify";
@@ -39,7 +39,6 @@ const InviteButton = ({loading}) => {
             let res = await InvitationService.getFriendshipStatus(id);
             if(res !== false){
                 setFriendshipStatus(res.message);
-                console.log(res);
             }
         }catch(e){
             console.error(e);
@@ -92,6 +91,50 @@ const InviteButton = ({loading}) => {
 
 }
 
+const ReportForm = ({id, hide}) => {
+    const [report, setReport] = useState({
+        content: "",
+        type: "",
+    });
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try{
+            let res = await UserService.report(id, report);
+            console.log(res);
+            if(res !== true) throw new Error();
+            displayMsg("User reported");
+        }catch(e){
+            console.error(JSON.stringify(e));
+            displayMsg("An error occurred, could not report this user.", "error");
+        }
+        setLoading(false);
+        hide();
+    }
+
+    const handleChange = (e) => {
+        setReport({
+            ...report,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <select name="type" onChange={handleChange} defaultValue="">
+                <option value="" disabled>Select a reason</option>
+                { Object.values(REPORT_TYPES).map(type => 
+                    <option key={type} value={type}>{type}</option>) 
+                }
+            </select>
+            <textarea name="content" value={report.content} onChange={handleChange}></textarea>
+            <button className="btn" disabled={loading}>Report</button>
+        </form>
+    )
+}
+
 export default function User(){
     const { appState } = useAppContext();
     const location = useLocation();
@@ -99,6 +142,7 @@ export default function User(){
     const {id} = useParams();
     const [ user, setUser ] = useState({});
     const [ loading, setLoading ] = useState(true);
+    const [ showReportForm, setShowReportForm ] = useState(false);
 
     const getUser = async () => {
         try{
@@ -132,8 +176,14 @@ export default function User(){
                     <h1>{user.firstName} {user.lastName}</h1>
                 </div>
                 <div>
+                    <button className="btn red" onClick={() => setShowReportForm(true)} value={id}>Report</button>
                     <InviteButton loading={loading}/>
                 </div>
+            </div>
+            <div className={classes.bottomPart}>
+            {
+                showReportForm && <ReportForm id={id} hide={()=>setShowReportForm(false)}/>
+            }
             </div>
         </div>
     )

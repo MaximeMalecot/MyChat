@@ -177,6 +177,29 @@ class UserService {
         }
         return true;
     }
+
+    async report(id, report){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("Missing token")
+        }
+        console.log(`${API}/user/${id}`)
+        let res = await fetch(`${API}/user/${id}`, 
+            {
+                method: "POST",
+                headers:{
+                    "Accept": "*/*",
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                },
+                body: JSON.stringify(report)
+            }
+        );
+        if(res.status !== 201){
+            return false;
+        }
+        return true;
+    }
 }
 
 export default new UserService();

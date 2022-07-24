@@ -17,3 +17,18 @@ export const NOTIFICATION_TYPES = {
     "MESSAGE": "MESSAGE",
     "FRIENDSHIP": "FRIENDSHIP",
 }
+
+export const REPORT_TYPES = {
+    "SCAM": "SCAM",
+    "CATFISH": "CATFISH",
+    "HARASSMENT": "HARASSMENT",
+    "UNAPROPRIAT_NAME": "UNAPROPRIAT_NAME",
+    "THE_PICK": "THE_PICK",
+    "OTHER": "OTHER",
+}
+
+export const REPORT_STATUS = {
+    "CREATED": "CREATED",
+    "BANNED": "BANNED",
+    "RESOLVED": "RESOLVED"
+}
