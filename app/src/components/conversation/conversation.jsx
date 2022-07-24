@@ -4,6 +4,7 @@ import { useAppContext } from "../../contexts/app-context";
 import classes from "./conversation.module.scss";
 import { PROFILE_PICTURE } from "../../constants/assets.js";
 import { displayMsg } from "../../helpers/toasts.js";
+import { Link } from 'react-router-dom';
 
 export const Conversation = ({selected}) => {
     const { appState } = useAppContext();
@@ -34,19 +35,32 @@ export const Conversation = ({selected}) => {
         <div className={classes.conversation}>
 
             <div className={classes.header}>
+                <div className={classes.img_container}>
+                    <img src={PROFILE_PICTURE} alt="profile"/>
+                </div>
                 <h4>{selected.firstName} {selected.lastName}</h4>
+                <Link to={`/user/${selected.userId}`} target={"_blank"}>
+                    <button className={"btn green"}>View profile</button>
+                </Link>
             </div>
 
             <div className={classes.messagesContainer}>
-
+                {
+                    messages.length > 0
+                    ? <></>
+                    : <p style={{fontStyle: "italic"}}>Looks like you never talked to each other yet</p>
+                }
             </div>
 
             <div className={classes.input}>
                 <input
+                    placeholder='Write something'
                     value={currInput} 
                     onChange={e=>setCurrInput(e.target.value)}
                 />
-                <button onClick={sendMessage}>Send</button>
+                <button
+                    className='btn blue' 
+                    onClick={sendMessage}>Send</button>
             </div>
 
         </div>

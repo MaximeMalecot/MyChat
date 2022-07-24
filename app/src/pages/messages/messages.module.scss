@@ -3,6 +3,7 @@
 .main{
     width: 100%;
     display: flex;
+    height: 430px;
 
     .left{
         width: 50%;
@@ -12,10 +13,6 @@
         background-color: $gray;
         padding: 20px;
         gap: 10px;
-
-        h3{
-
-        }
 
         .conversationList{
             height: 100%;
