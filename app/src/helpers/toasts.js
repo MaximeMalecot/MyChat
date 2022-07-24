@@ -20,3 +20,15 @@ export function displayMsg(msg, type="success"){
             break;
     }
 }
+
+export function notify(msg){
+    toast.info(msg, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}

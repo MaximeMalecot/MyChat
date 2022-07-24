@@ -8,6 +8,7 @@ import MessengerIcon from '../../assets/svg/messenger-icon.svg';
 import { useAppContext } from '../../contexts/app-context';
 import UserService from '../../services/user.service';
 import { API } from "../../constants/base";
+import { notify } from '../../helpers/toasts';
 
 const ResultItem = ({data}) => {
     const navigate = useNavigate();
@@ -38,9 +39,13 @@ export default function Navbar(){
 
     useEffect(() => {
         if(!appState.eventSource) return;
-        appState.eventSource.addEventListener('new_notification', (e) => {
-            console.log(JSON.parse(e.data));
-        })
+
+        const handleNotification = e => {
+            let msg = JSON.parse(e.data).data;
+            notify(msg);
+        };
+
+        appState.eventSource.addEventListener('new_notification', handleNotification);
     }, [appState]);
 
     useEffect(()=>{
