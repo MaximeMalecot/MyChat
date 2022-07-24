@@ -135,6 +135,15 @@ exports.sendMessage = async (req, res, next) => {
             }, 
             userId: userId
         });
+
+        broadcastKnown(
+            {
+            message: {
+                type: 'new_message', 
+                data: message
+            }, 
+            userId: req.user.id
+        });
         return res.status(201).json(message);
     }catch(err){
         console.error(err);

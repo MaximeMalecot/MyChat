@@ -16,7 +16,7 @@ const MessageItem = ({message}) => {
     )
 };
 
-export const Conversation = ({selected}) => {
+export const Conversation = ({selected, newMsgs}) => {
     const { appState } = useAppContext();
     const [ messages, setMessages ] = useState([]);
     const [ currInput, setCurrInput ] = useState("");
@@ -42,23 +42,26 @@ export const Conversation = ({selected}) => {
         }
     };
 
+    useEffect(()=>{
+        if(newMsgs && newMsgs.length > 0){
+            let msgToAdd = newMsgs[newMsgs.length - 1];
+            setMessages([...messages, msgToAdd ] );
+            scrollToBottom();
+        }
+    }, [newMsgs]);
+
     const scrollToBottom = () =>{
         if(lastMsgRef.current){
             const { offsetTop } = lastMsgRef.current
-            //msgContainerRef.current.scrollTo(0, offsetTop, { behavior: "smooth" })
             msgContainerRef.current.scrollTo({ top: offsetTop, behavior: 'smooth' });
         }
     };
 
     useEffect(()=>{
         getMessages();
-        // appState.eventSource.addEventListener('new_message', (e) => {
-        //      setMessages([...messages, e])
-        // })
         return () => {
             setMessages([]);
             setCurrInput("");
-            //Remove eventListener
         }
     }, [selected]);
 

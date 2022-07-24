@@ -11,6 +11,7 @@ export default function Messages(){
     const { appState } = useAppContext();
     const [ conversations, setConversations ] = useState([]);
     const [ selected, setSelected ] = useState(null);
+    const [ newMsgs, setNewMsg ] = useState({});
 
     const getConversations = async () => {
         try{
@@ -23,8 +24,26 @@ export default function Messages(){
         }
     };
 
+    const handleNewMsg = ({data}) => {
+        let msg = (JSON.parse(data)).data;
+        let id = msg.senderId == appState.auth.id ? msg.receiverId : msg.senderId;
+        let oldMsgs = newMsgs[id] ? [...newMsgs[id].msgs] : [];
+        oldMsgs.push(msg);
+        setNewMsg({...newMsgs, [id]: oldMsgs });
+    };
+
     useEffect(()=>{
         getConversations();
+        if( appState.eventSource ){
+            appState.eventSource.addEventListener('new_message', handleNewMsg);
+        }
+
+        return () => {
+            if(appState.eventSource){
+                appState.eventSource.removeEventListener('new_message', handleNewMsg);
+                console.log("closed");
+            }
+        }
     }, []);
 
     return(
@@ -36,7 +55,17 @@ export default function Messages(){
                         conversations.length > 0 
                         ?
                         <div className={classes.conversations}>
-                            {conversations.map( (conv, item) => <ConversationItem key={item} data={conv} onClick={() => setSelected(conv.friend)}/>)}
+                            {conversations.map( (conv, item) => {
+                                let lastMsg = newMsgs[conv.friend.userId] ? newMsgs[conv.friend.userId][newMsgs[conv.friend.userId].length -1].content : null;
+                                return  (
+                                    <ConversationItem 
+                                        key={item} 
+                                        data={conv} 
+                                        newMsg={lastMsg}
+                                        onClick={() => setSelected(conv.friend)}/>
+                                    )
+                                }
+                            )}
                         </div>
                         : <p>No conversation yet</p>
                     }
@@ -47,7 +76,9 @@ export default function Messages(){
                 {
                 !selected 
                     ? <p>No conversation selected</p>
-                    : <Conversation selected={selected}/>
+                    : <Conversation 
+                        selected={selected} 
+                        newMsgs={newMsgs[selected.userId]??null}/>
                 }
             </div>
         </div>
