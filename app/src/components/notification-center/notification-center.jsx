@@ -18,9 +18,14 @@ export default function NotificationCenter({visible, setVisible}){
         }
         
     };
+
+    const readNotification = async () => {
+        let res = await NotificationService.readAll();
+    };
     
     useEffect(()=>{
         if(visible){
+            //readNotification();
             getNotifications();
         }
 

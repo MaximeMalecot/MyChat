@@ -4,11 +4,31 @@ import {NOTIFICATION_TYPES, SUB_FRIENDSHIP_TYPES} from '../../constants/base.js'
 import { PROFILE_PICTURE } from "../../constants/assets.js";
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom';
+import InvitationService from '../../services/invitation.service';
+import { displayMsg } from "../../helpers/toasts.js";
 
 const formatDate = givenDate => format(new Date(givenDate), 'HH:mm dd/MM/yy');
 
 const FriendNotification = ({data}) => {
     const profileUrl = `/user/${data.senderId}`;
+
+    const acceptInvitation = async () => {
+        let res = await InvitationService.acceptInvitation(data.senderId);
+        if(res){
+            displayMsg("Invitation accepted!", "success");
+        }else{
+            displayMsg("An error occurred, could not accept this invitation.", "error");
+        }
+    };
+
+    const refuseInvitation = async () => {
+        let res = await InvitationService.refuseInvitation(data.senderId);
+        if(res){
+            displayMsg("Invitation refused", "success");
+        }else{
+            displayMsg("An error occurred, could not refuse this invitation.", "error");
+        }
+    };
 
     const renderContent = () => {
         
@@ -20,8 +40,8 @@ const FriendNotification = ({data}) => {
                     <>
                         <p><Link to={profileUrl}>{data.senderId}</Link> has sent you a friend invitation!</p>
                         <div className={classes.resBtns}>
-                            <button className={"btn green"} onClick={() => {}}>Accept</button>
-                            <button className={"btn red"} onClick={() => {}}>Refuse</button>
+                            <button onClick={acceptInvitation} className={"btn green"}>Accept</button>
+                            <button onClick={refuseInvitation} className={"btn red"}>Refuse</button>
                         </div>
                     </>
                 );
