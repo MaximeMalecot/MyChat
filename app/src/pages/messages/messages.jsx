@@ -56,7 +56,7 @@ export default function Messages(){
                         ?
                         <div className={classes.conversations}>
                             {conversations.map( (conv, item) => {
-                                let lastMsg = newMsgs[conv.friend.userId] ? newMsgs[conv.friend.userId][newMsgs[conv.friend.userId].length -1].content : null;
+                                let lastMsg = newMsgs[conv.friend.userId] ? newMsgs[conv.friend.userId][newMsgs[conv.friend.userId].length -1] : null;
                                 return  (
                                     <ConversationItem
                                         selected={selected?.userId}

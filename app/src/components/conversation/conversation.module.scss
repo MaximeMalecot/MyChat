@@ -5,6 +5,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     .header{
         display: flex;
@@ -40,12 +41,14 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
 
         .messagesList{
             width: 100%;
             height: 100%;
             overflow-y: scroll;
-
+            overflow-x: hidden;
+            
             .messageItem{
                 padding: 10px;
                 width: 50%;
