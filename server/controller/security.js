@@ -27,7 +27,7 @@ exports.login = async (req, res, next) => {
 				password: "Password is incorrect",
 			});
 		}
-		sseWithAuth(req.body.client_id, user.id);
+		sseWithAuth(req.body.client_id, user.id, user.isAdmin);
 		return res.status(200).json({
 			token: createToken(user),
 		});

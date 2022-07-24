@@ -17,8 +17,6 @@ export default function Field() {
 	}, []);
 
 	const handleChange = async (id, name) => {
-        console.log(id);
-        console.log(name);
 		let res = await FieldService.modify(id, name);
 		if(!res){
 			toast.error("Couldn't modify field, try again later", {
@@ -34,7 +32,6 @@ export default function Field() {
 	}
 
 	const handleDelete = async (id) => {
-        console.log(id);
 		let res = await FieldService.delete(id);
 		if(!res){
 			toast.error("Couldn't modify field, try again later", {

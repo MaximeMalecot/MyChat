@@ -154,7 +154,6 @@ exports.acceptInvitation = async (req, res, next) => {
         let sender = await getUser(req.params.id);
 
         const updateUserInvitation = async (userId, friendId, status) => {
-            console.log(`Looking for ${userId} document and set status=${status} in friendList where friendList.userId == ${friendId}`)
             await UserMongo.updateOne({userId}, 
                     {
                         "$set": {

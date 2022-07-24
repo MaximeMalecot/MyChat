@@ -80,7 +80,6 @@ const getNotifications = async (req, res, next) => {
 
 const readNotifications = async (req, res, next) => {
     try {
-        console.log(req.user.id)
         await Notification.update({
                 status: true,
             },{

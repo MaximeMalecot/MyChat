@@ -18,8 +18,7 @@ const broadcastUnknown = (message, client_id) => {
 
 const broadcastAdmins = (message) => {
     if(Object.values(admins).length > 0){
-        Object.values(admins).map((client_id) => {
-            console.log(users[client_id]);
+        Object.values(admins).map((client_id, idx) => {
             users[client_id].write(convertMessage(message))
         });
     }
@@ -31,8 +30,11 @@ const broadcastKnown = ({message, userId}) => {
     }
 }
 
-const sseWithAuth = (client_id, userId) => {
+const sseWithAuth = (client_id, userId, isAdmin) => {
     auth_users[userId] = client_id;
+    if(isAdmin){
+        admins[userId] = client_id;
+    }
     users[auth_users[userId]].write(convertMessage({type: 'auth'}));
 }
 
@@ -79,8 +81,6 @@ const getSSE = (req, res, next) => {
 }
 
 const getLiveConnections = () => {
-    console.log(Object.values(users).length, Object.values(users));
-    console.log(Object.values(auth_users).length, Object.values(auth_users));
     return {
         authentified_users: Object.values(auth_users).length,
         unknown_users: Object.values(users).length

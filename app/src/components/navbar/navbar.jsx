@@ -51,6 +51,9 @@ export default function Navbar(){
         };
 
         appState.eventSource.addEventListener('new_notification', handleNotification);
+        return () => {
+            if(appState.eventSource) appState.eventSource.removeEventListener('new_notification', handleNotification);
+        }
     }, [appState]);
 
     useEffect(()=>{

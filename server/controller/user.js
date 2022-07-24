@@ -171,7 +171,6 @@ exports.modifySelfTechno = async (req, res, next) => {
 
 exports.modifySelfField = async (req, res, next) => {
 	try{
-		console.log(req.body);
 		let user = await User.findByPk(req.user.id, {
 			include: ["field"]
 		});
@@ -179,7 +178,7 @@ exports.modifySelfField = async (req, res, next) => {
 		if(!field){
 			return res.sendStatus(404);
 		}
-		await User.update({fieldId:field.id},{where:{id:req.user.id}})
+		await User.update({fieldId:field.id},{where:{id:user.id}})
 		return res.sendStatus(204);
 	} catch (error) {
 		console.error(error);

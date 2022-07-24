@@ -183,7 +183,6 @@ class UserService {
         if (!token){
             throw new Error("Missing token")
         }
-        console.log(`${API}/user/${id}`)
         let res = await fetch(`${API}/user/${id}`, 
             {
                 method: "POST",

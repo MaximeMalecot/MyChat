@@ -103,7 +103,6 @@ const ReportForm = ({id, hide}) => {
         setLoading(true);
         try{
             let res = await UserService.report(id, report);
-            console.log(res);
             if(res !== true) throw new Error();
             displayMsg("User reported");
         }catch(e){

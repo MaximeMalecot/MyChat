@@ -40,7 +40,6 @@ export default function LoginModal({visible, setVisible}){
             });
             return;
         }
-        console.log(res);
         if(!res.includes('NetworkError')){
             Object.values(res).map((error) => {
                 toast.error(error, {

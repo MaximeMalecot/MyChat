@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 export default function ProfileFieldForm({userField}) {
     const [field, setField] = useState([]);
     const [selectedField, setSelectedField] = useState([]);
-    console.log(userField);
     useEffect(() => {
         FieldService.getAll()
             .then(res => {
