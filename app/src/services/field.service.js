@@ -1,8 +1,9 @@
 import { API } from '../constants/base';
 
-class TechnoService{
+class FieldService{
+
     async getAll(){
-        let res = await fetch(`${API}/techno`, 
+        let res = await fetch(`${API}/field`, 
             {
                 method: "GET",
                 headers:{
@@ -19,7 +20,7 @@ class TechnoService{
         if (!token){
             throw new Error("Missing token")
         }
-        let res = await fetch(`${API}/techno`, 
+        let res = await fetch(`${API}/field`, 
             {
                 method: "POST",
                 headers:{
@@ -42,7 +43,7 @@ class TechnoService{
         if (!token){
             throw new Error("Missing token")
         }
-        let res = await fetch(`${API}/techno/${id}`, 
+        let res = await fetch(`${API}/field/${id}`, 
             {
                 method: "PUT",
                 headers:{
@@ -65,7 +66,7 @@ class TechnoService{
         if (!token){
             throw new Error("Missing token")
         }
-        let res = await fetch(`${API}/techno/${id}`, 
+        let res = await fetch(`${API}/field/${id}`, 
             {
                 method: "DELETE",
                 headers:{
@@ -81,12 +82,12 @@ class TechnoService{
         return true;
     }
 
-    async modifySelfTechno(technos){
+    async modifySelfField(field){
         const token = localStorage.getItem("token");
         if (!token){
             throw new Error("Missing token")
         }
-        let res = await fetch(`${API}/user/self/techno`, 
+        let res = await fetch(`${API}/user/self/field`, 
             {
                 method: "PUT",
                 headers:{
@@ -94,7 +95,7 @@ class TechnoService{
                     "Content-Type":"application/json",
                     "Authorization":`Bearer ${token}`
                 },
-                body: JSON.stringify({technos})
+                body: JSON.stringify({field})
             }
         );
         res = await res.json();
@@ -105,4 +106,4 @@ class TechnoService{
     }
 }
 
-export default new TechnoService();
+export default new FieldService();

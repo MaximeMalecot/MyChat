@@ -3,6 +3,7 @@ import {Routes, Route } from "react-router-dom";
 
 const PageIntrouvable = lazy(() => import("../404/index"));
 const Techno = lazy(() => import("./techno/techno"));
+const Field = lazy(() => import("./field/field"));
 const Home = lazy(() => import("./home/home"));
 const Analytics = lazy(() => import("./analytics/analytics"));
 const Moderation = lazy(() => import("./moderation/moderation"));
@@ -16,6 +17,7 @@ export default function admin() {
         <Route path="/moderation" element={<Moderation />} />
         <Route path="/users" element={<Users />} />
         <Route path="/techno" element={<Techno/>} />
+        <Route path="/field" element={<Field/>} />
         <Route path="/" element={<Home/>} />
         <Route path="*" element={<PageIntrouvable />} />
       </Routes>
