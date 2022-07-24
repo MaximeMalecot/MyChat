@@ -1,6 +1,7 @@
 const {verifyToken} = require('../lib/jwt');
 const { randomUUID} = require('crypto');
 
+const admins = {};
 const auth_users = {};
 const users = {};
 
@@ -11,6 +12,12 @@ const convertMessage = ({ type, ...data }) => {
 const broadcastUnknown = (message, client_id) => {
     if(users[client_id]){
         users[client_id].write(convertMessage(message));
+    }
+}
+
+const broadcastAdmins = (message) => {
+    if(Object.values(admins).length > 0){
+        Object.values(admins).map((client_id) => users[client_id].write(convertMessage(message)));
     }
 }
 
@@ -39,6 +46,9 @@ const getSSE = (req, res, next) => {
             user = verifyToken(req.query.token);
             if(!user || !user.id){
                 res.sendStatus(404);
+            }
+            if(user.isAdmin){
+                admins[user.id] = client_id;
             }
             auth_users[user.id] = client_id;
         }
@@ -80,6 +90,7 @@ module.exports = {
     getSSE,
     broadcastKnown,
     broadcastUnknown,
+    broadcastAdmins,
     getLiveConnections,
     sseWithAuth
 }
