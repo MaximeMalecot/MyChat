@@ -34,7 +34,6 @@ export const Conversation = ({selected, newMsgs}) => {
 
     const getMessages = async () => {
         let res = await MessageService.getMessages(selected.userId);
-        scrollToBottom();
         if( res === false){
             displayMsg("An error occurred, could not get this message", "error");
         }else{
@@ -46,13 +45,18 @@ export const Conversation = ({selected, newMsgs}) => {
         if(newMsgs && newMsgs.length > 0){
             let msgToAdd = newMsgs[newMsgs.length - 1];
             setMessages([...messages, msgToAdd ] );
-            scrollToBottom();
         }
     }, [newMsgs]);
 
+    useEffect(()=>{
+        if(messages.length > 0){
+            scrollToBottom();
+        }
+    }, [messages]);
+
     const scrollToBottom = () =>{
         if(lastMsgRef.current){
-            const { offsetTop } = lastMsgRef.current
+            const { offsetTop } = lastMsgRef.current;
             msgContainerRef.current.scrollTo({ top: offsetTop, behavior: 'smooth' });
         }
     };
@@ -84,7 +88,7 @@ export const Conversation = ({selected, newMsgs}) => {
                     ? 
                         <div className={classes.messagesList} ref={msgContainerRef}>
                             {messages.map((message, index) => <MessageItem message={message} key={index}/>)}
-                            <div ref={lastMsgRef} />
+                            <div ref={lastMsgRef}/>
                         </div>
                     : <p style={{fontStyle: "italic"}}>Looks like you never talked to each other yet</p>
                 }
