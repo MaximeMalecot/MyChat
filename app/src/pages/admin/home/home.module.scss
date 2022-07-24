@@ -59,5 +59,20 @@
             }
         }
     }
+    @media screen and (max-width: 900px) {
+        .content{
+            flex-direction: column;
+            section{
+                width: 100%;
+            }
+            article{
+                width: 100%;
+                & > .card:first-child{
+                    min-height: 0;
+                }
+            }
+        }
+        
+    }
     
 }
