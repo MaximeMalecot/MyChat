@@ -58,7 +58,8 @@ export default function Messages(){
                             {conversations.map( (conv, item) => {
                                 let lastMsg = newMsgs[conv.friend.userId] ? newMsgs[conv.friend.userId][newMsgs[conv.friend.userId].length -1].content : null;
                                 return  (
-                                    <ConversationItem 
+                                    <ConversationItem
+                                        selected={selected?.userId}
                                         key={item} 
                                         data={conv} 
                                         newMsg={lastMsg}

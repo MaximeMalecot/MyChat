@@ -60,9 +60,10 @@ exports.getConversations = async (req, res, next) => {
                 lastMessage: messages[0],
             };
         }));
-        conversations = conversations.sort((a, b) => {
-            return b.lastMessage.createdAt - a.lastMessage.createdAt;
-        });
+        
+        // conversations = conversations.sort((a, b) => {
+        //     return b.lastMessage.createdAt - a.lastMessage.createdAt;
+        // });
         return res.status(200).json(conversations);
     }catch(err){
         console.error(err);
