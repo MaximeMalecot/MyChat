@@ -59,19 +59,22 @@ export default function Login(){
                     <div className={classes.loginForm}>
                         <form onSubmit={onSubmit}>
                             <input
+                                data-testid="login-email"
                                 value={authFields.email}
                                 onChange={e => setAuthFields({...authFields, email: e.target.value})}
                                 type="text"
                                 placeholder='Email'/>
                             <input
+                                data-testid="login-password"
                                 value={authFields.password}
                                 onChange={e => setAuthFields({...authFields, password: e.target.value})}
                                 type="password"
                                 placeholder='Password'/>
-                            <button className='btn blue'>Log In</button>
+                            <button data-testid="login-button" className='btn blue'>Log In</button>
                             <Link to="/login/recover"><p>Forgot password?</p></Link>
                         </form>
-                        <button onClick={() => setOpenLoginModal(true)}
+                        <button data-testid="register-button"
+                            onClick={() => setOpenLoginModal(true)}
                             className='btn green'>Create new account</button>
                     </div>
                 </div>
