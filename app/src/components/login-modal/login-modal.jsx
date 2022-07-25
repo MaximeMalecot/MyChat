@@ -26,6 +26,8 @@ export default function LoginModal({visible, setVisible}){
 
     const onSubmit = async e => {
         e.preventDefault();
+        if(JSON.stringify(userFields) === JSON.stringify(baseUserFields)) return;
+        
         let res = await AuthService.register(userFields);
         if(res === true){
             setVisible(false);
@@ -39,21 +41,8 @@ export default function LoginModal({visible, setVisible}){
                 progress: undefined,
             });
             return;
-        }
-        if(!res.includes('NetworkError')){
-            Object.values(res).map((error) => {
-                toast.error(error, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }, "")
-        }else {
-            toast.error("Network Error", {
+        }else{
+            toast.error("Could not create this account", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -62,6 +51,32 @@ export default function LoginModal({visible, setVisible}){
                 draggable: true,
                 progress: undefined,
             });
+
+            // if(!res.includes('NetworkError'))
+            // {
+            //     Object.values(res).map((error) => {
+            //         toast.error(error, {
+            //             position: "top-right",
+            //             autoClose: 5000,
+            //             hideProgressBar: false,
+            //             closeOnClick: true,
+            //             pauseOnHover: true,
+            //             draggable: true,
+            //             progress: undefined,
+            //         });
+            //     }, "")
+            // }else {
+            //     toast.error("Network Error", {
+            //         position: "top-right",
+            //         autoClose: 5000,
+            //         hideProgressBar: false,
+            //         closeOnClick: true,
+            //         pauseOnHover: true,
+            //         draggable: true,
+            //         progress: undefined,
+            //     });
+            // }
+
         }
     };
 
@@ -87,6 +102,7 @@ export default function LoginModal({visible, setVisible}){
                     <form onSubmit={onSubmit}>
                         <div className={classes.inlineInput}>
                             <input
+                                data-testid="register-firstname"
                                 onChange={e => updateField(e.target.value, 'firstName')}
                                 value={userFields.firstName}
                                 className={''}
@@ -94,6 +110,7 @@ export default function LoginModal({visible, setVisible}){
                                 placeholder="First name"
                                 />
                             <input
+                                data-testid="register-lastname"
                                 onChange={e => updateField(e.target.value, 'lastName')}
                                 value={userFields.lastName}
                                 className={''}
@@ -102,6 +119,7 @@ export default function LoginModal({visible, setVisible}){
                                 />
                         </div>
                         <input
+                            data-testid="register-email"
                             onChange={e => updateField(e.target.value, 'email')}
                             value={userFields.email}
                             className={''}
@@ -109,6 +127,7 @@ export default function LoginModal({visible, setVisible}){
                             placeholder="Email" 
                             />
                         <input
+                            data-testid="register-password"
                             onChange={e => updateField(e.target.value, 'password')}
                             value={userFields.password}
                             className={''}
@@ -116,7 +135,7 @@ export default function LoginModal({visible, setVisible}){
                             placeholder="New password" 
                             />
                         <p className={classes.tos}>By clicking Sign Up, you agree to our Terms. Learn how we collect, use and share your data in our Data Policy and how we use cookies and similar technology in our Cookies Policy. You may receive SMS Notifications from us and can opt out any time.</p>
-                        <button type="submit" className="btn green">Sign up</button>
+                        <button data-testid="signup-button" type="submit" className="btn green">Sign up</button>
                     </form>
                 </div>
         </Modal>

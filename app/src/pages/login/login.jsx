@@ -69,7 +69,8 @@ export default function Login(){
                             <button data-testid="login-button" className='btn blue'>Log In</button>
                             <Link to="/login/recover"><p>Forgot password?</p></Link>
                         </form>
-                        <button onClick={() => setOpenLoginModal(true)}
+                        <button data-testid="register-button"
+                            onClick={() => setOpenLoginModal(true)}
                             className='btn green'>Create new account</button>
                     </div>
                 </div>
