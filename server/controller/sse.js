@@ -28,6 +28,7 @@ const broadcastAdmins = (message) => {
 
 const broadcastKnown = ({message, userId}) => {
     if(auth_users[userId] && users[auth_users[userId]]){
+        console.log(auth_users[userId]);
         users[auth_users[userId]].write(convertMessage(message));
     }
 }

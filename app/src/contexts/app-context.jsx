@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import jwt_decode from "jwt-decode";
+import { CLIENT_ID } from '../constants/storage_keys.js';
 
 const getFromtoken = token => {
     let decoded = jwt_decode(token);
@@ -27,6 +28,7 @@ const authInitData = () => {
 export const appInitData = {
     auth: authInitData(),
     eventSource: null,
+    client_id: localStorage.getItem(CLIENT_ID)??null
 };
 
 export const useAppContext = () => {
@@ -46,12 +48,18 @@ export const appStateReducer = (previousState, { action, payload }) => {
             localStorage.setItem('token', token);
             return { ...previousState, auth: {...previousState.auth, token } };
 
+        case "SET_CLIENT_ID":
+            let { client_id } = payload;
+            localStorage.setItem(CLIENT_ID, client_id);
+            console.log({ ...previousState, client_id })
+            return { ...previousState, client_id };
+
         case 'SET_AUTH_DATA':
             return { ...previousState, auth: {...previousState.auth, ...payload} };
 
         case "LOGOUT":
             localStorage.removeItem("token");
-            localStorage.removeItem("client_id");
+            localStorage.removeItem(CLIENT_ID);
             return { ...previousState, token: null };
 
         case "SET_EVENT_SOURCE":

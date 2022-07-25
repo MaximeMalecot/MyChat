@@ -27,14 +27,18 @@ export default function Messages(){
     const handleNewMsg = ({data}) => {
         let msg = (JSON.parse(data)).data;
         let id = msg.senderId == appState.auth.id ? msg.receiverId : msg.senderId;
+        console.log(msg)
         let oldMsgs = newMsgs[id] ? [...newMsgs[id].msgs] : [];
         oldMsgs.push(msg);
         setNewMsg({...newMsgs, [id]: oldMsgs });
     };
 
     useEffect(()=>{
+        console.log("USEFFECT");
         getConversations();
         if( appState.eventSource ){
+            console.log('Listening messages ');
+            console.log(appState.client_id)
             appState.eventSource.addEventListener('new_message', handleNewMsg);
         }
 
