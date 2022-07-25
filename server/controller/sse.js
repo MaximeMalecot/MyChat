@@ -19,13 +19,15 @@ const broadcastUnknown = (message, client_id) => {
 const broadcastAdmins = (message) => {
     if(Object.values(admins).length > 0){
         Object.values(admins).map((client_id, idx) => {
-            users[client_id].write(convertMessage(message))
+            if(users[client_id]){
+                users[client_id].write(convertMessage(message))
+            }
         });
     }
 }
 
 const broadcastKnown = ({message, userId}) => {
-    if(auth_users[userId]){
+    if(auth_users[userId] && users[auth_users[userId]]){
         users[auth_users[userId]].write(convertMessage(message));
     }
 }
@@ -35,7 +37,9 @@ const sseWithAuth = (client_id, userId, isAdmin) => {
     if(isAdmin){
         admins[userId] = client_id;
     }
-    users[auth_users[userId]].write(convertMessage({type: 'auth'}));
+    if(users[auth_users[userId]]){
+        users[auth_users[userId]].write(convertMessage({type: 'auth'}));
+    }
 }
 
 const getSSE = (req, res, next) => {

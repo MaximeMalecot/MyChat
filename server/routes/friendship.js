@@ -19,5 +19,7 @@ router.route('/status/:userId')
 router.route('/:userId')
     .get(FriendshipController.getList)
     .delete(verifyToken, FriendshipController.removeFriend)
+
+router.get('/', verifyToken, FriendshipController.getFriendListRecommendation);
     
 module.exports = router;

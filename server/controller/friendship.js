@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const { User: UserMongo } = require("../models/mongo");
+const { connection, User } = require("../models/postgres");
+const { Op } = require('sequelize');
 const { NOTIFICATION_TYPES, SUB_FRIENDSHIP_TYPES, FRIEND_STATUS} = require('../constants/enums');
 const { notifyFriendShip } = require('../controller/notification');
 
@@ -299,6 +301,86 @@ exports.getFriendshipStatus = async (req, res, next) => {
             return res.status(200).json({message: "NOT_FRIENDS"});
         }
         return res.status(200).json({message: friendship[0].status});
+    }catch(e){
+        console.error(e);
+        next();
+    }
+};
+
+const getUserFromCommonFriend = async (user) => {
+    let users = []
+    if(user.friendList.length === 0){
+        return users;
+    }
+    let friendsFriendlist = [];
+    let friendsId = [];
+
+    for(let friend of user.friendList){
+        let friendDocument = await UserMongo.findOne({userId: friend.userId});
+        friendsId.push(friendDocument.userId);
+        friendsFriendlist.push(friendDocument);
+    }
+
+    friendsFriendlist.map((friend) => {
+        friend.friendList.map((friend) => {
+            if(!friendsId.includes(friend.userId) && friend.userId != user.userId){
+                if(users[friend.userId]){
+                    users[friend.userId].commonFriends++;
+                }else{
+                    users[friend.userId] = {
+                        user: friend,
+                        commonFriends: (users[friend.userId]?.occurences || 0) + 1
+                    };
+                }
+            }
+        })
+    })
+    return Object.values(users).sort((a, b) =>  b.commonFriends - a.commonFriends).slice(0,6);
+}
+
+const getUserWithSameField = async (user, friends) => {
+    if(!user.fieldId){
+        return [];
+    }
+    const fieldMatch = await User.findAll({ 
+        where: {
+            fieldId: user.fieldId,
+            id: {
+                [Op.ne]: user.id,
+                [Op.notIn]: friends
+            }
+        },
+        attributes: ['id', 'firstName', 'lastName'],
+        order: connection.random(),
+        limit: 5,
+    });
+    return fieldMatch;
+}
+
+exports.getFriendListRecommendation = async (req, res, next) => {
+    try{
+        const mongoUser = await getUser(req.user.id);
+        const pgUser = await User.findByPk(req.user.id);
+        const friendListPgIds = (await UserMongo.aggregate([
+            {
+                $match: { userId: req.user.id }
+            },
+            {
+                $unwind : "$friendList"
+            },
+            {
+                $project: {
+                    "_id": 0,
+                    "friendList.userId": 1
+                }
+            }
+        ])).map( obj => obj.friendList.userId);
+
+        const usersWithOccurences = await getUserFromCommonFriend(mongoUser);
+        const usersWithSameTechnos = [];
+        const userWithSameField = await getUserWithSameField(pgUser, friendListPgIds);
+        
+        return res.status(200).json({usersWithOccurences, usersWithSameTechnos, userWithSameField});
     }catch(e){
         console.error(e);
         next();
