@@ -1,20 +1,7 @@
-const { User} = require('../models/mongo');
+const { User: UserMongo} = require('../models/mongo');
 const { Notification } = require("../models/postgres");
 const { NOTIFICATION_TYPES, SUB_FRIENDSHIP_TYPES} = require("../constants/enums");
-const { broadcastKnown, broadcastUnknown } = require("./sse");
-const { Op } = require('sequelize');
-
-/**
- * NOTIFICATION
- * 
- * ?content string
- * type string
- * ?subType string
- * ?sender integer
- * ?recipient integer
- * read bool
- * 
- */
+const { broadcastKnown} = require("./sse");
 
 const notifyFriendShip = ({subType, sender, recipient}) => {
     if( !SUB_FRIENDSHIP_TYPES[subType] ) throw new Error('Invalid sub type');
@@ -40,7 +27,7 @@ const notifyUser = ({content, type, subType, senderId, recipientId}, customMsg="
         if(!NOTIFICATION_TYPES[type]){
             throw new Error(`${type} is not a valid notification type`);
         }
-        const user = User.findOne({userId: recipientId});
+        const user = UserMongo.findOne({userId: recipientId});
         if(user){
             Notification.create({
                 content, type, subType, senderId, recipientId
@@ -63,12 +50,25 @@ const notifyUser = ({content, type, subType, senderId, recipientId}, customMsg="
 
 const getNotifications = async (req, res, next) => {
     try {
-        const notifications = await Notification.findAll({
+        let notifications = await Notification.findAll({
             where: {
                 recipientId: req.user.id,
                 status: false,
             }
         });
+        notifications = await Promise.all(notifications.map(async (notification) => {
+            let sender = await UserMongo.findOne({userId: notification.senderId}, { _id: 0, userId: 1, firstName: 1, lastName: 1 });
+            let recipient = await UserMongo.findOne({userId: notification.recipientId}, { _id: 0, userId: 1, firstName: 1, lastName: 1 });
+            return {
+                content: notification.content,
+                type: notification.type,
+                subType: notification.subType,
+                sender,
+                recipient,
+                read: notification.status,
+                createdAt: notification.createdAt,
+            }
+        }));
         return res.status(200).json({
             notifications
         });

@@ -13,7 +13,7 @@ const FriendNotification = ({data}) => {
     const profileUrl = `/user/${data.senderId}`;
 
     const acceptInvitation = async () => {
-        let res = await InvitationService.acceptInvitation(data.senderId);
+        let res = await InvitationService.acceptInvitation(data.sender.userId);
         if(res){
             displayMsg("Invitation accepted!", "success");
         }else{
@@ -22,7 +22,7 @@ const FriendNotification = ({data}) => {
     };
 
     const refuseInvitation = async () => {
-        let res = await InvitationService.refuseInvitation(data.senderId);
+        let res = await InvitationService.refuseInvitation(data.sender.userId);
         if(res){
             displayMsg("Invitation refused", "success");
         }else{
@@ -34,11 +34,11 @@ const FriendNotification = ({data}) => {
         
         switch(data.subType){
             case SUB_FRIENDSHIP_TYPES.ACCEPTED:
-                return <p><Link to={profileUrl}>{data.senderId}</Link> has accepted your friend invitation!</p>;
+                return <p><Link to={profileUrl}>{data.sender.firstName} {data.sender.lastName}</Link> has accepted your friend invitation!</p>;
             case SUB_FRIENDSHIP_TYPES.RECEIVED:
                 return (
                     <>
-                        <p><Link to={profileUrl}>{data.senderId}</Link> has sent you a friend invitation!</p>
+                        <p><Link to={profileUrl}>{data.sender.firstName} {data.sender.lastName}</Link> has sent you a friend invitation!</p>
                         <div className={classes.resBtns}>
                             <button onClick={acceptInvitation} className={"btn green"}>Accept</button>
                             <button onClick={refuseInvitation} className={"btn red"}>Refuse</button>
