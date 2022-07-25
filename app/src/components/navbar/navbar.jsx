@@ -7,11 +7,14 @@ import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
 import BellIcon from '../../assets/svg/bell-icon.svg';
 
+import UserService from '../../services/user.service';
+import AuthService from '../../services/auth.service';
+import NotificationService from '../../services/notification.service';
+
 import NotificationCenter from '../notification-center/notification-center';
 
 import { useAppContext } from '../../contexts/app-context';
-import UserService from '../../services/user.service';
-import AuthService from '../../services/auth.service';
+
 import { API } from "../../constants/base";
 import { notify } from '../../helpers/toasts';
 
@@ -33,7 +36,7 @@ export default function Navbar(){
     const location = useLocation();
     const [searchEntry, setSearchEntry] = useState("");
     const [results, setResults] = useState([]);
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState(0);
     const [ showNotificationCenter, setShowNotificationCenter ] = useState(false);
     const { appState, dispatch } = useAppContext();
     const menuMobile = useRef(null);
@@ -46,17 +49,38 @@ export default function Navbar(){
         }
     };
 
+    const openNotificationCenter = () => {
+        setShowNotificationCenter(true); 
+        setNotifications(0);
+    }
+
+    const getNotifications = async () => {
+        let res = await NotificationService.getAll();
+        if(res === false){
+            return;
+        }else{
+            setNotifications(res.notifications.length);
+        }
+        
+    };
+
+    useEffect(()=>{
+        getNotifications();
+    }, []);
+
     useEffect(() => {
         if(!appState.eventSource) return;
 
         const handleNotification = e => {
             let msg = JSON.parse(e.data).data;
             notify(msg);
+            setNotifications(notifications + 1);
         };
 
         appState.eventSource.addEventListener('new_notification', handleNotification);
         return () => {
             if(appState.eventSource) appState.eventSource.removeEventListener('new_notification', handleNotification);
+            setNotifications(0);
         }
     }, [appState]);
 
@@ -116,16 +140,9 @@ export default function Navbar(){
                 </div>}
             </div>
             <div className={classes.tabs}>
-                <div>
-                    {
-                        notifications.length > 0 ?
-                                <button>{notifications.length}</button>
-                            :   
-                            null
-                    }
-                </div>
-                <div onClick={() => setShowNotificationCenter(true)} className={`${classes.tabItem} ${classes.bellIcon}`} >
+                <div onClick={openNotificationCenter} className={`${classes.tabItem} ${classes.bellIcon}`} >
                     <img src={BellIcon} alt=""/>
+                    {notifications > 0 && <span className={classes.counter}>{notifications}</span>}
                 </div>
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>

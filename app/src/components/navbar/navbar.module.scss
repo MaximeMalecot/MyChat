@@ -132,8 +132,19 @@ $gray: #F0F2F5;
             }
 
             &.bellIcon{
+                position: relative;
+                overflow: visible !important;
                 img{
                     height: 20px;
+                }
+
+                .counter{
+                    position: absolute;
+                    top: 10%;
+                    right: 15%;
+                    color: red;
+                    font-size: 14px;
+                    font-weight: bolder;
                 }
             }
 
