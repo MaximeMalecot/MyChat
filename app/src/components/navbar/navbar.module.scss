@@ -1,8 +1,7 @@
-$gray: #F0F2F5;
+@import '../../styles/responsive.scss';
 @import url('https://fonts.googleapis.com/css2?family=Faster+One&display=swap');
-.displayNone{
-    display: none!important;
-}
+$gray: #F0F2F5;
+
 .navbar{
     height: 60px;
     z-index: 10;
@@ -15,6 +14,10 @@ $gray: #F0F2F5;
     align-items: center;
     gap: 20px;
     padding: 0 2%;
+
+    @include sm{
+        justify-content: space-between;
+    }
 
     .logo{
         height: 40px;
@@ -43,6 +46,10 @@ $gray: #F0F2F5;
         align-items: center;
         padding: 0 20px;
         position: relative;
+
+        @include sm{
+            display: none;
+        }
 
         input{
             background-color: transparent;
@@ -104,8 +111,24 @@ $gray: #F0F2F5;
         //justify-self: flex-end;
         margin-left: auto;
         gap: 20px;
-        .mobileMenuHamburger{
+
+        @include sm{
+            gap: 10px;
+            margin-left: 0;
+        }
+
+        .logout{
+            @include sm{
+                display: none;
+            }
+        }
+
+        .mobileMenu{
             display: none;
+            @include sm{
+                display: block;
+                z-index: 10000;
+            }
         }
 
         .tabItem{
@@ -120,6 +143,7 @@ $gray: #F0F2F5;
             transition: 0.5s;
             cursor: pointer;
             user-select: none;
+            z-index: 99;
 
             &:hover{
                 background-color: #acb1b8;
@@ -149,9 +173,11 @@ $gray: #F0F2F5;
             }
 
             &.profileIcon{
+
                 img{
                     height: 100%;
                     object-fit: cover;
+                    z-index: 100;
                 }
 
                 &:hover{
@@ -161,62 +187,47 @@ $gray: #F0F2F5;
             }
         }
 
-        // .hamburgerLines{
-        //     width: 100%;
-        //     height: 100%;
-        //     .line {
-        //         display: block;
-        //         height: 4px;
-        //         width: 100%;
-        //         border-radius: 10px;
-        //         background: #0e2431;
-        //       }
-        //       .line1 {
-        //         transform-origin: 0% 0%;
-        //         transition: transform 0.4s ease-in-out;
-        //       }
-        //       .line2 {
-        //         transition: transform 0.2s ease-in-out;
-        //       }
-        //       .line3 {
-        //         transform-origin: 0% 100%;
-        //         transition: transform 0.4s ease-in-out;
-        //       }
-
-        // }
-
     }
-    
-     
-    @media only screen and (max-width: 600px) {
-        
-        .tabs{
-            // .mobileMenuHamburger{
-            //     display: block;
-            // }
-            
-            // .tabItem{
-            //     display: none;
-            // }
-            
+
+    .mobileNavigation{
+        z-index: -1;
+        position: absolute;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #006496;
+
+        ul{
+            margin-top: -20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            //border: 1px solid red;
+            align-items: center;
+
+            li{
+                $textColor: white;
+                
+                color: $textColor;
+                font-size: 38px;
+                user-select: none;
+                border-bottom: 3px solid transparent;
+                transition: 0.5s;
+                
+                &:hover{
+                    color: $gray;
+                    border-bottom: 3px solid $textColor;
+                }
+
+                &.current{
+                    border-bottom: 3px solid $textColor;
+                }
+            }
         }
     }
-
-
-}
-.mobileMenu{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(31, 31, 31);
-    z-index: 6;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    a{
-        color: whitesmoke;
-    }
+    
 }

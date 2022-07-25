@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classes from './navbar.module.scss';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Divide as MobileMenu } from 'hamburger-react';
 
 import Logo from '../../assets/svg/logo.svg';
 import SearchIcon from '../../assets/svg/search-icon.svg';
@@ -40,6 +41,7 @@ export default function Navbar(){
     const [ showNotificationCenter, setShowNotificationCenter ] = useState(false);
     const { appState, dispatch } = useAppContext();
     const menuMobile = useRef(null);
+    const [displayMobileMenu, setDisplayMobileMenu] = useState(false);
 
     const logout = async () => {
         let res = await AuthService.logout();
@@ -103,10 +105,6 @@ export default function Navbar(){
     }, [location]);
 
     if((location.pathname).startsWith('/login')) return null;
-    
-    const handleMenuMobile = () => {
-        menuMobile.current.classList.toggle(classes.displayNone);
-    }
 
     return(
         <>
@@ -147,27 +145,41 @@ export default function Navbar(){
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>
-                <button onClick={logout}>Logout</button>
+                <button className={classes.logout} onClick={logout}>X</button>
                 <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
-                </Link>
-                <div className={classes.hamburgerLines} onClick={handleMenuMobile}>
-                    <span className={`${classes.line} ${classes.line1}`}></span>
-                    <span className={`${classes.line} ${classes.line2}`}></span>
-                    <span className={`${classes.line} ${classes.line3}`}></span>
-                </div>  
-                
+                </Link> 
+
+                <div className={classes.mobileMenu}>
+                    <MobileMenu
+                        color={displayMobileMenu ? 'white' : 'black'}
+                        size={25}
+                        rounded
+                        toggled={displayMobileMenu} 
+                        toggle={()=>setDisplayMobileMenu(!displayMobileMenu)}
+                    />
+                </div>
+
+                {displayMobileMenu && <div className={classes.mobileNavigation}>
+                    <ul>
+                        <li onClick={() => setDisplayMobileMenu(false)}>
+                            <Link to="/" >Home</Link>
+                        </li>
+
+                        <li onClick={() => setDisplayMobileMenu(false)}>
+                            <Link to="/profile" >Profile</Link>
+                        </li>
+
+                        <li onClick={() => {setDisplayMobileMenu(false); logout(); }}>
+                            <Link to="/about-us" >Logout</Link>
+                        </li>
+
+                    </ul>
+                </div>}
+
             </div>
             
         </header>
-        {/* <div ref={menuMobile} className={`${classes.mobileMenu} ${classes.displayNone}`}>
-            <Link to="/messages">
-                Messenger
-            </Link>
-            <Link to="/profile">
-                Profile
-            </Link>
-        </div> */}
         <NotificationCenter visible={showNotificationCenter} setVisible={setShowNotificationCenter}/>
     </>
     )
