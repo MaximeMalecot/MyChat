@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { User: UserMongo } = require("../models/mongo");
-const { connection, User } = require("../models/postgres");
+const { connection, User, Techno } = require("../models/postgres");
 const { Op } = require('sequelize');
 const { NOTIFICATION_TYPES, SUB_FRIENDSHIP_TYPES, FRIEND_STATUS} = require('../constants/enums');
 const { notifyFriendShip } = require('../controller/notification');
@@ -307,28 +307,35 @@ exports.getFriendshipStatus = async (req, res, next) => {
     }
 };
 
-const getUserFromCommonFriend = async (user) => {
+const getUserFromCommonFriend = async (mongoUser) => {
     let users = []
-    if(user.friendList.length === 0){
+    if(mongoUser.friendList.length === 0){
         return users;
     }
     let friendsFriendlist = [];
     let friendsId = [];
 
-    for(let friend of user.friendList){
+    for(let friend of mongoUser.friendList){
         let friendDocument = await UserMongo.findOne({userId: friend.userId});
         friendsId.push(friendDocument.userId);
         friendsFriendlist.push(friendDocument);
     }
+    if(!friendsFriendlist || friendsFriendlist.length === 0){
+        return users;
+    }
 
     friendsFriendlist.map((friend) => {
         friend.friendList.map((friend) => {
-            if(!friendsId.includes(friend.userId) && friend.userId != user.userId){
+            if(!friendsId.includes(friend.userId) && friend.userId != mongoUser.userId){
                 if(users[friend.userId]){
                     users[friend.userId].commonFriends++;
                 }else{
                     users[friend.userId] = {
-                        user: friend,
+                        user: {
+                            id: friend.userId,
+                            firstName: friend.firstName,
+                            lastName: friend.lastName,
+                        },
                         commonFriends: (users[friend.userId]?.occurences || 0) + 1
                     };
                 }
@@ -336,6 +343,41 @@ const getUserFromCommonFriend = async (user) => {
         })
     })
     return Object.values(users).sort((a, b) =>  b.commonFriends - a.commonFriends).slice(0,6);
+}
+
+const getUsersFromCommomTechnos  = async (user, friends) => {
+    if(!user.technos || user.technos.length === 0){
+        return [];
+    }
+    let usersMatching = {};
+    const userTechnos = user.technos.map(techno => techno.id);
+    let users = await User.findAll({
+        where: {
+            id: {
+                [Op.ne]: user.id,
+                [Op.notIn]: friends
+            }
+        },
+        include: [
+            {model: Techno, attributes: [ "id", "name"]}
+        ]
+    });
+    if(users.length > 0){
+        users.map(async (userMatching) => {
+            if(!usersMatching[userMatching.id]){
+                let userMatchingTechnos = userMatching.technos.map(techno => techno.id);
+                usersMatching[userMatching.id] = {
+                    user: { 
+                        id: userMatching.id,
+                        firstName: userMatching.firstName,
+                        lastName: userMatching.lastName,
+                    },
+                    commonTechnos: userMatchingTechnos.filter(techno => userTechnos.includes(techno)).length
+                };
+            }
+        })
+    }
+    return Object.values(usersMatching).sort((a, b) =>  b.commonTechnos - a.commonTechnos).slice(0,6);
 }
 
 const getUserWithSameField = async (user, friends) => {
@@ -360,7 +402,7 @@ const getUserWithSameField = async (user, friends) => {
 exports.getFriendListRecommendation = async (req, res, next) => {
     try{
         const mongoUser = await getUser(req.user.id);
-        const pgUser = await User.findByPk(req.user.id);
+        const pgUser = await User.findOne({where:{id: req.user.id}, include: [{model: Techno, attributes: [ "id", "name"]}]});
         const friendListPgIds = (await UserMongo.aggregate([
             {
                 $match: { userId: req.user.id }
@@ -377,7 +419,7 @@ exports.getFriendListRecommendation = async (req, res, next) => {
         ])).map( obj => obj.friendList.userId);
 
         const usersWithOccurences = await getUserFromCommonFriend(mongoUser);
-        const usersWithSameTechnos = [];
+        const usersWithSameTechnos = await getUsersFromCommomTechnos(pgUser, friendListPgIds);
         const userWithSameField = await getUserWithSameField(pgUser, friendListPgIds);
         
         return res.status(200).json({usersWithOccurences, usersWithSameTechnos, userWithSameField});
