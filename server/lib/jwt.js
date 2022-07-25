@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const blacklist = [];
+
 exports.createToken = (user) => {
 	const payload = {
 		id: user.id,
@@ -15,6 +17,9 @@ exports.createToken = (user) => {
 
 exports.verifyToken = (token) => {
 	try {
+		if(blacklist.includes(token)){
+			return null;
+		}
 		const decoded = jwt.verify(token, process.env.JWT_SECRET);
 		return {
 			id: decoded.id,
@@ -26,3 +31,8 @@ exports.verifyToken = (token) => {
 		return null;
 	}
 };
+
+exports.blacklistToken = (token) => {
+	blacklist.push(token);
+	console.log(blacklist);
+}

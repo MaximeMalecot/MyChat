@@ -49,6 +49,30 @@ class AuthService{
         //    return e.message;
         //}
     }
+
+    async logout(){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("Missing token")
+        }
+        let res = await fetch(`${API}/security/logout`, 
+            {
+                method: "POST",
+                headers:{
+                    "Accept": "*/*",
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                
+                },
+            }
+        );
+
+        if(res.status !== 200){
+            return false;
+        }
+
+        return true;
+    }
 }
 
 export default new AuthService();

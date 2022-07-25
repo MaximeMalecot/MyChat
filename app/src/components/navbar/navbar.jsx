@@ -11,6 +11,7 @@ import NotificationCenter from '../notification-center/notification-center';
 
 import { useAppContext } from '../../contexts/app-context';
 import UserService from '../../services/user.service';
+import AuthService from '../../services/auth.service';
 import { API } from "../../constants/base";
 import { notify } from '../../helpers/toasts';
 
@@ -37,9 +38,12 @@ export default function Navbar(){
     const { appState, dispatch } = useAppContext();
     const menuMobile = useRef(null);
 
-    const logout = () => {
-        dispatch({ action: "LOGOUT" });
-        window.location.reload();
+    const logout = async () => {
+        let res = await AuthService.logout();
+        if(res){
+            dispatch({ action: "LOGOUT" });
+            window.location.reload();
+        }
     };
 
     useEffect(() => {
