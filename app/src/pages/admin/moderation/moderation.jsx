@@ -28,27 +28,6 @@ export default function Moderation() {
                                 </div>
                             </div>
                         </section>
-                        <section className={styles.messages}>
-                            <h2>Messages signalés</h2>
-                            <div className={styles.info}>
-                                <p>nom prenom</p>
-                                <p>Message</p>
-                                <div className={styles.btnGroup}>
-                                    <button className="btn blue">Message</button>
-                                    <button className="btn green">Annulé</button>
-                                    <button className="btn red">Supprimé</button>
-                                </div>
-                            </div>
-                            <div className={styles.info}>
-                                <p>nom prenom</p>
-                                <p>Message</p>
-                                <div className={styles.btnGroup}>
-                                    <button className="btn blue">Message</button>
-                                    <button className="btn green">Annulé</button>
-                                    <button className="btn red">Supprimé</button>
-                                </div>
-                            </div>
-                        </section>
                     </div>
                     
                 </div>
