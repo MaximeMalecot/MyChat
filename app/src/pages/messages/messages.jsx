@@ -12,6 +12,7 @@ export default function Messages(){
     const [ conversations, setConversations ] = useState([]);
     const [ selected, setSelected ] = useState(null);
     const [ newMsgs, setNewMsg ] = useState({});
+    const [ loaded, setLoaded ] = useState(false);
 
     const getConversations = async () => {
         try{
@@ -25,30 +26,45 @@ export default function Messages(){
     };
 
     const handleNewMsg = ({data}) => {
+      
         let msg = (JSON.parse(data)).data;
         let id = msg.senderId == appState.auth.id ? msg.receiverId : msg.senderId;
-        console.log(msg)
+        
+        console.log("###################")
+        console.log(appState.auth.id);
+        console.log( msg.senderId == appState.auth.id );
+        console.log("###################")  
+
         let oldMsgs = newMsgs[id] ? [...newMsgs[id].msgs] : [];
         oldMsgs.push(msg);
         setNewMsg({...newMsgs, [id]: oldMsgs });
     };
 
     useEffect(()=>{
-        console.log("USEFFECT");
         getConversations();
-        if( appState.eventSource ){
+    }, []);
+
+    useEffect(()=>{
+
+        console.log("USEFFECT");
+        if( appState.eventSource && !loaded ){
             console.log('Listening messages ');
             console.log(appState.client_id)
             appState.eventSource.addEventListener('new_message', handleNewMsg);
+            setLoaded(true);
+            console.log('loadind')
+        }else{
+            console.log("Already loaded")
         }
 
         return () => {
             if(appState.eventSource){
                 appState.eventSource.removeEventListener('new_message', handleNewMsg);
                 console.log("closed");
+                setLoaded(false);
             }
         }
-    }, []);
+    }, [appState]);
 
     return(
         <div className={`container ${classes.main}`}>

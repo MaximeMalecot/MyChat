@@ -20,6 +20,10 @@ export default function Login(){
             e.preventDefault();
             let res = await AuthService.login(authFields);
             dispatch({action: 'SET_TOKEN', payload: {token: res.token} });
+            let data = jwt_decode(res.token);
+            if(data){
+                dispatch({action: 'SET_AUTH_DATA', payload: {...data} });
+            }
         }catch(e){
             toast.error(e.message, {
                 position: "top-right",

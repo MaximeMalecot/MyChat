@@ -62,7 +62,9 @@ export const Conversation = ({selected, newMsgs}) => {
     };
 
     useEffect(()=>{
-        getMessages();
+        if(selected){
+            getMessages();
+        }
         return () => {
             setMessages([]);
             setCurrInput("");

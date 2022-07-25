@@ -50,20 +50,18 @@ export default function AppRouter() {
 		});
 
     dispatch({action: "SET_EVENT_SOURCE", payload: eventSource});
-
 	};
 
-	useEffect(()=>{
-    console.log(appState);
-    if( !appState.eventSource ){
-      console.log('On restart le init');
-      initEventSource();
-    }
-    return () => {
-      if(appState.eventSource){
-        //appState.eventSource.destroy();
-      }
-    }
+	useLayoutEffect(()=>{
+		if( !appState.eventSource ){
+			console.log('On restart le init');
+			initEventSource();
+		}
+		return () => {
+			if(appState.eventSource){
+				//appState.eventSource.destroy();
+			}
+		}
 	}, [appState]);
 
   useEffect(() => {

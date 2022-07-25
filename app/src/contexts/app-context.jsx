@@ -51,7 +51,6 @@ export const appStateReducer = (previousState, { action, payload }) => {
         case "SET_CLIENT_ID":
             let { client_id } = payload;
             localStorage.setItem(CLIENT_ID, client_id);
-            console.log({ ...previousState, client_id })
             return { ...previousState, client_id };
 
         case 'SET_AUTH_DATA':
