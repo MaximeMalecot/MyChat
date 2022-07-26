@@ -5,6 +5,8 @@ const MessageSchema = new mongoose.Schema({
     senderId: { type: String, required: true },
     receiverId: { type: String, required: true },
     createdAt: {type: Date, default: Date.now},
+    updated: {type: Boolean, default: false},
+    deleted: {type: Boolean, default: false}
 });
 
 const Message = mongoose.model("messages", MessageSchema);

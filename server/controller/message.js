@@ -101,7 +101,15 @@ exports.getMessages = async (req, res, next) => {
                     createdAt: 1
                 }
             }
-        ]);
+        ]).map((obj) => {
+            if(obj.deleted){
+                return {
+                    ...obj,
+                    content: ''
+                }
+            } 
+            return obj;
+        });
         return res.status(200).json({user, messages});
     }catch(err){
         console.error(err);
@@ -148,6 +156,65 @@ exports.sendMessage = async (req, res, next) => {
         return res.status(201).json(message);
     }catch(err){
         console.error(err);
+        next();
+    }
+}
+
+exports.updateMessage = async (req, res, next) => {
+    try{
+        const { content, id} = req.body;
+        let message = await Message.findOneAndUpdate({_id: messageId}, {
+            updated: true,
+            content
+        });
+        broadcastKnown(
+            {
+            message: {
+                type: 'new_message', 
+                data: message
+            }, 
+            userId: message.receiverId
+        });
+
+        broadcastKnown(
+            {
+            message: {
+                type: 'new_message', 
+                data: message
+            }, 
+            userId: message.senderId
+        });
+        return res.sendStatus(200);
+    } catch(err) {
+        next();
+    }
+}
+
+exports.deleteMessage = async (req, res, next) => {
+    try {
+        const { messageId } = req.params;
+        let message = await Message.findOneAndUpdate({_id: messageId}, {
+            deleted: true
+        });
+        broadcastKnown(
+            {
+            message: {
+                type: 'delete_message', 
+                data: { id: messageId},
+            }, 
+            userId: message.receiverId
+        });
+
+        broadcastKnown(
+            {
+            message: {
+                type: 'delete_message', 
+                data: { id: messageId},
+            }, 
+            userId: message.senderId
+        });
+        return res.sendStatus(204)
+    } catch(err) {
         next();
     }
 }
