@@ -40,3 +40,25 @@ a{
     color: inherit !important;
     text-decoration: none;
 }
+
+.error{
+    color: $error;
+}
+.warn{
+    color: $warn;
+}
+.info{
+    color: $info;
+}
+.http{
+    color: $http;
+}
+.verbose{
+    color: $verbose;
+}
+.debug{
+    color: $debug;
+}
+.silly{
+    color: $silly;
+}
