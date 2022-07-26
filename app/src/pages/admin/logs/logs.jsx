@@ -44,7 +44,7 @@ export default function Logs() {
                     <h1>Logs</h1>
                     <div className={styles.filter}>
                         <input type="text" placeholder="Search" name="text" onChange={handleFilter}/>
-                        <input type="number" placeholder="NB results" name="limit" min="0" onChange={handleFilter}/>
+                        <input type="number" placeholder="NB results" name="limit" min="1" onChange={handleFilter}/>
                     </div>
                     {logs.length && logs.map((log, index) => (
                         <div className={styles.logs} key={index}>

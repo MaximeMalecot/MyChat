@@ -11,27 +11,17 @@ exports.postLog = ( async(req, res) => {
 })
 
 exports.getLogs = ( async(req, res) => {
-    const { limit, text } = req.query;
+    const { limit=5, text='' } = req.query;
     let logs = null;
     const aggregate = [];
-    
-    if(text){
-        aggregate.push({
-            $match: { 
-                $or: [
-                    { message: { $regex: text, $options: 'i' } }
-                ]
-            }
-        });
+
+    if(text===''){
+        logs = await Log.find().sort({ date: -1 }).limit(parseInt(limit));
+        return res.status(200).json(logs);
     }
-    if(limit){
-        aggregate.push({ $limit: parseInt(limit) });
-    }
-    
-    logs = await Log.aggregate([
-        {$sort: {date: 1}},
-        ...aggregate
-        
-    ]);
+    logs = await Log.find(
+        {$text: { $search: text }}, 
+    ).sort({ date: -1 }).limit(parseInt(limit));
+
     return res.status(200).json(logs);
 })
