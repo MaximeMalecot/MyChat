@@ -5,7 +5,6 @@ const { verifyToken, checkAdmin } = require('../middlewares/auth');
 const router = new Router();
 router.route('/')
     .get(verifyToken, checkAdmin, UserController.getUsers)
-	.post(UserController.postUser)
 
 router.get('/search', verifyToken, UserController.searchUsers)
 
@@ -20,8 +19,8 @@ router.put('/self/field', verifyToken, UserController.modifySelfField)
 
 router.route('/:id')
 	.get(verifyToken, UserController.getUser)
-	.put(verifyToken, UserController.modifyUser)
+	.put(verifyToken, checkAdmin, UserController.modifyUser)
 	.post(verifyToken, UserController.reportUser)
-	.delete(verifyToken, UserController.deleteUser);
+	.delete(verifyToken, checkAdmin, UserController.deleteUser);
 
 module.exports = router;
