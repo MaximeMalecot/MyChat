@@ -8,15 +8,34 @@ import { Link } from 'react-router-dom';
 
 const MessageItem = ({message}) => {
     const { appState } = useAppContext();
-
+    
+    const deleteMessage = async (id) => {
+        let res = await MessageService.delete(id);
+        if( res !== true){
+            displayMsg("An error occurred, could not delete this message", "error");
+        }
+    }
+    if(message.senderId == appState.auth.id){
+        return (
+            <div>
+                { !message.deleted && <button onClick={() => deleteMessage(message._id)}>delete</button> }
+                <div className={`${classes.messageItem} ${classes.self}`}>
+                    { message.deleted === false ? message.content : "Message deleted"}
+                </div>
+            </div>
+        )
+    }
     return(
-        <div className={`${classes.messageItem} ${message.senderId == appState.auth.id ? classes.self : ""}`}>
-            {message.content}
+        <div>
+            <div className={classes.messageItem}>
+                { message.deleted === false ? message.content : "Message deleted"}
+            </div>
         </div>
+
     )
 };
 
-export const Conversation = ({selected, newMsgs}) => {
+export const Conversation = ({selected, newMsgs, deletedMsgs, handlDeleteMsg}) => {
     const { appState } = useAppContext();
     const [ messages, setMessages ] = useState([]);
     const [ currInput, setCurrInput ] = useState("");
@@ -47,6 +66,17 @@ export const Conversation = ({selected, newMsgs}) => {
             setMessages([...messages, msgToAdd ] );
         }
     }, [newMsgs]);
+
+    useEffect(()=>{
+        if(deletedMsgs && deletedMsgs.length > 0){
+            let messageToDelete = messages.find(msg => msg._id === deletedMsgs[deletedMsgs.length - 1]._id);
+            if(messageToDelete){
+                messageToDelete.deleted = true;
+                setMessages(messages);
+                handlDeleteMsg();
+            }
+        }
+    }, [deletedMsgs]);
 
     useEffect(()=>{
         if(messages.length > 0){

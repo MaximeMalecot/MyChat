@@ -8,7 +8,7 @@ class MessageService{
             throw new Error("Missing token")
         }
         try{
-            let res = await fetch(`${API}/message`,
+            let res = await fetch(`${API}/message/user`,
                     {
                         headers:{
                             "Accept": "*/*",
@@ -33,7 +33,7 @@ class MessageService{
             throw new Error("Missing token")
         }
         try{
-            let res = await fetch(`${API}/message/${friendId}`,
+            let res = await fetch(`${API}/message/user/${friendId}`,
                     {
                         headers:{
                             "Accept": "*/*",
@@ -58,7 +58,7 @@ class MessageService{
             if (!token){
                 throw new Error("Missing token");
             }
-            let res = await fetch(`${API}/message/${userId}`, 
+            let res = await fetch(`${API}/message/user/${userId}`, 
                     {
                         method: "POST",
                         headers:{
@@ -78,32 +78,57 @@ class MessageService{
             
         }
     }
-    // async send(userId){
-    //     try{
-    //         const token = localStorage.getItem("token");
-    //         if (!token){
-    //             throw new Error("Missing token")
-    //         }
-    //         let res = await fetch(`${API}/friendship/invitations/${userId}`, 
-    //             {
-    //                 method: "POST",
-    //                 headers:{
-    //                     "Accept": "*/*",
-    //                     "Content-Type":"application/json",
-    //                     "Authorization":`Bearer ${token}`
-    //                 }
-    //             }
-    //         );
-    //         if(res.status !== 201){
-    //             throw new Error();
-    //         }
-    //         return true;
-    //     }catch(e){
-    //         console.error(e);
-    //         return false;
-    //     }
-        
-    // }
+    async update(messageId, content){
+        try{
+            const token = localStorage.getItem("token");
+            if (!token){
+                throw new Error("Missing token");
+            }
+            let res = await fetch(`${API}/message/${messageId}`, 
+                    {
+                        method: "PUT",
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        },
+                        body:JSON.stringify({content})
+                    }
+                );
+
+            if(res.status !== 200){
+                return false;
+            }
+            return true;
+        }catch(e){
+            
+        }
+    }
+    async delete(messageId){
+        try{
+            const token = localStorage.getItem("token");
+            if (!token){
+                throw new Error("Missing token");
+            }
+            let res = await fetch(`${API}/message/${messageId}`, 
+                    {
+                        method: "DELETE",
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json",
+                            "Authorization":`Bearer ${token}`
+                        }
+                    }
+                );
+
+            if(res.status !== 204){
+                throw false;
+            }
+            return true;
+        }catch(e){
+            console.error(e)
+        }
+    }
 
 }
 

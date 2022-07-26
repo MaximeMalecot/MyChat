@@ -57,13 +57,13 @@ exports.getConversations = async (req, res, next) => {
             ])
             return {
                 friend,
-                lastMessage: messages[0],
+                lastMessage: {
+                    ...messages[0],
+                    content: messages[0].deleted ? 'Deleted message' : messages[0].content
+                }
             };
         }));
-        
-        // conversations = conversations.sort((a, b) => {
-        //     return b.lastMessage.createdAt - a.lastMessage.createdAt;
-        // });
+        conversations = Object.values(conversations).sort((a,b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
         return res.status(200).json(conversations);
     }catch(err){
         console.error(err);
@@ -77,7 +77,7 @@ exports.getMessages = async (req, res, next) => {
         const { userId } = req.params;
         const selfId = (req.user.id).toString();
         const user = await UserMongo.findOne({ userId }, { _id: 0, friendList: 0, __v: 0 });
-        const messages = await Message.aggregate([
+        let messages = await Message.aggregate([
             {
                 $match: {
                     $or: [
@@ -101,15 +101,18 @@ exports.getMessages = async (req, res, next) => {
                     createdAt: 1
                 }
             }
-        ]).map((obj) => {
-            if(obj.deleted){
-                return {
-                    ...obj,
-                    content: ''
-                }
-            } 
-            return obj;
-        });
+        ])
+        if(messages.length > 0){
+            messages = messages.map((obj) => {
+                if(obj.deleted){
+                    return {
+                        ...obj,
+                        content: 'Deleted message'
+                    }
+                } 
+                return obj;
+            });
+        }
         return res.status(200).json({user, messages});
     }catch(err){
         console.error(err);
@@ -162,7 +165,14 @@ exports.sendMessage = async (req, res, next) => {
 
 exports.updateMessage = async (req, res, next) => {
     try{
-        const { content, id} = req.body;
+        const { content, messageId} = req.body;
+        if(!messageId || !content){
+            SpecificLogger(req, {
+                message:`${req.method} on '${req.originalUrl}' - User not found`,
+				level: log.levels.warn
+            });
+            return res.sendStatus(400);
+        }
         let message = await Message.findOneAndUpdate({_id: messageId}, {
             updated: true,
             content
@@ -193,14 +203,25 @@ exports.updateMessage = async (req, res, next) => {
 exports.deleteMessage = async (req, res, next) => {
     try {
         const { messageId } = req.params;
+        if(!messageId){
+            SpecificLogger(req, {
+                message:`${req.method} on '${req.originalUrl}' - User not found`,
+				level: log.levels.warn
+            });
+            return res.sendStatus(400);
+        }
         let message = await Message.findOneAndUpdate({_id: messageId}, {
             deleted: true
         });
+        message = {
+            ...message.toObject(),
+            content: 'Deleted message'
+        }
         broadcastKnown(
             {
             message: {
                 type: 'delete_message', 
-                data: { id: messageId},
+                data:  message ,
             }, 
             userId: message.receiverId
         });
@@ -209,12 +230,13 @@ exports.deleteMessage = async (req, res, next) => {
             {
             message: {
                 type: 'delete_message', 
-                data: { id: messageId},
+                data:  message ,
             }, 
             userId: message.senderId
         });
         return res.sendStatus(204)
     } catch(err) {
+        console.error(err);
         next();
     }
 }

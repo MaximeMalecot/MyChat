@@ -256,7 +256,7 @@ exports.reportUser = async (req, res, next) => {
 			})
 			return res.sendStatus(403);
 		}
-		let report = await Report.create({
+		await Report.create({
 			type,
 			content,
 			reported,

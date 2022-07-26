@@ -13,6 +13,7 @@ export default function Messages(){
     const [ selected, setSelected ] = useState(null);
     const [ newMsgs, setNewMsg ] = useState({});
     const [ loaded, setLoaded ] = useState(false);
+    const [ deletedMsgs, setDeletedMsgs ] = useState({});
 
     const getConversations = async () => {
         try{
@@ -29,38 +30,40 @@ export default function Messages(){
       
         let msg = (JSON.parse(data)).data;
         let id = msg.senderId == appState.auth.id ? msg.receiverId : msg.senderId;
-        
-        console.log("###################")
-        console.log(appState.auth.id);
-        console.log( msg.senderId == appState.auth.id );
-        console.log("###################")  
 
         let oldMsgs = newMsgs[id] ? [...newMsgs[id].msgs] : [];
         oldMsgs.push(msg);
         setNewMsg({...newMsgs, [id]: oldMsgs });
     };
 
+    const handleEventDeleteMsg = ({data}) => {
+        let msg = (JSON.parse(data)).data;
+        let id = msg.senderId == appState.auth.id ? msg.receiverId : msg.senderId;
+
+        let oldMsgs = deletedMsgs[id] ? [...deletedMsgs[id].msgs] : [];
+        oldMsgs.push(msg);
+        setDeletedMsgs({...deletedMsgs, [id]: oldMsgs });
+    };
+
+    const handleDeleteMessage = (userId) => {
+        setDeletedMsgs({...deletedMsgs, [userId]: [] });
+    }
+
     useEffect(()=>{
         getConversations();
     }, []);
 
     useEffect(()=>{
-
-        console.log("USEFFECT");
         if( appState.eventSource && !loaded ){
-            console.log('Listening messages ');
-            console.log(appState.client_id)
             appState.eventSource.addEventListener('new_message', handleNewMsg);
+            appState.eventSource.addEventListener('delete_message', handleEventDeleteMsg);
             setLoaded(true);
-            console.log('loadind')
-        }else{
-            console.log("Already loaded")
         }
 
         return () => {
             if(appState.eventSource){
                 appState.eventSource.removeEventListener('new_message', handleNewMsg);
-                console.log("closed");
+                appState.eventSource.removeEventListener('delete_message', handleEventDeleteMsg);
                 setLoaded(false);
             }
         }
@@ -99,7 +102,9 @@ export default function Messages(){
                     ? <p>No conversation selected</p>
                     : <Conversation 
                         selected={selected} 
-                        newMsgs={newMsgs[selected.userId]??null}/>
+                        newMsgs={newMsgs[selected.userId]??null}
+                        deletedMsgs={deletedMsgs[selected.userId]}
+                        handlDeleteMsg={() => handleDeleteMessage(selected.userId)}/>
                 }
             </div>
         </div>
