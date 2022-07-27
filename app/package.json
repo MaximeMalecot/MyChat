@@ -5,7 +5,8 @@
     "lint": "eslint .",
     "clean": "rm -rf .node_repl_history .npm node_modules package-lock.json",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "build": "vite build"
   },
   "devDependencies": {
     "cypress": "^9.7.0",
