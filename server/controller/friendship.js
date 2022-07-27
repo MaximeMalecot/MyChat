@@ -316,9 +316,11 @@ const getUserFromCommonFriend = async (mongoUser) => {
     let friendsId = [];
 
     for(let friend of mongoUser.friendList){
-        let friendDocument = await UserMongo.findOne({userId: friend.userId});
-        friendsId.push(friendDocument.userId);
-        friendsFriendlist.push(friendDocument);
+        if(friend.status === FRIEND_STATUS.ACCEPTED){
+            let friendDocument = await UserMongo.findOne({userId: friend.userId});
+            friendsId.push(friendDocument.userId);
+            friendsFriendlist.push(friendDocument);
+        }
     }
     if(!friendsFriendlist || friendsFriendlist.length === 0){
         return users;
