@@ -147,7 +147,7 @@ export default function Navbar(){
                 </div>}
             </div>
             <div className={classes.tabs}>
-                <div onClick={openNotificationCenter} className={`${classes.tabItem} ${classes.bellIcon}`} >
+                <div onClick={() => {handleAnalytics('click notif');openNotificationCenter();}} className={`${classes.tabItem} ${classes.bellIcon}`} >
                     <img src={BellIcon} alt=""/>
                     {notifications > 0 && <span className={classes.counter}>{notifications}</span>}
                 </div>

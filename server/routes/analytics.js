@@ -4,10 +4,11 @@ const { AnalyticsController } = require('../controller');
 const { verifyToken } = require('../lib/jwt');
 
 const router = new Router();
-router.route('/')
-    .get(verifyToken, AnalyticsController.getAnalytics)
-    .post(verifyToken, AnalyticsController.postAnalytic)
 
 router.get("/connections", AnalyticsController.getLiveConnections);
+
+router.route('/')
+    .get(AnalyticsController.getAnalytics)
+    .post(AnalyticsController.postAnalytic)
 
 module.exports = router;
