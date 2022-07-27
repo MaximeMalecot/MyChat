@@ -15,7 +15,7 @@ export default function AnalyticItem({data}){
                     <>
                         <p>Last actions:</p>
                         <div className={classes.actionsList}>
-                                {data.actions.map(({action, count}, index) => <span key={index}>{action} ({count} times)</span>)}
+                                {(data.actions).slice(0, 3).map(({action, count}, index) => <span key={index}>{action} ({count} times)</span>)}
                                 {/* {data.actions.map((action, index) => <span key={index}>{JSON.stringify(action.action)}</span>)} */}
 
                         </div>

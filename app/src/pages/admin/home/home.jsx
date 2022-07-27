@@ -16,8 +16,7 @@ export default function Home() {
     const getAnalytics = async () => {
         let res = await AnalyticsService.getAnalytics();
         if(res){
-            console.log(res)
-            setAnalytics(res);
+            setAnalytics(res.slice(0, 3));
         }
     };
 
@@ -53,7 +52,7 @@ export default function Home() {
                                 }
                             </div>
                             <Link to="/admin/analytics" className={`${styles.view} btn blue`}>
-                                Voir
+                                Voir plus
                             </Link>
                         </div>
                         <div className={styles.card}>
