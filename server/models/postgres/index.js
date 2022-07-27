@@ -1,4 +1,4 @@
-const { User: UserMongo } = require("../mongo");
+const { User: UserMongo, Message: MessageMongo } = require("../mongo");
 
 exports.connection = require("./db");
 exports.User = require("./User");
@@ -96,16 +96,28 @@ const deleteFromFriends = async (user) => {
     
 };
 
-// const denormalizeDelete = async(user) => {
-//     try {
-
-//     } catch(err) {
-//         console.error(err);
-//     }
-// };
+const denormalizeDelete = async(user) => {
+    try {
+        await UserMongo.updateMany(
+            { friendList: { $elemMatch: { userId: user.id } } },
+            { $pull: { friendList: { userId: user.id } } },              
+        ).catch(console.error);
+        await MessageMongo.deleteMany(
+            { $or: [
+                {"senderId": user.id},
+                {"receiverId": user.id}
+            ]}
+        ).catch(console.error);
+        await UserMongo.remove({userId: user.id})
+            .then(console.log)
+            .catch(console.error);
+    } catch(err) {
+        console.error(err);
+    }
+};
 
 
 
 exports.User.addHook("afterCreate", denormalizeUser);
 exports.User.addHook("afterUpdate", denormalizeForFriends);
-exports.User.addHook("beforeDestroy", deleteFromFriends)
+exports.User.addHook("beforeDestroy", denormalizeDelete);

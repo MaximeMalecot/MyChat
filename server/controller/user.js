@@ -14,10 +14,8 @@ exports.getUsers = async (req, res, next) => {
 			attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
 			include: [
 				{model: Techno, attributes: [ "id", "name"]}
-			],
-			paranoid: false
+			]
 		});
-		console.log(users);
 		return res.json(users);
     } catch (error) {
 		console.error(error);
@@ -71,13 +69,23 @@ exports.modifyUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     try {
-		return res.sendStatus(204);
-		// const nbLine = await User.destroy({ where: { id: req.params.id } });
-		// if (!nbLine) {
-		// 	return res.sendStatus(404);
-		// } else {
-		// 	return res.sendStatus(204);
-		// }
+		const nbLine = await User.destroy({ where: { id: req.params.id },
+			individualHooks: true });
+		if (!nbLine) {
+			return res.sendStatus(404);
+		} else {
+			const users = await User.findAll({ 
+				where: {
+					isAdmin: false,
+				}, 
+				attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
+				include: [
+					{model: Techno, attributes: [ "id", "name"]}
+				]
+			});
+			console.log(users);
+			return res.status(204).json({users});
+		}
     } catch (error) {
       	next();
     }

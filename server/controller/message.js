@@ -57,13 +57,13 @@ exports.getConversations = async (req, res, next) => {
             ])
             return {
                 friend,
-                lastMessage: {
+                lastMessage: messages[0] ? {
                     ...messages[0],
-                    content: messages[0].deleted ? 'Deleted message' : messages[0].content
-                }
+                    content: messages[0]?.deleted ? 'Deleted message' : messages[0]?.content
+                } : null
             };
         }));
-        conversations = Object.values(conversations).sort((a,b) => b.lastMessage.createdAt - a.lastMessage.createdAt);
+        conversations = Object.values(conversations).sort((a,b) => b.lastMessage?.createdAt - a.lastMessage?.createdAt);
         return res.status(200).json(conversations);
     }catch(err){
         console.error(err);

@@ -172,8 +172,7 @@ class UserService {
                 }
             }
         );
-        res = await res.json();
-        if(res.status !== 202){
+        if(res.status !== 204){
             return false;
         }
         return true;

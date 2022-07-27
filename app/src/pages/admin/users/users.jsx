@@ -19,7 +19,9 @@ export default function Users() {
 
     const deleteUser = async (userId) => {
         let res = await userService.delete(userId);
-        console.log(res);
+        if(res){
+            await getUsers();
+        }
     }
 
     return (
