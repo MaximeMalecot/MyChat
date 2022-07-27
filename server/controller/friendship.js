@@ -355,6 +355,7 @@ const getUsersFromCommomTechnos  = async (user, friends) => {
     }
     let usersMatching = {};
     const userTechnos = user.technos.map(techno => techno.id);
+    console.log(userTechnos);
     let users = await User.findAll({
         where: {
             id: {
@@ -363,7 +364,7 @@ const getUsersFromCommomTechnos  = async (user, friends) => {
             }
         },
         include: [
-            {model: Techno, attributes: [ "id", "name"]}
+            {model: Techno, attributes: [ "id", "name"], where: { id: { [Op.in]: userTechnos } }}
         ]
     });
     if(users.length > 0){
