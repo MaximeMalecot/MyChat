@@ -332,14 +332,16 @@ const getUserFromCommonFriend = async (mongoUser) => {
                 if(users[friend.userId]){
                     users[friend.userId].commonFriends++;
                 }else{
-                    users[friend.userId] = {
-                        user: {
-                            id: friend.userId,
-                            firstName: friend.firstName,
-                            lastName: friend.lastName,
-                        },
-                        commonFriends: (users[friend.userId]?.occurences || 0) + 1
-                    };
+                    if(friend.status === FRIEND_STATUS.ACCEPTED){
+                        users[friend.userId] = {
+                            user: {
+                                id: friend.userId,
+                                firstName: friend.firstName,
+                                lastName: friend.lastName,
+                            },
+                            commonFriends: (users[friend.userId]?.occurences || 0) + 1
+                        };
+                    }
                 }
             }
         })
