@@ -7,7 +7,7 @@ class AnalyticsService{
             if (!token){
                 throw new Error("Missing token")
             }
-            let res = await fetch(`${API}/analytics/get`, 
+            let res = await fetch(`${API}/analytics`, 
                     {
                         method: "GET",
                         headers:{
@@ -20,9 +20,9 @@ class AnalyticsService{
             if(res.status === 200){
                 return await res.json();
             }
-            return res.json();
+            return false;
         }catch(e){
-            return e.message;
+            return false;
         }
     }
 

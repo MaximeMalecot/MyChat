@@ -4,13 +4,23 @@ import styles from "./home.module.scss";
 import LogsService from "../../../services/logs.service";
 import { errorsEnum } from "../../../helpers/logs";
 import UserService from "../../../services/user.service";
+import AnalyticsService from '../../../services/analytics.service';
 
 export default function Home() {
     const [logs, setLogs] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const getAnalytics = async () => {
+        let res = await AnalyticsService.getAnalytics();
+        if(res){
+            console.log(res);
+        }
+    };
+
     useEffect(() => {
         setLoading(true);
+        getAnalytics();
         fetchDatas();
         setLoading(false);
     }, []);
