@@ -1,4 +1,4 @@
-const { User, Field, Report } = require("../models/postgres");
+const { User, Field, Techno, Report } = require("../models/postgres");
 const { User: UserMongo } = require("../models/mongo");
 const { ValidationError } = require("sequelize");
 const { SpecificLogger, log } = require("../lib/logger");
@@ -7,9 +7,20 @@ const { broadcastAdmins } = require('./sse');
 
 exports.getUsers = async (req, res, next) => {
     try {
-		const users = await User.findAll({ where: req.query });
+		const users = await User.findAll({ 
+			where: {
+				isAdmin: false,
+			}, 
+			attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
+			include: [
+				{model: Techno, attributes: [ "id", "name"]}
+			],
+			paranoid: false
+		});
+		console.log(users);
 		return res.json(users);
     } catch (error) {
+		console.error(error);
       	next();
     }
 };
@@ -60,12 +71,13 @@ exports.modifyUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
     try {
-		const nbLine = await User.destroy({ where: { id: req.params.id } });
-		if (!nbLine) {
-			return res.sendStatus(404);
-		} else {
-			return res.sendStatus(204);
-		}
+		return res.sendStatus(204);
+		// const nbLine = await User.destroy({ where: { id: req.params.id } });
+		// if (!nbLine) {
+		// 	return res.sendStatus(404);
+		// } else {
+		// 	return res.sendStatus(204);
+		// }
     } catch (error) {
       	next();
     }

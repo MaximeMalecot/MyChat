@@ -96,6 +96,14 @@ const deleteFromFriends = async (user) => {
     
 };
 
+// const denormalizeDelete = async(user) => {
+//     try {
+
+//     } catch(err) {
+//         console.error(err);
+//     }
+// };
+
 
 
 exports.User.addHook("afterCreate", denormalizeUser);

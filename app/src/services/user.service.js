@@ -71,6 +71,7 @@ class UserService {
         res = await res.json();
         return res;
     }
+    
     async create(name){
         const token = localStorage.getItem("token");
         if (!token){
