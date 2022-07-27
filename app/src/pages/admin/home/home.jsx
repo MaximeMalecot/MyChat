@@ -66,13 +66,14 @@ export default function Home() {
                         </div>
                         <div className={styles.card}>
                             <h2>Modération</h2>
+                            <div className={styles.reports}>
                             {
                                 reports.length > 0 && reports.map((report, index) => (
-                                        <div key={index} className={styles.report}>
+                                        <div key={index} className={styles.info}>
                                             <p>{report.user.firstName} {report.user.lastName}</p>
                                             <p>{report.content}</p>
                                             <p>{report.createdAt}</p>
-                                            <Link to={`/admin/users/${report.reported}`}>Voir</Link>
+                                            <Link className="btn" to={`/admin/users/${report.reported}`}>Voir</Link>
                                         </div>
                                     )
                                 )
@@ -80,6 +81,7 @@ export default function Home() {
                             <Link to="/admin/moderation" className={`${styles.view} btn blue`}>
                                 Voir
                             </Link>
+                            </div>
                         </div>
                         <div className={styles.card}>
                             <h2>Logs</h2>

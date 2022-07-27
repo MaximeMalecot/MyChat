@@ -53,6 +53,16 @@
                 gap: 10px;
                 align-items: center;
             }
+            .reports{
+                width: 100%;
+                height: 100%;
+                .info{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 20px;
+                }
+
+            }
 
             a{
                 z-index: 10;
