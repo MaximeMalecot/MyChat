@@ -4,13 +4,23 @@ import styles from "./home.module.scss";
 import LogsService from "../../../services/logs.service";
 import { errorsEnum } from "../../../helpers/logs";
 import UserService from "../../../services/user.service";
+import AnalyticsService from '../../../services/analytics.service';
 
 export default function Home() {
     const [logs, setLogs] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const getAnalytics = async () => {
+        let res = await AnalyticsService.getAnalytics();
+        if(res){
+            console.log(res);
+        }
+    };
+
     useEffect(() => {
         setLoading(true);
+        getAnalytics();
         fetchDatas();
         setLoading(false);
     }, []);
@@ -21,11 +31,13 @@ export default function Home() {
         res= await UserService.getAll(5);
         setUsers(res)
     }
-  return (
+
+    if(loading) return <div className={styles.loading}>Loading...</div>;
+
+    return (
     <>
-        {loading ? <div className={styles.loading}>Loading...</div> :
-        <>
-            <h1 className={styles.title}>Admin Dashboard</h1>
+        <div>
+            <h1 className={styles.title} style={{color: 'white' }}>Admin Dashboard</h1>
             <div className={styles.container}>
                 <div className={styles.content}>
                     <section className={styles.main}>
@@ -82,8 +94,7 @@ export default function Home() {
                     
                 </div>
             </div>
-        </>
-    }
+        </div>
     </>
   );
 }
