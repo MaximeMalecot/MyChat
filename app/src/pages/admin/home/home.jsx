@@ -17,7 +17,6 @@ export default function Home() {
         const res = await LogsService.getAllLogs({limit: 5});
         setLogs(res);
     }
-    console.log(logs);
   return (
     <>
         {loading ? <div className={styles.loading}>Loading...</div> :

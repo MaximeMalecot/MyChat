@@ -25,6 +25,29 @@ class AnalyticsService{
             return e.message;
         }
     }
+
+    async create(analytics){
+        const client_id = localStorage.getItem('client_id')
+        if(!client_id){
+            return false;
+        }
+        analytics.client = client_id;
+        let res = await fetch(`${API}/analytics`, 
+                    {
+                        method: "POST",
+                        headers:{
+                            "Accept": "*/*",
+                            "Content-Type":"application/json"
+                        },
+                        body:JSON.stringify(analytics)
+                    }
+                );
+
+            if(res.status !== 201){
+                throw new Error();
+            }
+            return true;
+    }
    
 }
 

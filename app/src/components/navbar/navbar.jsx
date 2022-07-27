@@ -10,6 +10,7 @@ import BellIcon from '../../assets/svg/bell-icon.svg';
 
 import UserService from '../../services/user.service';
 import AuthService from '../../services/auth.service';
+import AnalyticsService from '../../services/analytics.service';
 import NotificationService from '../../services/notification.service';
 
 import NotificationCenter from '../notification-center/notification-center';
@@ -18,6 +19,7 @@ import { useAppContext } from '../../contexts/app-context';
 
 import { API } from "../../constants/base";
 import { notify } from '../../helpers/toasts';
+import analyticsService from '../../services/analytics.service';
 
 const ResultItem = ({data}) => {
     const navigate = useNavigate();
@@ -42,6 +44,13 @@ export default function Navbar(){
     const { appState, dispatch } = useAppContext();
     const menuMobile = useRef(null);
     const [displayMobileMenu, setDisplayMobileMenu] = useState(false);
+
+    const handleAnalytics = async (action) => {
+        await AnalyticsService.create({
+            page: location.pathname,
+            action
+        })
+    }
 
     const logout = async () => {
         let res = await AuthService.logout();
@@ -109,7 +118,7 @@ export default function Navbar(){
     return(
         <>
         <header className={classes.navbar}>
-            <Link to="/">
+            <Link to="/" onClick={() => handleAnalytics('click logo')}>
                 <div className={classes.logo}>
                     <span>G</span>
                 </div>
@@ -145,7 +154,7 @@ export default function Navbar(){
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>
-                <button className={classes.logout} onClick={logout}>X</button>
+                <button className={classes.logout} onClick={() => {handleAnalytics("logout");logout();}}>X</button>
                 <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
                 </Link> 
@@ -170,8 +179,8 @@ export default function Navbar(){
                             <Link to="/profile" >Profile</Link>
                         </li>
 
-                        <li onClick={() => {setDisplayMobileMenu(false); logout(); }}>
-                            <Link to="/about-us" >Logout</Link>
+                        <li onClick={() => {handleAnalytics("logout");setDisplayMobileMenu(false); logout(); }}>
+                            <a onClick={logout}>Logout</a>
                         </li>
 
                     </ul>

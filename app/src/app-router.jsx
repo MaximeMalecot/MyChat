@@ -54,7 +54,6 @@ export default function AppRouter() {
 
 	useLayoutEffect(()=>{
 		if( !appState.eventSource ){
-			console.log('On restart le init');
 			initEventSource();
 		}
 		return () => {
