@@ -52,14 +52,14 @@ export default function User() {
                                 <div>
                                     {loading ? reportsTo.map(report => {
                                         return (
-                                            <div key={report.id}>
+                                            <div key={report.id} className={styles.report}>
                                                     <p>{report.type}</p>
                                                     <p>{report.content}</p>
                                                     <p>{report.createdAt}</p>
                                                     { report.status === REPORT_STATUS.CREATED && 
                                                         <>
-                                                            <button onClick={() => modifyReport(report.id, "resolve")}>Mark as resolved</button>
-                                                            <button onClick={() => modifyReport(report.id, "close")}>Ban</button>
+                                                            <button className="btn blue" onClick={() => modifyReport(report.id, "resolve")}>Mark as resolved</button>
+                                                            <button className="btn red" onClick={() => modifyReport(report.id, "close")}>Ban</button>
                                                         </>
 
                                                     }

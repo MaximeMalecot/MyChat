@@ -37,16 +37,12 @@
                 flex-direction: column;
                 margin: 20px;
                 gap: 20px;
-                .reports{
+                .report{
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: row;
                     align-items: center;
-                    border-radius: 3px;
-                    background-color: rgb(219, 219, 219);
-                    box-shadow: 0px 10px 20px rgba(56, 56, 56, 0.2);
-                    table{
-                        margin: 20px;
-                    }
+                    padding: 5px;
+                    gap: 20px;
                 }
             }
         }
