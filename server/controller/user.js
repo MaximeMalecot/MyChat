@@ -12,25 +12,19 @@ exports.getUsers = async (req, res, next) => {
 		let users =null;
 		if(typeof limit === "number" && limit > 0){
 			users = await User.findAll({ 
-				where: {
-					isAdmin: false,
-				}, 
 				attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
 				include: [
 					{model: Techno, attributes: [ "id", "name"]},
-					{model: Report, as: "reported", where: {status: REPORT_STATUS.CREATED}}
+					{model: Report, as: "reported"}
 				],
 				limit: limit
 			})
 		}else {
 			users = await User.findAll({ 
-				where: {
-					isAdmin: false,
-				}, 
 				attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
 				include: [
 					{model: Techno, attributes: [ "id", "name"]},
-					{model: Report, as: "reported", where: {status: REPORT_STATUS.CREATED}}
+					{model: Report, as: "reported"}
 				],
 			});
 		}
