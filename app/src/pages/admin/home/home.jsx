@@ -4,6 +4,7 @@ import styles from "./home.module.scss";
 import LogsService from "../../../services/logs.service";
 import { errorsEnum } from "../../../helpers/logs";
 import UserService from "../../../services/user.service";
+import ReportService from "../../../services/report.service";
 import AnalyticsService from '../../../services/analytics.service';
 import AnalyticItem from "../../../components/analytic-item/analytic-item";
 
@@ -12,6 +13,7 @@ export default function Home() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [ analytics, setAnalytics ] = useState([]);
+    const [ reports, setReports] = useState([]);
 
     const getAnalytics = async () => {
         let res = await AnalyticsService.getAnalytics();
@@ -19,10 +21,17 @@ export default function Home() {
             setAnalytics(res.slice(0, 3));
         }
     };
+    const getReports = async () => {
+        let res = await ReportService.getLastCreated();
+        if(res){
+            setReports(res);
+        }
+    }
 
     useEffect(() => {
         setLoading(true);
         getAnalytics();
+        getReports();
         fetchDatas();
         setLoading(false);
     }, []);
@@ -57,7 +66,17 @@ export default function Home() {
                         </div>
                         <div className={styles.card}>
                             <h2>Modération</h2>
-                            <p>dernier commentaire ou message signaler</p>
+                            {
+                                reports.length > 0 && reports.map((report, index) => (
+                                        <div key={index} className={styles.report}>
+                                            <p>{report.user.firstName} {report.user.lastName}</p>
+                                            <p>{report.content}</p>
+                                            <p>{report.createdAt}</p>
+                                            <Link to={`/admin/users/${report.reported}`}>Voir</Link>
+                                        </div>
+                                    )
+                                )
+                            }
                             <Link to="/admin/moderation" className={`${styles.view} btn blue`}>
                                 Voir
                             </Link>

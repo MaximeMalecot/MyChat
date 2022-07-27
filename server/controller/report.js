@@ -5,12 +5,21 @@ const { ValidationError } = require("sequelize");
 
 exports.getAll = async (req, res, next) => {
     try {
-        const reports = await Report.findAll();
-        if (!reports) {
-            return res.sendStatus(404);
-        } else {
-            return res.status(200).json(reports);
+        const { limit, status } = req.query;
+        let options = {};
+        if(limit){
+            options.limit = limit;
         }
+        if(status){
+            options.where = {status: status};
+        }
+        options.order = [["createdAt", "DESC"]];
+        options.include = [
+            {model: User, attributes: ["id", "email", "firstName", "lastName"], foreignKey: "reported"},
+        ]
+        const reports = await Report.findAll(options);
+        console.log(reports);
+        return res.status(200).json(reports);
     } catch (error) {
         next();
     }

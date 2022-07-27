@@ -47,27 +47,26 @@ export default function User() {
                     <p>{user.email}</p>
                     <p>{user.firstName} {user.lastName}</p>
                     <div className={styles.content}>
-                        <div className={styles.reports}>
+                        <section className={styles.reports}>
                             <h2>REPORTS ON USER</h2>
                                 <div>
                                     {loading ? reportsTo.map(report => {
                                         return (
-                                            <div key={report.id} className={styles.report}>
+                                            <div key={report.id} className={styles.info}>
                                                     <p>{report.type}</p>
                                                     <p>{report.content}</p>
                                                     <p>{report.createdAt}</p>
                                                     { report.status === REPORT_STATUS.CREATED && 
-                                                        <>
+                                                        <div className={styles.btnGroup}>
                                                             <button className="btn blue" onClick={() => modifyReport(report.id, "resolve")}>Mark as resolved</button>
                                                             <button className="btn red" onClick={() => modifyReport(report.id, "close")}>Ban</button>
-                                                        </>
-
+                                                        </div>
                                                     }
                                             </div>
                                         )
-                                    }) : <div>Loading...</div>}
+                                    }) : <p>Rien à voir ici</p>}
                                 </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
             </div>
