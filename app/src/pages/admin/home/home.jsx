@@ -5,16 +5,18 @@ import LogsService from "../../../services/logs.service";
 import { errorsEnum } from "../../../helpers/logs";
 import UserService from "../../../services/user.service";
 import AnalyticsService from '../../../services/analytics.service';
+import AnalyticItem from "../../../components/analytic-item/analytic-item";
 
 export default function Home() {
     const [logs, setLogs] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [ analytics, setAnalytics ] = useState([]);
 
     const getAnalytics = async () => {
         let res = await AnalyticsService.getAnalytics();
         if(res){
-            console.log(res);
+            setAnalytics(res.slice(0, 3));
         }
     };
 
@@ -42,9 +44,15 @@ export default function Home() {
                 <div className={styles.content}>
                     <section className={styles.main}>
                         <div className={styles.card}>
-                            <h2>Analytiques</h2>
+                            <h2>Analytics</h2>
+                            <div className={styles.inlineItems}>
+                                { analytics.length > 0
+                                    ? analytics.map((analytic, index) => <AnalyticItem data={analytic} key={index} />)
+                                    : <span>There are no analytics</span>
+                                }
+                            </div>
                             <Link to="/admin/analytics" className={`${styles.view} btn blue`}>
-                                Voir
+                                Voir plus
                             </Link>
                         </div>
                         <div className={styles.card}>

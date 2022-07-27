@@ -45,6 +45,15 @@
                 font-weight: bold;
                 margin: 10px 0 20px 10px;
             }
+
+            .inlineItems{
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
             a{
                 z-index: 10;
                 &.view{

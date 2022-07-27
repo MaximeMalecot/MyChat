@@ -1,7 +1,7 @@
 import React from 'react';
-import classes from './analytic-item.module.scss';
+import classes from './analytic-item-full.module.scss';
 
-export default function AnalyticItem({data}){
+export default function AnalyticItemFull({data}){
     return(
         <div className={classes.main}>
 
@@ -13,11 +13,9 @@ export default function AnalyticItem({data}){
                 {data.actions.length > 0
                     ?  
                     <>
-                        <p>Last actions:</p>
+                        <p>Detail:</p>
                         <div className={classes.actionsList}>
-                                {(data.actions).slice(0, 3).map(({action, count}, index) => <span key={index}>{action} ({count} times)</span>)}
-                                {/* {data.actions.map((action, index) => <span key={index}>{JSON.stringify(action.action)}</span>)} */}
-
+                                {data.actions.map(({action, count}, index) => <span key={index}>{action} ({count} times)</span>)}
                         </div>
                     </>
                     : <p>No data yet</p>
