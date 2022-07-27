@@ -21,11 +21,13 @@ export default function Home() {
         res= await UserService.getAll(5);
         setUsers(res)
     }
-  return (
+
+    if(loading) return <div className={styles.loading}>Loading...</div>;
+
+    return (
     <>
-        {loading ? <div className={styles.loading}>Loading...</div> :
-        <>
-            <h1 className={styles.title}>Admin Dashboard</h1>
+        <div>
+            <h1 className={styles.title} style={{color: 'white' }}>Admin Dashboard</h1>
             <div className={styles.container}>
                 <div className={styles.content}>
                     <section className={styles.main}>
@@ -82,8 +84,7 @@ export default function Home() {
                     
                 </div>
             </div>
-        </>
-    }
+        </div>
     </>
   );
 }

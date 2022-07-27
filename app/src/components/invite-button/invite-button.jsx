@@ -38,6 +38,7 @@ export default function InviteButton({userId, loading}){
     const removeFriend = async e => {
         e.preventDefault();
         e.stopPropagation();
+
         let res = await InvitationService.removeFriend(userId);
         if(res !== true){
             displayMsg("An error occurred, could not remove this user from friends.", "error");
@@ -48,7 +49,6 @@ export default function InviteButton({userId, loading}){
     }
     
     useEffect(()=>{
-        console.log(userId)
         if(!loading && userId){
             getFriendshipStatus();
         }

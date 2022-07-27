@@ -7,6 +7,8 @@ import Logo from '../../assets/svg/logo.svg';
 import SearchIcon from '../../assets/svg/search-icon.svg';
 import MessengerIcon from '../../assets/svg/messenger-icon.svg';
 import BellIcon from '../../assets/svg/bell-icon.svg';
+import LogoutIcon from '../../assets/svg/logout-icon.svg';
+import AdminIcon from '../../assets/svg/admin-icon.svg';
 
 import UserService from '../../services/user.service';
 import AuthService from '../../services/auth.service';
@@ -147,6 +149,11 @@ export default function Navbar(){
                 </div>}
             </div>
             <div className={classes.tabs}>
+                {appState.auth?.isAdmin && 
+                    <Link to="/admin" className={classes.tabItem}>
+                        <img src={AdminIcon} alt="administrator icon"/>
+                    </Link>
+                }
                 <div onClick={() => {handleAnalytics('click notif');openNotificationCenter();}} className={`${classes.tabItem} ${classes.bellIcon}`} >
                     <img src={BellIcon} alt=""/>
                     {notifications > 0 && <span className={classes.counter}>{notifications}</span>}
@@ -154,7 +161,9 @@ export default function Navbar(){
                 <Link to="/messages" className={`${classes.tabItem} ${classes.messengerIcon}`}>
                     <img src={MessengerIcon} alt="messenger icon"/>
                 </Link>
-                <button className={classes.logout} onClick={() => {handleAnalytics("logout");logout();}}>X</button>
+                <div className={classes.tabItem} onClick={() => {handleAnalytics("logout");logout();}}>
+                    <img src={LogoutIcon} alt="logout icon"/>
+                </div>
                 <Link to="/profile" className={`${classes.tabItem} ${classes.profileIcon}`}>
                     <img src={"https://i.stack.imgur.com/l60Hf.png"} alt="profile icon"/>
                 </Link> 
