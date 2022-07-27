@@ -1,20 +1,21 @@
 import React, {useState, useEffect} from "react";
 import styles from './user.module.scss';
-import userService from "../../../services/user.service";
-import { useParams } from "react-router-dom";
+import UserService from "../../../services/user.service";
+import ReportService from "../../../services/report.service";
+import { useParams, useNavigate } from "react-router-dom";
+import { REPORT_STATUS } from "../../../constants/base";
 
 
 export default function User() {
     const [user, setUser] = useState({});
-    const [reportsFrom, setReportsFrom] = useState([]);
     const [reportsTo, setReportsTo] = useState([]);
     const [loading, setLoading] = useState(false);
     const { id } = useParams();
+	const navigate = useNavigate();
 
     const getUser = async (id) => {
-        let res = await userService.getReports(id)
+        let res = await UserService.getReports(id)
         setUser(res.user);
-        setReportsFrom(res.reportsFrom);
         setReportsTo(res.reportsTo);
     }
 
@@ -25,10 +26,16 @@ export default function User() {
         }
     });
 
-    const deleteUser = async (userId) => {
-        let res = await userService.delete(userId);
+    const modifyReport = async (reportId, type) => {
+        let res = await ReportService.modify(reportId, type);
         if(res){
-            await getUsers();
+            if(type === "close"){
+                navigate("/admin");
+                return;
+            } else {
+                await getUser(user.id);
+                return;
+            }
         }
     }
 
@@ -37,26 +44,30 @@ export default function User() {
             <div className={styles.main}>
                 <div className={styles.card}>
                     <h1>User</h1>
+                    <p>{user.email}</p>
                     <p>{user.firstName} {user.lastName}</p>
                     <div className={styles.content}>
-                        <h2>REPORTS ON USER</h2>
-                        {loading ? reportsTo.map(report => {
-                            return (
-                                <div key={report.id}>
-                                    <div>{report.type}</div>
-                                    <div>{report.content}</div>
+                        <div className={styles.reports}>
+                            <h2>REPORTS ON USER</h2>
+                                <div>
+                                    {loading ? reportsTo.map(report => {
+                                        return (
+                                            <div key={report.id}>
+                                                    <p>{report.type}</p>
+                                                    <p>{report.content}</p>
+                                                    <p>{report.createdAt}</p>
+                                                    { report.status === REPORT_STATUS.CREATED && 
+                                                        <>
+                                                            <button onClick={() => modifyReport(report.id, "resolve")}>Mark as resolved</button>
+                                                            <button onClick={() => modifyReport(report.id, "close")}>Ban</button>
+                                                        </>
+
+                                                    }
+                                            </div>
+                                        )
+                                    }) : <div>Loading...</div>}
                                 </div>
-                            )
-                        }) : <div>Loading...</div>}
-                        <h2>REPORTS FROM USER</h2>
-                        {loading ? reportsFrom.map(report => {
-                            return (
-                                <div key={report.id}>
-                                    <div>{report.type}</div>
-                                    <div>{report.content}</div>
-                                </div>
-                            )
-                        }) : <div>Loading...</div>}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -17,6 +17,7 @@ exports.getUsers = async (req, res, next) => {
 					{model: Techno, attributes: [ "id", "name"]},
 					{model: Report, as: "reported"}
 				],
+				order: [["reported", "createdAt", "DESC"]],
 				limit: limit
 			})
 		}else {
@@ -26,6 +27,7 @@ exports.getUsers = async (req, res, next) => {
 					{model: Techno, attributes: [ "id", "name"]},
 					{model: Report, as: "reported"}
 				],
+				order: [["reported", "createdAt", "ASC"]]
 			});
 		}
 		return res.json(users);
