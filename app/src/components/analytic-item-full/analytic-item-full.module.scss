@@ -9,15 +9,17 @@
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    gap: 10px;
     cursor: pointer;
     user-select: none;
-
+    
     .route{
         height: 40%;
         max-height: 40%;
         span{
             font-size: 33px;
         }
+        border-bottom: 1px solid rgb(210, 210, 210);
     }
 
     .actions{

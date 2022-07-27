@@ -44,7 +44,7 @@ export default function Home() {
                 <div className={styles.content}>
                     <section className={styles.main}>
                         <div className={styles.card}>
-                            <h2>Analytiques</h2>
+                            <h2>Analytics</h2>
                             <div className={styles.inlineItems}>
                                 { analytics.length > 0
                                     ? analytics.map((analytic, index) => <AnalyticItem data={analytic} key={index} />)
