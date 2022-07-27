@@ -1,4 +1,5 @@
 const { SpecificLogger, log } = require("../lib/logger");
+const { Report, User } = require('../models/postgres');
 
 exports.getAll = async (req, res, next) => {
     try {
@@ -15,25 +16,30 @@ exports.getAll = async (req, res, next) => {
 
 exports.getForUser = async (req, res, next) => {
     try {
+        const user = await User.findByPk(req.params.userId);
+        if(!user){
+            SpecificLogger(req, { 
+                message:`${req.method} on '${req.originalUrl}' - No user found`,
+                level: log.levels.info
+            });
+            return res.sendStatus(400);
+        }
         const reported = await Report.findAll({
             where: {
-                reporter: req.params.userId
+                reporter: user.id
             }
         });
 
         const reports = await Report.findAll({
             where: {
-                reported: req.params.userId
+                reported: user.id
             }
         });
-        if (!report) {
-            return res.sendStatus(404);
-        } else {
-            return res.status(200).json({
-                reportsFrom: reported,
-                reportsTo: reports
-            });
-        }
+        return res.status(200).json({
+            user,
+            reportsFrom: reported,
+            reportsTo: reports
+        });
     } catch (error) {
         next();
     }

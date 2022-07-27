@@ -27,9 +27,9 @@ exports.Notification.belongsTo(exports.User, { foreignKey: 'recipientId'});
 exports.User.hasMany(exports.Notification, { foreignKey: 'recipientId'});
 
 exports.Report.belongsTo(exports.User, { foreignKey: 'reporter'});
-exports.User.hasMany(exports.Report, { foreignKey: 'reporter'});
+exports.User.hasMany(exports.Report, { as: "reporter", foreignKey: 'reporter'});
 exports.Report.belongsTo(exports.User, { foreignKey: 'reported'});
-exports.User.hasMany(exports.Report, { foreignKey: 'reported'});
+exports.User.hasMany(exports.Report, { as: "reported", foreignKey: 'reported'});
 
 
 const denormalizeUser = async (user) => {

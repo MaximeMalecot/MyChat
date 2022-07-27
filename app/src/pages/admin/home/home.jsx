@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import styles from "./home.module.scss";
 import LogsService from "../../../services/logs.service";
 import { errorsEnum } from "../../../helpers/logs";
+import UserService from "../../../services/user.service";
 
 export default function Home() {
     const [logs, setLogs] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
@@ -14,8 +16,10 @@ export default function Home() {
     }, []);
 
     const fetchDatas = async () => {
-        const res = await LogsService.getAllLogs({limit: 5});
+        let res = await LogsService.getAllLogs({limit: 5});
         setLogs(res);
+        res= await UserService.getAll(5);
+        setUsers(res)
     }
   return (
     <>
@@ -61,7 +65,15 @@ export default function Home() {
                     <article>
                         <div className={styles.card}>
                             <h2>Users</h2>
-                            <p>derniers utilisateur créer</p>
+                            {
+                                users.length && users.map((user) => (
+                                    <div key={user.id}>
+                                        <p>{user.firstName} {user.lastName}</p>
+                                        <p>Nombres de reports : {user.reported?.length ?? 0}</p>
+                                        <Link to={`/admin/users/${user.id}`}>Voir</Link>
+                                    </div>
+                                ))
+                            }
                             <Link to="/admin/users" className={`${styles.view} btn blue`}>
                                 Voir
                             </Link>

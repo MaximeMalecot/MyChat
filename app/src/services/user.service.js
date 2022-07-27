@@ -53,12 +53,16 @@ class UserService {
         }
     }
 
-    async getAll(){
+    async getAll(limit=null){
         const token = localStorage.getItem("token");
         if (!token){
             throw new Error("Missing token")
         }
-        let res = await fetch(`${API}/user`, 
+        let url = `${API}/user`
+        if(limit && typeof limit === "number"){
+            url += `?limit=${limit}`;
+        }
+        let res = await fetch(url, 
             {
                 method: "GET",
                 headers:{
@@ -198,6 +202,27 @@ class UserService {
             return false;
         }
         return true;
+    }
+
+    async getReports(id){
+        const token = localStorage.getItem("token");
+        if (!token){
+            throw new Error("Missing token")
+        }
+        let res = await fetch(`${API}/report/${id}`, 
+            {
+                method: "GET",
+                headers:{
+                    "Accept": "*/*",
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                }
+            }
+        );
+        if(res.status !== 200){
+            return false;
+        }
+        return res.json();
     }
 }
 

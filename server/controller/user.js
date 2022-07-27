@@ -4,18 +4,36 @@ const { ValidationError } = require("sequelize");
 const { SpecificLogger, log } = require("../lib/logger");
 const formatError = require("../lib/formatError");
 const { broadcastAdmins } = require('./sse');
+const { REPORT_STATUS } = require("../constants/enums");
 
 exports.getUsers = async (req, res, next) => {
     try {
-		const users = await User.findAll({ 
-			where: {
-				isAdmin: false,
-			}, 
-			attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
-			include: [
-				{model: Techno, attributes: [ "id", "name"]}
-			]
-		});
+		const { limit } = req.query;
+		let users =null;
+		if(typeof limit === "number" && limit > 0){
+			users = await User.findAll({ 
+				where: {
+					isAdmin: false,
+				}, 
+				attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
+				include: [
+					{model: Techno, attributes: [ "id", "name"]},
+					{model: Report, as: "reported", where: {status: REPORT_STATUS.CREATED}}
+				],
+				limit: limit
+			})
+		}else {
+			users = await User.findAll({ 
+				where: {
+					isAdmin: false,
+				}, 
+				attributes: ["id", "email", "firstName", "lastName", "createdAt", "updatedAt"],
+				include: [
+					{model: Techno, attributes: [ "id", "name"]},
+					{model: Report, as: "reported", where: {status: REPORT_STATUS.CREATED}}
+				],
+			});
+		}
 		return res.json(users);
     } catch (error) {
 		console.error(error);
