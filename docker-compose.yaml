@@ -23,7 +23,7 @@ services:
       - DATABASE_URL=postgres://root:password@db/app
       - JWT_SECRET=secret
     ports:
-      - 127.0.0.1:3000:3000
+      - 3000:3000
     command: npm run dev
 
   db:
