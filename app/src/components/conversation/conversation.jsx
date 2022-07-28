@@ -5,9 +5,11 @@ import classes from "./conversation.module.scss";
 import { PROFILE_PICTURE } from "../../constants/assets.js";
 import { displayMsg } from "../../helpers/toasts.js";
 import { Link } from 'react-router-dom';
+import TrashIcon from '../../assets/svg/trash-icon.svg';
 
 const MessageItem = ({message}) => {
     const { appState } = useAppContext();
+    const [ clicked, setClicked] = useState(false);
     
     const deleteMessage = async (id) => {
         let res = await MessageService.delete(id);
@@ -18,11 +20,17 @@ const MessageItem = ({message}) => {
 
     if(message.senderId == appState.auth.id){
         return (
-            <div>
-                { !message.deleted && <button onClick={() => deleteMessage(message._id)}>delete</button> }
-                <div className={`${classes.messageItem} ${classes.self}`}>
+            <div className={classes.selfMessageItem} >
+                <div onClick={() => setClicked(!clicked) } className={`${classes.messageItem} ${classes.self}`}>
                     { message.deleted === false ? message.content : "Message deleted"}
                 </div>
+                { ( clicked && !message.deleted ) && 
+                    <div 
+                        className={classes.deleteIcon} 
+                        onClick={() => deleteMessage(message._id)}>
+                        <img src={TrashIcon} alt="" />
+                    </div>
+                }
             </div>
         )
     }
@@ -118,8 +126,10 @@ export const Conversation = ({selected, newMsgs, deletedMsgs, handlDeleteMsg}) =
             <div className={classes.messagesContainer}>
                 {
                     messages.length > 0
-                    ? 
-                        <div className={classes.messagesList} ref={msgContainerRef}>
+                    ?
+                        <div
+                            className={classes.messagesList} 
+                            ref={msgContainerRef}>
                             {messages.map((message, index) => <MessageItem message={message} key={index}/>)}
                             <div ref={lastMsgRef}/>
                         </div>
@@ -131,7 +141,7 @@ export const Conversation = ({selected, newMsgs, deletedMsgs, handlDeleteMsg}) =
                 <input
                     placeholder='Write something'
                     value={currInput}
-                    onKeyDown={ e => e.key === 'Enter' ? sendMessage() : null }
+                    onKeyDown={ e => (e.key === 'Enter' && currInput.length > 0) ? sendMessage() : null }
                     onChange={e=>setCurrInput(e.target.value)}
                 />
                 <button
