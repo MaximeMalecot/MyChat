@@ -15,6 +15,7 @@ const MessageItem = ({message}) => {
             displayMsg("An error occurred, could not delete this message", "error");
         }
     }
+
     if(message.senderId == appState.auth.id){
         return (
             <div>
@@ -129,7 +130,8 @@ export const Conversation = ({selected, newMsgs, deletedMsgs, handlDeleteMsg}) =
             <div className={classes.input}>
                 <input
                     placeholder='Write something'
-                    value={currInput} 
+                    value={currInput}
+                    onKeyDown={ e => e.key === 'Enter' ? sendMessage() : null }
                     onChange={e=>setCurrInput(e.target.value)}
                 />
                 <button
